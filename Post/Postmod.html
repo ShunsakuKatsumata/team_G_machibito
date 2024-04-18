@@ -95,10 +95,43 @@
         .show-message {
             opacity: 1;
         }
+
+        .sidebar {
+            position: fixed;
+            left: 0;
+            width: 200px;
+            height: 100%;
+            background: #333;
+            color: #fff;
+            padding: 20px;
+        }
+        .sidebar ul {
+            list-style: none;
+            padding: 0;
+        }
+        .sidebar ul li a {
+            color: #fff;
+            text-decoration: none;
+        }
+        .main-content {
+    padding-left: 220px; /* サイドバーの幅 + 余白 */
+}
     </style>
 </head>
 
 <body>
+    <div class="sidebar">
+        <button class="menu">メニュー</button>
+        <nav>
+            <ul>
+                <li><a href="#">ホーム</a></li>
+                <li><a href="#">記事作成</a></li>
+                <li><a href="#">いいね！！！！！！</a></li>
+                <li><a href="#">ランキング</a></li>
+            </ul>
+        </nav>
+    </div>
+    <div class="main-content"></div>
     <div class="error-message"></div>
     <div class="post-container">
         <div class="user-info">
