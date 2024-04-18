@@ -1,0 +1,62 @@
+body{
+    text-align: center;
+    border: solid 1px #000000;
+    border-radius: 10px;
+    margin:0 30%;
+    background-color: #ccc;
+}
+
+.outside{
+    background-color: #f5f5f5;
+}
+
+/* ヘッダー home.html */
+.menu-item_red{
+    border: solid 1px #000000;
+    display: inline-block;
+    background-color: #dc3545;
+    /* outline: 5px solid #ccc; */
+    outline-offset: -10px;
+}
+
+.menu-item_blue{
+    border: solid 1px #000000;
+    display: inline-block;
+    background-color: #007bff;
+    /* outline: 5px solid #ccc; */
+    outline-offset: -10px;
+}
+
+tr.qalist tr{
+    border: solid 1px #000000;
+}
+
+/* detail.html */
+.detail_q, .detail_reply{
+    border: solid 1px #000000;
+    border-radius: 10px;
+    margin:0 20%;
+    text-align: left;
+    padding: 0 10px 10px;
+    background-color: #ccc;
+}
+
+.detail1{
+    background-color: #f5f5f5;
+} 
+
+
+
+/* 質問と回答の間に空白 */
+.detail_q{
+    margin:10px 20% 10px 20%;
+}
+.write_comment{
+    text-align: left;
+    margin:0 20%;
+    background-color: #f5f5f5;
+    /* padding:; */
+}
+textarea{
+    background-color: #ccc;
+}

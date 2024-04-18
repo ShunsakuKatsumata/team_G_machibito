@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+    <head> 
+        <link rel="stylesheet" href="comment.css">
+    </head>
+    <body>
+        <div class="outside">
+            <header>
+                <ul class="menu">
+                    <li class="menu-item_red">未解決</li>
+                    <li class="menu-item_blue">解決済み</li>
+                </ul>
+            </header>
+            <hr>
+            <table id="comment_1" align="center">
+            </table>
+            <script>
+                var comments= ['投稿１', '投稿２', '投稿３'];
+                var tableEle = document.getElementById('comment_1');
+                // css
+                const style = document.createElement('style')
+                const css = "#comment_1 td{border: solid 1px #000000; padding:10px 200px; margin-top:7px; display: inline-block; border-radius: 10px; background-color: #ccc;}";              
+                style.appendChild(document.createTextNode(css));
+                document.head.appendChild(style);
+                
+                for (i in comments) {
+                    var tr = document.createElement('tr');
+                    var td = document.createElement('td');
+                    td.innerHTML = comments[i];
+                    tr.appendChild(td);
+                    tableEle.appendChild(tr);
+                }
+            </script>
+        </div>
+    </body>
+</html>
+
+
+<!-- <tr align="left">
+                <td id="a"></td>
+            </tr>
+            <tr align="right">
+                <td>返信</td>
+            </tr> -->
