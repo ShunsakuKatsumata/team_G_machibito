@@ -1,0 +1,25 @@
+# データベース post の作成
+set names utf8; ・・・①
+drop database if exists post; ・・・②
+create database post character set utf8 collate utf8_general_ci; ・・・③
+# ユーザー「kobe」にパスワード「denshi」を設定し、データベース「php」に対する全ての権限
+を付与
+grant all privileges on post.* to kobe@localhost identified by 'denshi';
+・・・④
+# データベースpost を使⽤
+use post; ・・・⑤
+# テーブル post の作成
+create table person(uid int auto_increment primary key,
+ post_id int,
+ title text,
+ content text
+);
+# テーブル post にデータを挿⼊
+insert into person(post_id, title, content) values(1, '参考書の選び方', '僕にも分かりません');
+insert into person(post_id, title, content) values(1, '同窓会について', 
+'ごめん、同級会には行けません。
+いま、シンガポールにいます。
+この国を南北に縦断する地下鉄を、私は作っています。
+本当は、あの頃が恋しいけれど、でも……今はもう少しだけ、知らないふりをします。
+私の作るこの地下鉄も、きっといつか、誰かの青春を乗せるから。'
+);
