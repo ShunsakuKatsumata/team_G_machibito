@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>サイドバー</title>
+    <style>
+        /* ボディのスタイル設定 */
+        body {
+            margin: 0; /* マージンを0に設定 */
+            padding: 0; /* パディングを0に設定 */
+            font-family: Arial, sans-serif; /* フォントをArial, sans-serifに設定 */
+        }
+        /* サイドバーのスタイル設定 */
+        .sidebar {
+            position: fixed;
+            width: 200px;
+            height: 100%;
+            background: #12b8e2;/* 061069 */
+            color: #e20404;
+            border-top-right-radius: 5%;    /* 右上を丸くする*/
+            border-bottom-right-radius: 5%; /* 右下を丸くしてるけどしたすぎてみえぬ*/
+            padding: 20px;
+            left: -200px; /* サイドバーを左側に隠す */
+            transition: left 0.3s; /* 左側への移動を滑らかにする */
+        }
+
+        .sidebar.open {
+            left: 0; /* サイドバーを表示する */
+        }
+
+        .sidebar .menu {
+            position: absolute;
+            border-radius: 25%;
+            left: 100%;
+            top: 15;
+            background: #fff;
+            color: #fff;
+            padding: 10px;
+            width: 50px; /* メニューボタンの幅を設定外枠 */
+            height: 50px; /* メニューボタンの高さを設定外枠 */
+        }
+        .sidebar .menu img {
+            width: 100%; /* 中の画像の幅を100%に設定 */
+            height: auto; /* 高さは自動的に調整 */
+        }
+        /* サイドバー内のリストのスタイル設定 */
+        .sidebar ul {
+            list-style: none; /* リストマーカーを非表示に設定 */
+            padding: 0; /* パディングを0に設定 */
+        }
+        /* サイドバー内のリンクのスタイル設定 */
+        .sidebar ul li a {
+            color: #000; /* リンクの文字色設定 */
+            text-decoration: none; /* リンクの下線を非表示に設定 */
+        }
+        /* サイドバー内の画像設定 */
+        .sidebar ul li img {
+            width: 20px; /* 画像の幅を設定 */
+            height: auto; /* 高さは自動的に調整 */
+            margin-right: 10px; /* 画像とテキストの間にマージンを設定 */
+        }
+    </style>
+</head>
+<body>
+    <div class="sidebar">
+        <img src="../Image/earth.png" alt="トップ画像">
+        <button class="menu" onclick="toggleSidebar()">
+            <img src="../Image/side_Ls.png" alt="メニュー">
+        </button>
+        <nav>
+            <ul>
+                <li><img src="../Image/home.png" alt="ホーム"><a href="#">ホーム</a></li>
+                <li><img src="../Image/art.png" alt="記事作成"><a href="#">記事作成</a></li>
+                <li><img src="../Image/Good_pink.png" alt="いいね！！！！！！"><a href="#">いいね！！！！！！</a></li>
+                <li><img src="../Image/king.png" alt="ランキング"><a href="#">ランキング</a></li>
+            </ul>
+        </nav>
+    </div>
+    <script>
+        function toggleSidebar() {
+            var sidebar = document.querySelector('.sidebar');
+            var menuButtonImage = document.querySelector('.sidebar .menu img');
+            sidebar.classList.toggle('open');
+
+            if (sidebar.classList.contains('open')) {
+                // サイドバーが開いている場合、画像を別のものに変更
+                menuButtonImage.src = "../Image/side_Rs.png";
+            } else {
+                // サイドバーが閉じている場合、画像を元のものに戻す
+                menuButtonImage.src = "../Image/side_Ls.png";
+            }
+        }
+    </script>
+</body>
+</html>
