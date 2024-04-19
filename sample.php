@@ -13,7 +13,7 @@
     $password = 'denshi';
 
     try {
-        $pdo = new PDO($post_id, $title, $content);
+        $pdo = new PDO($dsn, $user, $password);
         $sql = 'select * from post';
         $stmt = $pdo->query($sql);
         $results = $stmt->fetchAll();
