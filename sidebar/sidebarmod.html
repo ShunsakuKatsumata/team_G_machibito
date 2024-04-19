@@ -15,10 +15,10 @@
             position: fixed;
             width: 200px;
             height: 100%;
-            background: #12b8e2;/* 061069*/
+            background: #12b8e2;/* 061069 */
             color: #e20404;
-            border-top-right-radius: 5%;
-            border-bottom-right-radius: 5%;
+            border-top-right-radius: 5%;    /* 右上を丸くする*/
+            border-bottom-right-radius: 5%; /* 右下を丸くしてるけどしたすぎてみえぬ*/
             padding: 20px;
             left: -200px; /* サイドバーを左側に隠す */
             transition: left 0.3s; /* 左側への移動を滑らかにする */
@@ -53,6 +53,7 @@
             color: #000; /* リンクの文字色設定 */
             text-decoration: none; /* リンクの下線を非表示に設定 */
         }
+        /* サイドバー内の画像設定 */
         .sidebar ul li img {
             width: 20px; /* 画像の幅を設定 */
             height: auto; /* 高さは自動的に調整 */

@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>サイドバー</title>
+    <style>
+        /* ボディのスタイル設定 */
+        body {
+            margin: 0; /* マージンを0に設定 */
+            padding: 0; /* パディングを0に設定 */
+            font-family: Arial, sans-serif; /* フォントをArial, sans-serifに設定 */
+        }
+        /* サイドバーのスタイル設定 */
+        .sidebar {
+            position: fixed; /* サイドバーを固定位置に設定 */
+            width: 200px; /* サイドバーの幅を200pxに設定 */
+            height: 100vh; /* サイドバーの高さを100vhに設定 */
+            background: #333; /* サイドバーの背景色を#333に設定 */
+            color: #fff; /* サイドバーの文字色を#fffに設定 */
+            border-top-right-radius: 5%;    /* 右上を丸くする*/
+            border-bottom-right-radius: 5%; /* 右下を丸くしてるけどしたすぎてみえぬ*/
+            padding: 20px; /* サイドバーのパディングを20pxに設定 */
+            left: 0; /* サイドバーを左側に固定 */
+            top: 0; /* サイドバーを上側に固定 */
+            
+        }
+        /* サイドバー内のリストのスタイル設定 */
+        .sidebar ul {
+            list-style: none; /* リストマーカーを非表示に設定 */
+            padding: 0; /* パディングを0に設定 */
+        }
+        /* サイドバー内のリンクのスタイル設定 */
+        .sidebar ul li a {
+            color: #fff; /* リンクの文字色を#fffに設定 */
+            text-decoration: none; /* リンクの下線を非表示に設定 */
+        }
+        /* サイドバー内の画像設定 */
+        .sidebar ul li img {
+            width: 20px; /* 画像の幅を設定 */
+            height: auto; /* 高さは自動的に調整 */
+            margin-right: 10px; /* 画像とテキストの間にマージンを設定 */
+        }
+    </style>
+</head>
+<body>
+    <div class="sidebar">
+        <img src="../Image/earth.png" alt="トップ画像">
+        <nav>
+            <ul>
+                <li><img src="../Image/home.png" alt="ホーム"><a href="#">ホーム</a></li>
+                <li><img src="../Image/art.png" alt="投稿する"><a href="#">投稿する</a></li>
+                <li><img src="../Image/Good_pink.png" alt="自分の記事"><a href="#">自分の記事</a></li>
+                <li><img src="../Image/king.png" alt="質問"><a href="#">質問</a></li>
+                <li><img src="../Image/king.png" alt="いいね"><a href="#">いいね</a></li>
+                <li><img src="../Image/king.png" alt="設定"><a href="#">設定</a></li>
+            </ul>
+        </nav>
+    </div>
+</body>
+</html>
