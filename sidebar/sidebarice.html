@@ -14,15 +14,14 @@
         .sidebar {
             position: fixed; /* サイドバーを固定位置に設定 */
             width: 200px; /* サイドバーの幅を200pxに設定 */
-            height: 100vh; /* サイドバーの高さを100vhに設定 */
+            height: 96vh; /* サイドバーの高さを100vhに設定 */
             background: #333; /* サイドバーの背景色を#333に設定 */
             color: #fff; /* サイドバーの文字色を#fffに設定 */
             border-top-right-radius: 5%;    /* 右上を丸くする*/
-            border-bottom-right-radius: 5%; /* 右下を丸くしてるけどしたすぎてみえぬ*/
+            border-bottom-right-radius: 5%; /* 右下を丸くする */
             padding: 20px; /* サイドバーのパディングを20pxに設定 */
             left: 0; /* サイドバーを左側に固定 */
             top: 0; /* サイドバーを上側に固定 */
-            
         }
         /* サイドバー内のリストのスタイル設定 */
         .sidebar ul {
@@ -39,6 +38,13 @@
             width: 20px; /* 画像の幅を設定 */
             height: auto; /* 高さは自動的に調整 */
             margin-right: 10px; /* 画像とテキストの間にマージンを設定 */
+        }
+        /* サイドバー内のリストアイテムのスタイル設定 */
+        .sidebar ul li {
+            background: #555; /* 背景色を設定 */
+            padding: 10px; /* パディングを設定 */
+            margin: 10px 0; /* 上下のマージンを設定 */
+            border-radius: 5px; /* 角を丸くする */
         }
     </style>
 </head>
