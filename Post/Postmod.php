@@ -5,9 +5,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>投稿画面</title>
+    <link rel="stylesheet" href="../sidebar/sidebar.css">
     <style>
         body {
             display: flex;
+            background-color: #f5f5f5;
             justify-content: center;
             align-items: center;
             height: 100vh;
@@ -18,7 +20,7 @@
             max-width: 800px;
             width: 80%;
             padding: 20px;
-            background-color: #f5f5f5;
+            background-color: #fff;
             border-radius: 5px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         }
@@ -40,15 +42,17 @@
         .title-input {
             flex: 1;
             padding: 10px;
-            border: none;
+            background-color: #f5f5f5;
+            border: 1px solid #ccc;
             border-radius: 5px;
         }
 
         .content-input {
-            width: 100%;
+            background-color: #f5f5f5;
+            border: 1px solid #ccc;
+            width: 97%;
             height: 300px;
             padding: 10px;
-            border: none;
             border-radius: 5px;
             resize: vertical;
         }
@@ -96,42 +100,16 @@
             opacity: 1;
         }
 
-        .sidebar {
-            position: fixed;
-            left: 0;
-            width: 200px;
-            height: 100%;
-            background: #333;
-            color: #fff;
-            padding: 20px;
-        }
-        .sidebar ul {
-            list-style: none;
-            padding: 0;
-        }
-        .sidebar ul li a {
-            color: #fff;
-            text-decoration: none;
-        }
-        .main-content {
-    padding-left: 220px; /* サイドバーの幅 + 余白 */
-}
+        .post-container {
+        width: 80%; /* コンテナの幅を設定 */
+        margin: 0 auto; /* 中央に配置 */
+    }
     </style>
 </head>
 
 <body>
-    <div class="sidebar">
-        <button class="menu">メニュー</button>
-        <nav>
-            <ul>
-                <li><a href="#">ホーム</a></li>
-                <li><a href="#">記事作成</a></li>
-                <li><a href="#">いいね！！！！！！</a></li>
-                <li><a href="#">ランキング</a></li>
-            </ul>
-        </nav>
-    </div>
-    <div class="main-content"></div>
+    <?php include '../sidebar/sidebar.php'; ?>
+    <div class="main-content">
     <div class="error-message"></div>
     <div class="post-container">
         <div class="user-info">
@@ -140,7 +118,7 @@
         </div>
         <textarea placeholder="本文を入力してください" class="content-input"></textarea>
         <div class="button-container">
-            <button class="clear-button">削除</button>
+            <button class="clear-button">削除する</button>
             <button class="post-button">投稿する</button>
         </div>
     </div>

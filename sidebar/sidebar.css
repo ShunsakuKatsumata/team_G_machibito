@@ -1,0 +1,37 @@
+.main-content {
+    margin-left: calc(200px + 20px); /* サイドバーの幅 + パディング */
+    box-sizing: border-box; /* パディングとボーダーを要素の幅と高さに含める */
+    width: calc(100% - 220px); /* 全体の幅からサイドバーの幅を引いた値を設定 */
+    overflow-x: hidden; /* 横方向のスクロールを防ぐ */
+}
+.sidebar-sidebar {
+    position: fixed;
+    width: 200px;
+    height: 96vh;
+    background: #333;
+    color: #fff;
+    border-top-right-radius: 5%;
+    border-bottom-right-radius: 5%;
+    padding: 20px;
+    left: 0;
+    top: 0;
+}
+.sidebar-sidebar ul {
+    list-style: none;
+    padding: 0;
+}
+.sidebar-sidebar ul li a {
+    color: #fff;
+    text-decoration: none;
+}
+.sidebar-sidebar ul li img {
+    width: 20px;
+    height: auto;
+    margin-right: 10px;
+}
+.sidebar-sidebar ul li {
+    background: #555;
+    padding: 10px;
+    margin: 10px 0;
+    border-radius: 5px;
+}
