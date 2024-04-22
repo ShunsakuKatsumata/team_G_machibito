@@ -13,7 +13,7 @@
     $password = 'denshi';
 
     try {
-        $pdo = new PDO($post_id, $title, $content);
+        $pdo = new PDO($dsn, $user, $password);
         $sql = 'select * from post';
         $stmt = $pdo->query($sql);
         $results = $stmt->fetchAll();
@@ -28,7 +28,6 @@
     $pdo = null;
     ?>
     <hr>
-    <h4>0J03010 勝間田駿作</h4>
 </body>
 
 </html>
