@@ -148,7 +148,6 @@
 
         .reply-list-header {
             display: flex;
-            justify-content: space-between;
             align-items: center;
             cursor: pointer;
         }
@@ -186,7 +185,27 @@
         .reply-list-toggle.open .toggle-icon {
             transform: rotate(180deg);
         }
+
+        .post-message {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: #fff;
+            border-radius: 5px;
+            opacity: 0;
+            transition: opacity 0.3s;
+            z-index: 1;
+        }
+
+        .error-message {
+            background-color: #dc3545;
+            /* エラーメッセージの文字色 */
+        }
     </style>
+
     <script>
         window.addEventListener('DOMContentLoaded', () => {
             const likeButton = document.querySelector('.like-button');
@@ -194,6 +213,9 @@
             const likeCount = document.querySelector('.like-count');
             const replyButton = document.querySelector('.reply-button');
             const replyForm = document.querySelector('.reply-form');
+            const replySubmitButton = document.querySelector('.reply-submit');
+            const postMessage = document.querySelector('.post-message');
+            const replyInput = document.querySelector('.reply-input');
 
             let isLiked = false;
             let count = 123;
@@ -224,6 +246,37 @@
             replyButton.addEventListener('click', () => {
                 replyForm.classList.toggle('show-reply-form');
             });
+
+            replySubmitButton.addEventListener('click', () => {
+                // リプライ送信処理
+                if (replyInput.value.trim() === '') {
+                    // 内容が空の場合はエラーメッセージを表示
+                    showErrorMessage('内容を入力してください');
+                } else {
+                    // 内容が入力されている場合は投稿しましたメッセージを表示
+                    showPostMessage();
+                }
+            });
+
+            // 投稿しましたメッセージを表示する関数
+            function showPostMessage() {
+                postMessage.textContent = '投稿しました';
+                postMessage.style.opacity = '1';
+                setTimeout(() => {
+                    postMessage.style.opacity = '0';
+                }, 3000);
+            }
+
+            // エラーメッセージを表示する関数
+            function showErrorMessage(message) {
+                postMessage.textContent = message;
+                postMessage.classList.add('error-message'); // エラーメッセージにクラスを追加
+                postMessage.style.opacity = '1';
+                setTimeout(() => {
+                    postMessage.style.opacity = '0';
+                    postMessage.classList.remove('error-message'); // エラーメッセージのクラスを削除
+                }, 3000);
+            }
         });
 
         window.addEventListener('DOMContentLoaded', () => {
@@ -295,7 +348,7 @@
             <button class="reply-submit">送信</button>
         </div>
     </div>
-
+    <div class="post-message"></div>
 </body>
 
 </html>
