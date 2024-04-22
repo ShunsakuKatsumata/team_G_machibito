@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="ja">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -92,15 +93,30 @@
             border-radius: 5px;
             padding: 10px;
             margin-bottom: 10px;
-
         }
+
         .like-icon {
             width: 20px;
             height: 20px;
             margin-right: 5px;
         }
+
+        .post-message {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: #fff;
+            border-radius: 5px;
+            opacity: 0;
+            transition: opacity 0.3s;
+            z-index: 1;
+        }
     </style>
 </head>
+
 <body>
     <div class="search-bar">
         <input type="text" class="search-input" placeholder="検索...">
@@ -146,6 +162,7 @@
             </div>
         </div>
     </div>
+    <div class="post-message" id="postMessage"></div> <!-- 追加: 投稿メッセージの要素 -->
     <script>
         function handleSortChange(value) {
             switch (value) {
@@ -163,6 +180,22 @@
                     break;
             }
         }
+
+        // ページ読み込み時に投稿メッセージがあれば表示する
+        window.onload = function () {
+            var postMessage = localStorage.getItem('postMessage');
+            if (postMessage) {
+                var postMessageElement = document.getElementById('postMessage');
+                postMessageElement.innerText = postMessage;
+                postMessageElement.style.opacity = '1';
+                setTimeout(function () {
+                    postMessageElement.style.opacity = '0';
+                }, 3000);
+                // メッセージを表示した後は削除する
+                localStorage.removeItem('postMessage');
+            }
+        };
     </script>
 </body>
+
 </html>
