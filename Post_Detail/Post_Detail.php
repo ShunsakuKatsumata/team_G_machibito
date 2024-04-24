@@ -4,6 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../sidebar/sidebar.css">
     <title>投稿詳細</title>
     <style>
         @keyframes enlarge {
@@ -207,6 +208,7 @@
     </style>
 
     <script>
+        
         window.addEventListener('DOMContentLoaded', () => {
             const likeButton = document.querySelector('.like-button');
             const likeIcon = document.querySelector('.like-icon');
@@ -305,6 +307,10 @@
 </head>
 
 <body>
+        <!-- サイドバー -->
+        <?php include '../sidebar/sidebar.php'; ?>
+        <div class="main-content">
+        <!-- ここまで -->
     <div class="post-detail">
         <div class="user-info">
             <div class="user-icon"></div>
