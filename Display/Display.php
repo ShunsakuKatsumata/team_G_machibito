@@ -4,6 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../sidebar/sidebar.css">
     <title>記事一覧</title>
     <style>
         body {
@@ -121,6 +122,10 @@
 </head>
 
 <body>
+        <!-- サイドバー -->
+        <?php include '../sidebar/sidebar.php'; ?>
+        <div class="main-content">
+        <!-- ここまで -->
     <div class="search-bar">
         <input type="text" class="search-input" placeholder="検索...">
         <div class="sort-buttons">

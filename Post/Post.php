@@ -4,6 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../sidebar/sidebar.css">
     <title>投稿画面</title>
     <style>
         body {
@@ -102,6 +103,10 @@
 </head>
 
 <body>
+        <!-- サイドバー -->
+        <?php include '../sidebar/sidebar.php'; ?>
+        
+        <!-- ここまで -->
     <div class="error-message"></div>
     <div class="post-container">
         <div class="user-info">
