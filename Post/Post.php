@@ -138,7 +138,7 @@
 
                 // 投稿一覧画面に遷移
                 localStorage.setItem('postMessage', '投稿しました');
-                window.location.href = '../Display/Display.html';
+                window.location.href = '../Display/Display.php';
             }
         });
 
