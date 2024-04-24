@@ -8,10 +8,10 @@ use post;
 
 create table post(
 post_id int auto_increment primary key,
-post_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP;
+post_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 title text,
 content text,
-tag　text
+tag text
 );
 
 insert into post(post_id, title, content, tag) values(1, '参考書の選び方', '僕にも分かりません', '参考書');
