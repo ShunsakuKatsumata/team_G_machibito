@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>投稿画面</title>
+    <link rel="stylesheet" href="../sidebar/sidebar.css">
     <style>
         body {
             display: flex;
@@ -98,10 +99,17 @@
         .show-message {
             opacity: 1;
         }
+
+        .post-container {
+        width: 80%; /* コンテナの幅を設定 */
+        margin: 0 auto; /* 中央に配置 */
+    }
     </style>
 </head>
 
 <body>
+    <?php include '../sidebar/sidebar.php'; ?>
+    <div class="main-content">
     <div class="error-message"></div>
     <div class="post-container">
         <div class="user-info">
@@ -132,7 +140,6 @@
                 // 投稿処理の実装...
 
                 // 投稿一覧画面に遷移
-                localStorage.setItem('postMessage', '投稿しました');
                 window.location.href = '../Display/Display.html';
             }
         });
@@ -146,24 +153,10 @@
         function showErrorMessage(message) {
             errorMessage.textContent = message;
             errorMessage.classList.add('show-message');
-            setTimeout(() => {
-                errorMessage.classList.remove('show-message');
-            }, 3000);
         }
 
         function hideErrorMessage() {
             errorMessage.classList.remove('show-message');
-        }
-
-        function showPostMessage(message) {
-            var postMessage = document.createElement('div');
-            postMessage.textContent = message;
-            postMessage.classList.add('post-message');
-            document.body.appendChild(postMessage);
-
-            setTimeout(function () {
-                postMessage.style.opacity = '0'; // 3 秒後にメッセージを非表示にする
-            }, 3000);
         }
     </script>
 </body>
