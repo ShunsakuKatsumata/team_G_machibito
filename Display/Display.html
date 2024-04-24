@@ -119,7 +119,6 @@
         }
     </style>
 </head>
-
 <body>
     <div class="search-bar">
         <input type="text" class="search-input" placeholder="検索...">
@@ -164,26 +163,24 @@
                 <span class="like-count">120</span>
             </div>
         </div>
+        <div class="post-detail">
+            <div class="post-date">2024-04-25</div>
+            <div class="user-info">
+                <div class="user-icon"></div>
+                <span>投稿者名3</span>
+            </div>
+            <a href="../Post_Detail/Post_Detail.html" class="post-title">投稿のタイトル3</a>
+            <div class="post-content">
+                投稿の本文3がここに表示されます。さまざまな内容が含まれることがあります。
+            </div>
+            <div class="like-button">
+                <img class="like-icon" src="../Image/Good_white.png" alt="Like">
+                <span class="like-count">1</span>
+            </div>
+        </div>
     </div>
     <div class="post-message" id="postMessage"></div> <!-- 追加: 投稿メッセージの要素 -->
     <script>
-        function handleSortChange(value) {
-            switch (value) {
-                case 'date-asc':
-                    console.log("Sort by date ascending");
-                    break;
-                case 'date-desc':
-                    console.log("Sort by date descending");
-                    break;
-                case 'likes-asc':
-                    console.log("Sort by likes ascending");
-                    break;
-                case 'likes-desc':
-                    console.log("Sort by likes descending");
-                    break;
-            }
-        }
-
         // ページ読み込み時に投稿メッセージがあれば表示する
         window.onload = function () {
             var postMessage = localStorage.getItem('postMessage');
@@ -199,6 +196,57 @@
             }
         };
     </script>
+
+<script>
+    function handleSortChange(value) {
+        var postList = document.querySelector('.post-list');
+        var postDetails = Array.from(postList.querySelectorAll('.post-detail'));
+
+        switch (value) {
+            case 'date-asc':
+                // 日付昇順でソート
+                postDetails.sort(function(a, b) {
+                    var dateA = new Date(a.querySelector('.post-date').textContent.trim());
+                    var dateB = new Date(b.querySelector('.post-date').textContent.trim());
+                    return dateA - dateB;
+                });
+                break;
+            case 'date-desc':
+                // 日付降順でソート
+                postDetails.sort(function(a, b) {
+                    var dateA = new Date(a.querySelector('.post-date').textContent.trim());
+                    var dateB = new Date(b.querySelector('.post-date').textContent.trim());
+                    return dateB - dateA;
+                });
+                break;
+            case 'likes-asc':
+                // 評価昇順でソート
+                postDetails.sort(function(a, b) {
+                    var dateA = new Date(a.querySelector('.post-date').textContent.trim());
+                    var dateB = new Date(b.querySelector('.post-date').textContent.trim());
+                    return dateA - dateB;
+                });
+                break;
+            case 'likes-desc':
+                // 評価降順でソート
+                postDetails.sort(function(a, b) {
+                    var dateA = new Date(a.querySelector('.post-date').textContent.trim());
+                    var dateB = new Date(b.querySelector('.post-date').textContent.trim());
+                    return dateB - dateA;
+                });
+                break;
+            default:
+                return;
+        }
+
+        // ソートされた要素を再配置
+        postDetails.forEach(function(postDetail) {
+            postList.appendChild(postDetail);
+        });
+    }
+</script>
+
+
 </body>
 
 </html>
