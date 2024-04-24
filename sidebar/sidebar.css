@@ -1,0 +1,60 @@
+.main-content {
+    margin-left: calc(200px + 20px);
+    /* サイドバーの幅 + パディング */
+    box-sizing: border-box;
+    /* パディングとボーダーを要素の幅と高さに含める */
+    width: calc(100% - 220px);
+    /* 全体の幅からサイドバーの幅を引いた値を設定 */
+    overflow-x: hidden;
+    /* 横方向のスクロールを防ぐ */
+}
+
+.sidebar-sidebar {
+    position: fixed;
+    width: 200px;
+    height: 100vh;
+    background: #262626;
+    color: #fff;
+    padding: 20px;
+    left: 0;
+    top: 0;
+}
+
+.sidebar-sidebar nav ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.sidebar-sidebar nav ul li {
+    margin-bottom: 10px;
+}
+
+.sidebar-sidebar nav ul li a {
+    color: #ffffff;
+    text-decoration: none;
+    align-items: center;
+    display: flex;
+    /* Flexbox を使って水平方向にアイテムを配置 */
+}
+
+.sidebar-sidebar nav ul li:hover {
+    background-color: #ccc;
+    /* マウスを合わせたときの背景色 */
+}
+
+.sidebar-sidebar nav ul li img {
+    width: 20px;
+    height: auto;
+    margin-right: 10px;
+    vertical-align: middle;
+    /* 画像を垂直方向に中央揃え */
+}
+
+.sidebar-sidebar ul li {
+    background: #262626;
+    padding: 10px;
+    margin: 10px 0;
+    border-top: 3px solid #000;
+    border-bottom: 3px solid #000;
+}

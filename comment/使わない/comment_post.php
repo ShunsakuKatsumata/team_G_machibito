@@ -8,6 +8,7 @@
     <style>
         body {
             display: flex;
+            background-color: #f5f5f5;
             justify-content: center;
             align-items: center;
             height: 100vh;
@@ -18,7 +19,7 @@
             max-width: 800px;
             width: 80%;
             padding: 20px;
-            background-color: #f5f5f5;
+            background-color: #fff;
             border-radius: 5px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         }
@@ -40,15 +41,17 @@
         .title-input {
             flex: 1;
             padding: 10px;
-            border: none;
+            background-color: #f5f5f5;
+            border: 1px solid #ccc;
             border-radius: 5px;
         }
 
         .content-input {
-            width: 100%;
+            background-color: #f5f5f5;
+            border: 1px solid #ccc;
+            width: 97%;
             height: 300px;
             padding: 10px;
-            border: none;
             border-radius: 5px;
             resize: vertical;
         }
@@ -95,52 +98,32 @@
         .show-message {
             opacity: 1;
         }
-
-        .sidebar {
-            position: fixed;
-            left: 0;
-            width: 200px;
-            height: 100%;
-            background: #333;
-            color: #fff;
-            padding: 20px;
-        }
-        .sidebar ul {
-            list-style: none;
-            padding: 0;
-        }
-        .sidebar ul li a {
-            color: #fff;
-            text-decoration: none;
-        }
-        .main-content {
-    padding-left: 220px; /* サイドバーの幅 + 余白 */
-}
     </style>
 </head>
 
 <body>
-    <div class="sidebar">
-        <button class="menu">メニュー</button>
-        <nav>
-            <ul>
-                <li><a href="#">ホーム</a></li>
-                <li><a href="#">記事作成</a></li>
-                <li><a href="#">いいね！！！！！！</a></li>
-                <li><a href="#">ランキング</a></li>
-            </ul>
-        </nav>
-    </div>
-    <div class="main-content"></div>
     <div class="error-message"></div>
     <div class="post-container">
-        <div class="user-info">
-            <div class="user-icon"></div>
-            <input type="text" placeholder="タイトルを入力してください" class="title-input">
-        </div>
-        <textarea placeholder="本文を入力してください" class="content-input"></textarea>
+        <form method="POST" action="comment_post.php">
+            <div class="user-info">
+                <div class="user-icon"></div>
+                <input name="qustion_title" type="text" placeholder="タイトルを入力してください" class="title-input">
+            </div>
+            <textarea name="question_detail" placeholder="本文を入力してください" class="content-input"></textarea>
+        </form>
+
         <div class="button-container">
-            <button class="clear-button">削除</button>
+            <?php
+                // 変数を受け取る
+                $title = $_POST['qustion_title'];
+                $detail = $_POST['question_detail'];
+
+                // 関数の実行
+                require_once __DIR__.'/comment_dbdata.php';
+                $question_post = new Question_Post();
+                $question_post->post_questions($title, $detail);
+            ?>
+            <button class="clear-button">削除する</button>
             <button class="post-button">投稿する</button>
         </div>
     </div>
@@ -162,6 +145,7 @@
                 // 投稿処理の実装...
 
                 // 投稿一覧画面に遷移
+                localStorage.setItem('postMessage', '投稿しました');
                 window.location.href = '../Display/Display.html';
             }
         });
@@ -175,10 +159,24 @@
         function showErrorMessage(message) {
             errorMessage.textContent = message;
             errorMessage.classList.add('show-message');
+            setTimeout(() => {
+                errorMessage.classList.remove('show-message');
+            }, 3000);
         }
 
         function hideErrorMessage() {
             errorMessage.classList.remove('show-message');
+        }
+
+        function showPostMessage(message) {
+            var postMessage = document.createElement('div');
+            postMessage.textContent = message;
+            postMessage.classList.add('post-message');
+            document.body.appendChild(postMessage);
+
+            setTimeout(function () {
+                postMessage.style.opacity = '0'; // 3 秒後にメッセージを非表示にする
+            }, 3000);
         }
     </script>
 </body>
