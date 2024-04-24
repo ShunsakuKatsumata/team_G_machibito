@@ -18,6 +18,7 @@
 
         .post-container {
             max-width: 800px;
+            margin-left: 20%;
             width: 80%;
             padding: 20px;
             background-color: #fff;
@@ -103,10 +104,10 @@
 </head>
 
 <body>
-        <!-- サイドバー -->
-        <?php include '../sidebar/sidebar.php'; ?>
-        
-        <!-- ここまで -->
+    <!-- サイドバー -->
+    <?php include '../sidebar/sidebar.php'; ?>
+
+    <!-- ここまで -->
     <div class="error-message"></div>
     <div class="post-container">
         <div class="user-info">
@@ -166,7 +167,7 @@
             postMessage.classList.add('post-message');
             document.body.appendChild(postMessage);
 
-            setTimeout(function () {
+            setTimeout(function() {
                 postMessage.style.opacity = '0'; // 3 秒後にメッセージを非表示にする
             }, 3000);
         }
