@@ -1,0 +1,11 @@
+USE post;
+
+CREATE TABLE detail (
+    post_id INT,
+    reply TEXT
+);
+
+INSERT INTO post(post_id,reply) VALUES(1,'こんなのはどうでしょう');
+INSERT INTO post(post_id,reply) VALUES(1,'ｲｲｶﾓ');
+INSERT INTO post(post_id,reply) VALUES(2,'wwww');
+INSERT INTO post(post_id,reply) VALUES(2,';(--);');
