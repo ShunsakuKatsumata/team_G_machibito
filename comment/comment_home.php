@@ -2,9 +2,14 @@
 <html>
     <head> 
         <link rel="stylesheet" href="comment.css">
+        <link rel="stylesheet" href="../sidebar/sidebar.css">
         <meta charset="UTF-8">
     </head>
     <body>
+        <!-- サイドバー -->
+        <?php include '../sidebar/sidebar.php'; ?>
+        <div class="main-content">
+        <!-- ここまで -->
         <div class="comment_home">
             <!-- <header>
                 <h3>タイトル</h3>
