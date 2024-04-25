@@ -11,7 +11,7 @@
 
 .sidebar-sidebar {
     position: fixed;
-    width: 200px;
+    width: 180px;
     height: 100vh;
     background: #262626;
     color: #fff;
@@ -28,6 +28,8 @@
 
 .sidebar-sidebar nav ul li {
     margin-bottom: 10px;
+    transition: background-color 0.3s ease;
+    /* 背景色の変化が滑らかになるように設定 */
 }
 
 .sidebar-sidebar nav ul li a {
@@ -39,7 +41,7 @@
 }
 
 .sidebar-sidebar nav ul li:hover {
-    background-color: #ccc;
+    background-color: #545454;
     /* マウスを合わせたときの背景色 */
 }
 
@@ -57,4 +59,12 @@
     margin: 10px 0;
     border-top: 3px solid #000;
     border-bottom: 3px solid #000;
+}
+
+.sidebar-image {
+    margin: 0 auto;
+    width: 180px;
+    /* 画像の幅を調整する値に変更 */
+    height: auto;
+    /* 高さを自動調整 */
 }
