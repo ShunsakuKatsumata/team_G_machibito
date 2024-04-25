@@ -118,6 +118,11 @@
             transition: opacity 0.3s;
             z-index: 1;
         }
+        .post-tag{
+            text-align: right;
+            padding: 10px;
+            margin-top:10px;
+        }
     </style>
 </head>
 <body>
@@ -166,6 +171,7 @@
                 echo '<div class="like-button">';
                 echo '<img class="like-icon" src="../Image/Good_white.png" alt="Like">';
                 echo '<span class="like-count">0</span>'; // いいねの数は0に設定
+                echo '<span class="post-tag">' . $row["tag"] . '</span>';
                 echo '</div>';
                 echo '</div>';
             }
