@@ -1,5 +1,5 @@
 <?php
-    class DbData{
+    class dbdata{
         protected $pdo;						
 
         // コンストラクタ
@@ -26,7 +26,7 @@
         }
 
         // INSERT、UPDATE、DELETE文実行用のメソッド	
-        protected function exec($sql,  $array_params)
+        protected function exec($sql, $array_params)
         {
             $stmt = $this->pdo->prepare($sql);
             $stmt->execute($array_params);  // 成功：true、失敗：false

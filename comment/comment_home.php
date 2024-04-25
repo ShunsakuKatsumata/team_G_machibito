@@ -31,20 +31,31 @@
             </ul></P>
             <hr>
             <?php
-                require_once __DIR__.'/';
+                
             ?>
             <table id="comment_home_item" align="center">
-                <tr>
-                    <td>
-                        <button class="list_button" onclick="location.href='comment_detail.html'">
-                            <div><span class="language">Python</span></div>
-                            <div><span class="post">投稿１</span></div>
-                            <div class="date">4/17 21:30</div>
-                            <div class="comment_number">コメント12個</div>
-                        </button>
-                    </td>
-                </tr>
+                <?php
+                // onclick="location.href='comment_detail.html'">
+                require_once __DIR__.'/question_post.php';
+                $question_post = new question_post();
+                $questions_list = $question_post->get_questions();
+                    foreach ($questions_list as $item) {
+                        echo '<tr>';
+                            echo '<td>';
+                                // 投稿詳細画面に移動
+                                echo '<button class="list_button" onclick="location.href=\'./comment_detail.php?ident='.$item['ident'].'\'">';       
+                                echo '<div><span class="language">Python</span></div>';
+                                    echo '<div><span class="post">'.$item['title'].'</span></div>';
+                                    echo '<div class="date">4/17 21:30</div>';
+                                    echo '<div class="comment_number">コメント12個</div>';
+                                echo '</button>';
+                            echo '</td>';
+                        echo '</tr>';
+                    }
+                ?>
+                        
             </table>
+            
         </div>
     </body>
 </html>
