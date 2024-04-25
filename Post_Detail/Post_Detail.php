@@ -11,6 +11,7 @@
     <script>
         
         window.addEventListener('DOMContentLoaded', () => {
+            // 各要素を取得
             const likeButton = document.querySelector('.like-button');
             const likeIcon = document.querySelector('.like-icon');
             const likeCount = document.querySelector('.like-count');
@@ -20,14 +21,19 @@
             const postMessage = document.querySelector('.post-message');
             const replyInput = document.querySelector('.reply-input');
 
+            // いいねの状態とカウントを管理する変数
             let isLiked = false;
             let count = 123;
 
+            // 初期のいいねの数を表示
             likeCount.textContent = count;
 
+            // いいねボタンのクリックイベント
             likeButton.addEventListener('click', () => {
+                // いいねの状態を反転
                 isLiked = !isLiked;
 
+                // いいねの状態に応じてアイコンとカウントを更新
                 if (isLiked) {
                     likeIcon.src = "../Image/Good_pink.png";
                     likeButton.classList.add('liked');
@@ -38,7 +44,9 @@
                     count--;
                 }
 
+                // 更新したカウントを表示
                 likeButton.querySelector('.like-count').textContent = count;
+                // アニメーションを再生
                 if (likeButton.querySelector('.like-icon').src.includes('Good_pink.png')) {
                     likeButton.querySelector('.like-icon').style.animation = 'none';
                     void likeButton.offsetWidth;
@@ -46,12 +54,15 @@
                 }
             });
 
+            // リプライボタンのクリックイベント
             replyButton.addEventListener('click', () => {
+                // リプライフォームの表示・非表示を切り替え
                 replyForm.classList.toggle('show-reply-form');
             });
 
+            // リプライ送信ボタンのクリックイベント
             replySubmitButton.addEventListener('click', () => {
-                // リプライ送信処理
+                // リプライ送信処理 空かチェック
                 if (replyInput.value.trim() === '') {
                     // 内容が空の場合はエラーメッセージを表示
                     showErrorMessage('内容を入力してください');
@@ -82,6 +93,7 @@
             }
         });
 
+        // リプライリストの表示・非表示を切り替えるイベントリスナー
         window.addEventListener('DOMContentLoaded', () => {
             const replyListToggle = document.querySelector('.reply-list-toggle');
             const replyListContent = document.querySelector('.reply-list-content');
@@ -108,10 +120,11 @@
 </head>
 
 <body>
-        <!-- サイドバー -->
-        <?php include '../sidebar/sidebar.php'; ?>
-        <div class="main-content">
-        <!-- ここまで -->
+    
+    <!-- サイドバー -->
+    <?php include '../sidebar/sidebar.php'; ?>
+    <div class="main-content">
+    <!-- ここまで -->
     <div class="post-detail">
         <div class="user-info">
             <div class="user-icon"></div>
