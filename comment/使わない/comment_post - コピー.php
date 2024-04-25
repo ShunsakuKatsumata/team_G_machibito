@@ -110,14 +110,65 @@
                 <input name="qustion_title" type="text" placeholder="タイトルを入力してください" class="title-input">
             </div>
             <textarea name="question_detail" placeholder="本文を入力してください" class="content-input"></textarea>
-            <div class="button-container">
-                <button class="clear-button">削除する</button>
-                <button name="button1" class="post-button">投稿する</button>
-            </div>
         </form>
 
-        
+        <div class="button-container">
+            <button class="clear-button">削除する</button>
+            <button name="button1" class="post-button">投稿する</button>
+        </div>
     </div>
+
+    <script>
+        const postButton = document.querySelector('.post-button');
+        const clearButton = document.querySelector('.clear-button');
+        const titleInput = document.querySelector('.title-input');
+        const contentInput = document.querySelector('.content-input');
+        const errorMessage = document.querySelector('.error-message');
+
+        postButton.addEventListener('click', () => {
+            const title = titleInput.value.trim();
+            const content = contentInput.value.trim();
+
+            if (title === '' || content === '') {
+                showErrorMessage('タイトル・本文を入力してください');
+            } else {
+                // 投稿処理の実装...
+
+                // 投稿一覧画面に遷移
+                localStorage.setItem('postMessage', '投稿しました');
+                window.location.href = 'comment_home.php';
+            }
+        });
+
+        clearButton.addEventListener('click', () => {
+            titleInput.value = '';
+            contentInput.value = '';
+            hideErrorMessage();
+        });
+
+        function showErrorMessage(message) {
+            errorMessage.textContent = message;
+            errorMessage.classList.add('show-message');
+            setTimeout(() => {
+                errorMessage.classList.remove('show-message');
+            }, 3000);
+        }
+
+        function hideErrorMessage() {
+            errorMessage.classList.remove('show-message');
+        }
+
+        function showPostMessage(message) {
+            var postMessage = document.createElement('div');
+            postMessage.textContent = message;
+            postMessage.classList.add('post-message');
+            document.body.appendChild(postMessage);
+
+            setTimeout(function () {
+                postMessage.style.opacity = '0'; // 3 秒後にメッセージを非表示にする
+            }, 3000);
+        }
+    </script>
 </body>
 
 </html>

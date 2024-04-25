@@ -2,14 +2,9 @@
 <html>
     <head> 
         <link rel="stylesheet" href="comment.css">
-        <link rel="stylesheet" href="../sidebar/sidebar.css">
         <meta charset="UTF-8">
     </head>
     <body>
-        <!-- サイドバー -->
-        <?php include '../sidebar/sidebar.php'; ?>
-        <div class="main-content">
-        <!-- ここまで -->
         <div class="comment_home">
             <!-- <header>
                 <h3>タイトル</h3>
@@ -23,7 +18,7 @@
                 <li class="menu-item_red">回答募集中&nbsp;|&nbsp;</li>
                 <li class="menu-item_blue">解決済み&nbsp;|&nbsp;</li>
                 <li class="menu-item_blue">カテゴリー</li>
-                <li><input class="menu-item_q" type="button" onclick="location.href='./comment_post.html'" value="質問する"></li>
+                <li><input class="menu-item_q" type="button" onclick="location.href='./comment_post.php'" value="質問する"></li>
                 <!-- <li ></li> -->
             </ul>
             <P><ul class="menu_sort">
@@ -35,6 +30,9 @@
                 </select>
             </ul></P>
             <hr>
+            <?php
+                require_once __DIR__.'/';
+            ?>
             <table id="comment_home_item" align="center">
                 <tr>
                     <td>
@@ -46,44 +44,7 @@
                         </button>
                     </td>
                 </tr>
-                <tr>
-                    <td>
-                        <button class="list_button" onclick="location.href='comment_detail.html'">
-                            <div class="language">C</div>
-                            <div class="post">投稿２</div>
-                            <div class="date">4/17 21:30</div>
-                            <div class="comment_number">コメント12個</div>
-                        </button>
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <button class="list_button" onclick="location.href='comment_detail.html'">
-                            <div class="language">PHP</div>
-                            <div class="post">投稿３</div>
-                            <div class="date">4/17 21:30</div>
-                            <div class="comment_number">コメント12個</div>
-                        </button>
-                    </td>
-                </tr>
             </table>
-            <!-- <script>
-                var comments= ['投稿１', '投稿２', '投稿３'];
-                var tableEle = document.getElementById('comment_1');
-                // css
-                const style = document.createElement('style')
-                const css = "#comment_1 td{border: solid 1px #000000; padding:10px 200px; margin-top:7px; display: inline-block; border-radius: 10px; background-color: #ccc;}";      
-                style.appendChild(document.createTextNode(css));
-                document.head.appendChild(style);
-                
-                for (i in comments) {
-                    var tr = document.createElement('tr');
-                    var td = document.createElement('td');
-                    td.innerHTML = comments[i];
-                    tr.appendChild(td);
-                    tableEle.appendChild(tr);
-                }
-            </script> -->
         </div>
     </body>
 </html>
