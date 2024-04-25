@@ -6,7 +6,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $content = $_POST['content'];
     $tag = $_POST['tag'];
 
-
     // データベースに接続する
     $dsn = 'mysql:host=localhost;dbname=post;charset=utf8';
     $username = 'kobe';
@@ -70,26 +69,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             </div>
         </form>
     </div>
-
     <script>
-        const postButton = document.querySelector('.post-button');
         const clearButton = document.querySelector('.clear-button');
         const titleInput = document.querySelector('.title-input');
         const contentInput = document.querySelector('.content-input');
         const tagInput = document.querySelector('.tag-input');
         const errorMessage = document.querySelector('.error-message');
-
-        postButton.addEventListener('click', () => {
-            const title = titleInput.value.trim();
-            const content = contentInput.value.trim();
-            const tag = tagInput.value.trim();
-
-            if (title === '' || content === '' || tag === '') {
-                showErrorMessage('タイトル・本文・タグを入力してください');
-            } else {
-                localStorage.setItem('postMessage', '投稿しました');
-            }
-        });
 
         clearButton.addEventListener('click', () => {
             titleInput.value = '';
@@ -98,26 +83,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             hideErrorMessage();
         });
 
+        function hideErrorMessage() {
+            errorMessage.classList.remove('show-message');
+        }
+
         function showErrorMessage(message) {
             errorMessage.textContent = message;
             errorMessage.classList.add('show-message');
             setTimeout(() => {
                 errorMessage.classList.remove('show-message');
-            }, 3000);
-        }
-
-        function hideErrorMessage() {
-            errorMessage.classList.remove('show-message');
-        }
-
-        function showPostMessage(message) {
-            var postMessage = document.createElement('div');
-            postMessage.textContent = message;
-            postMessage.classList.add('post-message');
-            document.body.appendChild(postMessage);
-
-            setTimeout(function() {
-                postMessage.style.opacity = '0'; // 3 秒後にメッセージを非表示にする
             }, 3000);
         }
     </script>
