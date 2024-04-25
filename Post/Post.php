@@ -1,3 +1,45 @@
+<?php
+// フォームが送信されたかどうかを確認する
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    // フォームから送信されたデータを取得する
+    $title = $_POST['title'];
+    $content = $_POST['content'];
+    $tag = $_POST['tag'];
+
+
+    // データベースに接続する
+    $dsn = 'mysql:host=localhost;dbname=post;charset=utf8';
+    $username = 'kobe';
+    $password = 'denshi';
+
+    try {
+        $pdo = new PDO($dsn, $username, $password);
+        $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+        // データを挿入するクエリを準備する
+        $sql = "INSERT INTO post (title, content, tag) VALUES (:title, :content, :tag)";
+        $stmt = $pdo->prepare($sql);
+
+        // パラメータをバインドする
+        $stmt->bindParam(':title', $title, PDO::PARAM_STR);
+        $stmt->bindParam(':content', $content, PDO::PARAM_STR);
+        $stmt->bindParam(':tag', $tag, PDO::PARAM_STR);
+
+        // クエリを実行する
+        $stmt->execute();
+
+        // 投稿一覧画面にリダイレクトする
+        header("Location: ../Display/Display.php");
+        exit();
+    } catch (PDOException $e) {
+        echo "エラー：" . $e->getMessage();
+    }
+
+    // データベース接続を閉じる
+    $pdo = null;
+}
+?>
+
 <!DOCTYPE html>
 <html lang="ja">
 
@@ -15,16 +57,18 @@
 
     <div class="error-message"></div>
     <div class="post-container">
-        <div class="user-info">
-            <div class="user-icon"></div>
-            <input type="text" placeholder="タイトルを入力してください" class="title-input">
-        </div>
-        <textarea placeholder="本文を入力してください" class="content-input"></textarea>
-        <textarea placeholder="タグを入力して下さい。例）#Python #資格" class="tag-input"></textarea>
-        <div class="button-container">
-            <button class="clear-button">削除する</button>
-            <button class="post-button">投稿する</button>
-        </div>
+        <form action="post.php" method="post">
+            <div class="user-info">
+                <div class="user-icon"></div>
+                <input type="text" name="title" placeholder="タイトルを入力してください" class="title-input">
+            </div>
+            <textarea name="content" placeholder="本文を入力してください" class="content-input"></textarea>
+            <textarea name="tag" placeholder="タグを入力して下さい。例）#Python #資格" class="tag-input"></textarea>
+            <div class="button-container">
+                <button type="button" class="clear-button">削除する</button>
+                <button type="submit" class="post-button">投稿する</button>
+            </div>
+        </form>
     </div>
 
     <script>
@@ -43,11 +87,7 @@
             if (title === '' || content === '' || tag === '') {
                 showErrorMessage('タイトル・本文・タグを入力してください');
             } else {
-                // 投稿処理の実装...
-
-                // 投稿一覧画面に遷移
                 localStorage.setItem('postMessage', '投稿しました');
-                window.location.href = '../Display/Display.php/';
             }
         });
 
