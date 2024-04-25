@@ -103,28 +103,40 @@
                 replyListContent.style.maxHeight = '0';
             }
 
-            replyListToggle.addEventListener('click', () => {
-                replyListContent.classList.toggle('show');
+                replyListToggle.addEventListener('click', () => {
+                    replyListContent.classList.toggle('show');
 
-                if (replyListContent.classList.contains('show')) {
-                    replyListContent.style.maxHeight = replyListContent.scrollHeight + 'px';
-                    toggleIcon.style.transform = 'rotate(180deg)';
-                } else {
-                    replyListContent.style.maxHeight = '0';
-                    toggleIcon.style.transform = 'rotate(0deg)';
-                }
+                    if (replyListContent.classList.contains('show')) {
+                        replyListContent.style.maxHeight = replyListContent.scrollHeight + 'px';
+                        toggleIcon.style.transform = 'rotate(180deg)';
+                    } else {
+                        replyListContent.style.maxHeight = '0';
+                        toggleIcon.style.transform = 'rotate(0deg)';
+                    }
+                });
             });
-        });
-
     </script>
 </head>
 
 <body>
-    
     <!-- サイドバー -->
     <?php include '../sidebar/sidebar.php'; ?>
     <div class="main-content">
     <!-- ここまで -->
+    <?php
+        $servername = "localhost";
+        $username = "kobe";
+        $password = "denshi";
+
+        // Create connection
+        $conn = new mysqli($servername, $username, $password);
+
+        // Check connection
+        if ($conn->connect_error) {
+            die("Connection failed: " . $conn->connect_error);
+        } 
+        echo "Connected successfully";
+        ?>
     <div class="post-detail">
         <div class="user-info">
             <div class="user-icon"></div>
