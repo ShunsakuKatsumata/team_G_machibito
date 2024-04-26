@@ -104,7 +104,7 @@
 <body>
     <div class="error-message"></div>
     <div class="post-container">
-        <form method="POST" action="comment_post_add.php">
+        <form method="POST" action="post_comment/comment_post_add.php">
             <div class="user-info">
                 <div class="user-icon"></div>
                 <input name="qustion_title" type="text" placeholder="タイトルを入力してください" class="title-input">

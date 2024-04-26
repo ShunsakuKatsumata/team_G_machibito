@@ -5,7 +5,7 @@ class question_post extends dbdata{
     // 追加
     public function post_questions($title, $detail){
         $sql = "insert into question_post(title, detail) values(?, ?)";
-        $result = $this->query($sql, [$title, $detail]);
+        $result = $this->exec($sql, [$title, $detail]);
     }
 
     // 取得
@@ -23,6 +23,12 @@ class question_post extends dbdata{
         $stmt = $this->query($sql, [$ident]);
         $item = $stmt->fetch();
         return $item;
+    }
+
+    // 投稿したものを編集する
+    public function edit_question($ident, $title, $detail){
+        $sql = "update question_post set title=?,detail=? where ident=?";
+        $result = $this->exec($sql, [$title, $detail, $ident]);
     }
     
 }

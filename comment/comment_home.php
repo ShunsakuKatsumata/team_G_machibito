@@ -18,7 +18,7 @@
                 <li class="menu-item_red">回答募集中&nbsp;|&nbsp;</li>
                 <li class="menu-item_blue">解決済み&nbsp;|&nbsp;</li>
                 <li class="menu-item_blue">カテゴリー</li>
-                <li><input class="menu-item_q" type="button" onclick="location.href='./comment_post.php'" value="質問する"></li>
+                <li><input class="menu-item_q" type="button" onclick="location.href='./new_question_post.php'" value="質問する"></li>
                 <!-- <li ></li> -->
             </ul>
             <P><ul class="menu_sort">
@@ -36,7 +36,7 @@
             <table id="comment_home_item" align="center">
                 <?php
                 // onclick="location.href='comment_detail.html'">
-                require_once __DIR__.'/question_post.php';
+                require_once __DIR__.'/classes/question_post.php';
                 $question_post = new question_post();
                 $questions_list = $question_post->get_questions();
                     foreach ($questions_list as $item) {

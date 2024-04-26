@@ -3,16 +3,16 @@ require_once __DIR__ .'/comment_dbdata.php';
 
 class answer_post extends dbdata{
     // 追加
-    public function answer_question($speak_myknowledge){
-        $sql = "insert into question_answer(answer) values(?)";
-        $result = $this->query($sql, [$speak_myknowledge]);
+    public function answer_question($post_id, $speak_myknowledge){
+        $sql = "insert into question_answer(post_id, answer) values(?, ?)";
+        $result = $this->query($sql, [$post_id, $speak_myknowledge]);
     }
 
     // 取得
-    public function get_answers(){
+    public function get_answers($post_id){
         // 現在利用しているユーザーを指定
-        $sql = "select * from question_answer";
-        $stmt = $this->query($sql, []);
+        $sql = "select * from question_answer where post_id = ?";
+        $stmt = $this->query($sql, [$post_id]);
         $items = $stmt->fetchAll();
         return $items;
     }

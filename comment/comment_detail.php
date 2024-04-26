@@ -5,7 +5,6 @@
         <meta charset="UTF-8">
     </head>
     <body>
-
         <!-- 質問 -->
             <div class="detail1">
                 <div class="detail_q">
@@ -15,7 +14,7 @@
                     <?php
                         $ident = $_GET['ident'];
                         // テーブルの中身を取り出す
-                        require_once __DIR__.'/question_post.php';
+                        require_once __DIR__.'/classes/question_post.php';
                         $question_post = new question_post();
                         $item = $question_post->get_question_ident($ident);
                     
@@ -28,15 +27,34 @@
                             echo '<td>'.$item['detail'].'</td>';
                         echo '</tr>';
                     echo '</table>';
+
+                    // formを追加
+                    echo '<form method="POST" action="./post_comment/comment_post_edit.php">';
+                        echo '<button class="post_edit_button" onclick="location.href=\'./post_comment/comment_post_edit.php?ident='.$ident.'\'">編集</button>';
+                        echo '<input name="question_ident_edit" type="hidden" value="'.$ident.'>';
+                        // echo '<input name="question_title_edit" type="hidden" value="'.$item['title'].'>';
+                        // echo '<input name="question_detail_edit" type="hidden" value="'.$item['detail'].'>';
+                    echo '</form>';
+
+                    // formを追加
+                    echo '<form>';
+                        echo '<button class="post_delete_button">削除</button>';
+                    echo '</form>';
+
+                    // echo '<form method="POST" action="answer_post_add.php">';
+                    //     echo '<input type="hidden" name="comment_detail_ident" value="'.$ident.'">';
+                    // echo '</form>';
                     ?>
                 </div>
+                
                 <!-- コメント欄 -->
                 <!-- 質問者の返信がある場合 -->
                 <?php
+                $post_id = $_GET['ident'];
                 // テーブルの中身を取り出す
-                require_once __DIR__.'/answer_post.php';
+                require_once __DIR__.'/classes/answer_post.php';
                 $answer_post = new answer_post();
-                $items = $answer_post->get_answers();
+                $items = $answer_post->get_answers($post_id);
                 foreach($items as $item){
                     echo '<div class="detail_reply">';
                     echo '<h3>回答</h3>';
@@ -50,11 +68,15 @@
                 ?>
                 <!-- コメント記入 -->
                 <!-- <br> -->
-                <form method="POST" action="answer_post_add.php">
+                <form method="POST" action="/classes/answer_post_add.php">
                     <div class="write_comment">
-                        <!-- <label>コメント記入</label> -->
-                        <p><textarea name="answer_post" rows="3" cols="45" placeholder="質問に回答する"></textarea></p>
-                        <p><button onclick="location.href='./comment_detail.php?ident='">送信</button></p>
+                        <?php
+                        // <!-- <label>コメント記入</label> -->
+                        $ident = $_GET['ident'];
+                        echo '<p><textarea name="answer_post" rows="3" cols="45" placeholder="質問に回答する"></textarea></p>';
+                        echo '<p><button>送信</button></p>';                      
+                        echo '<input type="hidden" name="answer_ident" value="'.$ident.'">';
+                        ?>
                     </div>
                 </form>
             </div>
