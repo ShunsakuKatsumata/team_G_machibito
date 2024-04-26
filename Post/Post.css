@@ -17,12 +17,14 @@ body {
 
 .post-container {
     max-width: 800px;
-    margin-left: 19%;
-    width: 80%;
     padding: 20px;
     background-color: #fff;
     border-radius: 5px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    margin-left: calc(15% + 20px);
+    box-sizing: border-box;
+    width: calc(100% - 220px);
+    overflow-x: hidden;
 }
 
 .user-info {
