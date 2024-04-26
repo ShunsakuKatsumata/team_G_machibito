@@ -118,6 +118,11 @@
             transition: opacity 0.3s;
             z-index: 1;
         }
+        .post-tag{
+            text-align: right;
+            padding: 10px;
+            margin-top:10px;
+        }
     </style>
 </head>
 <body>
@@ -138,51 +143,44 @@
         </div>
     </div>
     <div class="post-list">
-        <div class="post-detail">
-            <div class="post-date">2024-04-15</div>
-            <div class="user-info">
-                <div class="user-icon"></div>
-                <span>投稿者名1</span>
-            </div>
-            <a href="../Post_Detail/Post_Detail.html" class="post-title">投稿のタイトル1</a>
-            <div class="post-content">
-                投稿の本文1がここに表示されます。改行を含む本文の場合も、適切に表示されます。
-            </div>
-            <div class="like-button">
-                <img class="like-icon" src="../Image/Good_white.png" alt="Like">
-                <span class="like-count">97</span>
-            </div>
-        </div>
-        <div class="post-detail">
-            <div class="post-date">2024-04-14</div>
-            <div class="user-info">
-                <div class="user-icon"></div>
-                <span>投稿者名2</span>
-            </div>
-            <a href="../Post_Detail/Post_Detail.html" class="post-title">投稿のタイトル2</a>
-            <div class="post-content">
-                投稿の本文2がここに表示されます。さまざまな内容が含まれることがあります。
-            </div>
-            <div class="like-button">
-                <img class="like-icon" src="../Image/Good_white.png" alt="Like">
-                <span class="like-count">120</span>
-            </div>
-        </div>
-        <div class="post-detail">
-            <div class="post-date">2024-04-25</div>
-            <div class="user-info">
-                <div class="user-icon"></div>
-                <span>投稿者名3</span>
-            </div>
-            <a href="../Post_Detail/Post_Detail.html" class="post-title">投稿のタイトル3</a>
-            <div class="post-content">
-                投稿の本文3がここに表示されます。さまざまな内容が含まれることがあります。
-            </div>
-            <div class="like-button">
-                <img class="like-icon" src="../Image/Good_white.png" alt="Like">
-                <span class="like-count">1</span>
-            </div>
-        </div>
+        <?php
+        // データベースに接続
+        $db_host = 'localhost';
+        $db_user = 'kobe';
+        $db_password = 'denshi';
+        $db_name = 'post';
+        $conn = new mysqli($db_host, $db_user, $db_password, $db_name);
+        // 接続をチェック
+        if ($conn->connect_error) {
+            die("データベース接続エラー: " . $conn->connect_error);
+        }
+        // データベースから投稿を取得
+        $sql = "SELECT * FROM post";
+        $result = $conn->query($sql);
+        // 結果を表示
+        if ($result->num_rows > 0) {
+            while($row = $result->fetch_assoc()) {
+                echo '<div class="post-detail">';
+                echo '<div class="post-date">' . $row["post_date"] . '</div>';
+                echo '<div class="user-info">';
+                echo '<div class="user-icon"></div>';
+                echo '<span>' . $row["title"] . '</span>';
+                echo '</div>';
+                echo '<a href="../Post_Detail/Post_Detail.html" class="post-title">' . $row["title"] . '</a>';
+                echo '<div class="post-content">' . $row["content"] . '</div>';
+                echo '<div class="like-button">';
+                echo '<img class="like-icon" src="../Image/Good_white.png" alt="Like">';
+                echo '<span class="like-count">0</span>'; // いいねの数は0に設定
+                echo '<span class="post-tag">' . $row["tag"] . '</span>';
+                echo '</div>';
+                echo '</div>';
+            }
+        } else {
+            echo "投稿がありません";
+        }
+        // データベース接続を閉じる
+        $conn->close();
+        ?>
     </div>
     <div class="post-message" id="postMessage"></div> <!-- 追加: 投稿メッセージの要素 -->
     <script>
@@ -200,54 +198,50 @@
                 localStorage.removeItem('postMessage');
             }
         };
-    </script>
+        function handleSortChange(value) {
+            var postList = document.querySelector('.post-list');
+            var postDetails = Array.from(postList.querySelectorAll('.post-detail'));
 
-<script>
-    function handleSortChange(value) {
-        var postList = document.querySelector('.post-list');
-        var postDetails = Array.from(postList.querySelectorAll('.post-detail'));
-
-        switch (value) {
-            case 'date-asc':
-                // 日付昇順でソート
-                postDetails.sort(function(a, b) {
-                    var dateA = new Date(a.querySelector('.post-date').textContent.trim());
-                    var dateB = new Date(b.querySelector('.post-date').textContent.trim());
-                    return dateA - dateB;
-                });
-                break;
-            case 'date-desc':
-                // 日付降順でソート
-                postDetails.sort(function(a, b) {
-                    var dateA = new Date(a.querySelector('.post-date').textContent.trim());
-                    var dateB = new Date(b.querySelector('.post-date').textContent.trim());
-                    return dateB - dateA;
-                });
-                break;
-            case 'likes-asc':
-                // 評価昇順でソート
-                postDetails.sort(function(a, b) {
-                    var dateA = new Date(a.querySelector('.post-date').textContent.trim());
-                    var dateB = new Date(b.querySelector('.post-date').textContent.trim());
-                    return dateA - dateB;
-                });
-                break;
-            case 'likes-desc':
-                // 評価降順でソート
-                postDetails.sort(function(a, b) {
-                    var dateA = new Date(a.querySelector('.post-date').textContent.trim());
-                    var dateB = new Date(b.querySelector('.post-date').textContent.trim());
-                    return dateB - dateA;
-                });
-                break;
-            default:
-                return;
-        }
-
-        // ソートされた要素を再配置
-        postDetails.forEach(function(postDetail) {
-            postList.appendChild(postDetail);
-        });
+            switch (value) {
+                case 'date-asc':
+                    // 日付昇順でソート
+                    postDetails.sort(function(a, b) {
+                        var dateA = new Date(a.querySelector('.post-date').textContent.trim());
+                        var dateB = new Date(b.querySelector('.post-date').textContent.trim());
+                        return dateA - dateB;
+                    });
+                    break;
+                case 'date-desc':
+                    // 日付降順でソート
+                    postDetails.sort(function(a, b) {
+                        var dateA = new Date(a.querySelector('.post-date').textContent.trim());
+                        var dateB = new Date(b.querySelector('.post-date').textContent.trim());
+                        return dateB - dateA;
+                    });
+                    break;
+                case 'likes-asc':
+                    // 評価昇順でソート
+                    postDetails.sort(function(a, b) {
+                        var dateA = new Date(a.querySelector('.post-date').textContent.trim());
+                        var dateB = new Date(b.querySelector('.post-date').textContent.trim());
+                        return dateA - dateB;
+                    });
+                    break;
+                case 'likes-desc':
+                    // 評価降順でソート
+                    postDetails.sort(function(a, b) {
+                        var dateA = new Date(a.querySelector('.post-date').textContent.trim());
+                        var dateB = new Date(b.querySelector('.post-date').textContent.trim());
+                        return dateB - dateA;
+                    });
+                    break;
+                default:
+                    return;
+            }
+            // ソートされた要素を再配置
+            postDetails.forEach(function(postDetail) {
+                postList.appendChild(postDetail);
+            });
     }
 </script>
 
@@ -255,3 +249,4 @@
 </body>
 
 </html>
+
