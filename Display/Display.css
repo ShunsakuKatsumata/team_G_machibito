@@ -1,0 +1,131 @@
+/* 全体のスタイル設定 */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 20px;
+    background-color: #f0f0f0;
+}
+
+/* 検索バーのスタイル */
+.search-bar {
+    max-width: 800px;
+    display: flex;
+    justify-content: space-between;
+    margin: 0 auto 20px;
+    padding: 10px;
+    background-color: #fff;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* 検索入力欄のスタイル */
+.search-input {
+    width: 70%;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+/* ソートボタンのスタイル */
+.sort-buttons {
+    display: flex;
+    align-items: center;
+}
+
+.sort-select {
+    padding: 5px 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+/* 投稿リストのスタイル */
+.post-list {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+/* 投稿の詳細スタイル */
+.post-detail {
+    position: relative;
+    background-color: #fff;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+    padding: 20px;
+}
+
+/* 投稿日時のスタイル */
+.post-date {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 14px;
+    color: #666;
+}
+
+/* ユーザ情報のスタイル */
+.user-info {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+/* ユーザアイコンのスタイル */
+.user-icon {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background-color: #ccc;
+    margin-right: 10px;
+}
+
+/* 投稿タイトルのスタイル */
+.post-title {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 5px;
+    color: blue;
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+/* 投稿内容のスタイル */
+.post-content {
+    line-height: 1.5;
+    white-space: pre-wrap;
+    background-color: #f5f5f5;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 10px;
+    margin-bottom: 10px;
+}
+
+/* いいねアイコンのスタイル */
+.like-icon {
+    width: 20px;
+    height: 20px;
+    margin-right: 5px;
+}
+
+/* 投稿メッセージのスタイル */
+.post-message {
+    position: fixed;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: #fff;
+    border-radius: 5px;
+    opacity: 0;
+    transition: opacity 0.3s;
+    z-index: 1;
+}
+
+/* 投稿タグのスタイル */
+.post-tag{
+    text-align: right;
+    padding: 10px;
+    margin-top:10px;
+}

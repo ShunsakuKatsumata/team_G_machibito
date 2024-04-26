@@ -8,14 +8,17 @@ try {
     $pdo = new PDO($dsn, $username, $password);
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
+    if(isset($_GET['post_id'])) {
+        $post_id = $_GET['post_id'];
+    }
+
     // 元々のデータベース処理
     if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $replyContent = $_POST['input-post'];
-        $postId = 1;
 
         // SQLクエリを準備
-        $stmt = $pdo->prepare("INSERT INTO reply (post_id, reply) VALUES (:post_id, :reply)");
-        $stmt->bindParam(':post_id', $postId);
+        $stmt = $pdo->prepare("INSERT INTO reply (post_id, reply) VALUES (post_id, :reply)");
+        $stmt->bindParam(':post_id', $post_id);
         $stmt->bindParam(':reply', $replyContent);
 
         // クエリを実行
@@ -27,9 +30,8 @@ try {
     }
 
     // 追加のデータベース処理
-    $postId = 1;
-    $stmt = $pdo->prepare("SELECT * FROM reply WHERE post_id = :post_id");
-    $stmt->bindParam(':post_id', $postId);
+    $stmt = $pdo->prepare("SELECT * FROM reply WHERE $post_id = :post_id");
+    $stmt->bindParam(':post_id', $post_id);
     $stmt->execute();
     $replyData = $stmt->fetchAll(PDO::FETCH_ASSOC);
 } catch (PDOException $e) {
@@ -208,7 +210,7 @@ try {
         <div class="reply-form">
             <form method="POST" action="Post_Detail.php">
                 <textarea name="input-post" class="reply-input" placeholder="リプライを入力してください"></textarea>
-                <button type="submit" name="submit-post" class="reply-submit">送信</button>
+                <button type="submit" name="submit-post" class="reply-submit"></button>
             </form>
         </div>
     </div>

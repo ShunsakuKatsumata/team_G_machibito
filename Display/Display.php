@@ -5,125 +5,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="../sidebar/sidebar.css">
+    <link rel="stylesheet" href="Display.css">
     <title>記事一覧</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 20px;
-            background-color: #f0f0f0;
-        }
-
-        .search-bar {
-            max-width: 800px;
-            display: flex;
-            justify-content: space-between;
-            margin: 0 auto 20px;
-            padding: 10px;
-            background-color: #fff;
-            border-radius: 5px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        }
-
-        .search-input {
-            width: 70%;
-            padding: 8px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-        }
-
-        .sort-buttons {
-            display: flex;
-            align-items: center;
-        }
-
-        .sort-select {
-            padding: 5px 10px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-
-        .post-list {
-            max-width: 800px;
-            margin: 0 auto;
-        }
-
-        .post-detail {
-            position: relative;
-            background-color: #fff;
-            border-radius: 5px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            margin-bottom: 20px;
-            padding: 20px;
-        }
-
-        .post-date {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            font-size: 14px;
-            color: #666;
-        }
-
-        .user-info {
-            display: flex;
-            align-items: center;
-            margin-bottom: 10px;
-        }
-
-        .user-icon {
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            background-color: #ccc;
-            margin-right: 10px;
-        }
-
-        .post-title {
-            font-size: 24px;
-            font-weight: bold;
-            margin-bottom: 5px;
-            color: blue;
-            text-decoration: underline;
-            cursor: pointer;
-        }
-
-        .post-content {
-            line-height: 1.5;
-            white-space: pre-wrap;
-            background-color: #f5f5f5;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            padding: 10px;
-            margin-bottom: 10px;
-        }
-
-        .like-icon {
-            width: 20px;
-            height: 20px;
-            margin-right: 5px;
-        }
-
-        .post-message {
-            position: fixed;
-            top: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            padding: 10px 20px;
-            background-color: #007bff;
-            color: #fff;
-            border-radius: 5px;
-            opacity: 0;
-            transition: opacity 0.3s;
-            z-index: 1;
-        }
-        .post-tag{
-            text-align: right;
-            padding: 10px;
-            margin-top:10px;
-        }
-    </style>
 </head>
 <body>
         <!-- サイドバー -->
@@ -160,13 +43,14 @@
         // 結果を表示
         if ($result->num_rows > 0) {
             while($row = $result->fetch_assoc()) {
+                $row['post_id'];
                 echo '<div class="post-detail">';
                 echo '<div class="post-date">' . $row["post_date"] . '</div>';
                 echo '<div class="user-info">';
                 echo '<div class="user-icon"></div>';
                 echo '<span>' . $row["title"] . '</span>';
                 echo '</div>';
-                echo '<a href="../Post_Detail/Post_Detail.html" class="post-title">' . $row["title"] . '</a>';
+                echo '<a href="../Post_Detail/Post_Detail.php?post_id=' . $row["post_id"] . '" class="post-title">' . $row["title"] . '</a>';
                 echo '<div class="post-content">' . $row["content"] . '</div>';
                 echo '<div class="like-button">';
                 echo '<img class="like-icon" src="../Image/Good_white.png" alt="Like">';
