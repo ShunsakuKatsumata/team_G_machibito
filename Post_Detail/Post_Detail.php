@@ -1,3 +1,44 @@
+<!-- データベ～ス -->
+<?php
+$dsn = 'mysql:host=localhost;dbname=post;charset=utf8';
+$username = 'kobe';
+$password = 'denshi';
+
+try {
+    $pdo = new PDO($dsn, $username, $password);
+    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+    // 元々のデータベース処理
+    if ($_SERVER["REQUEST_METHOD"] == "POST") {
+        $replyContent = $_POST['input-post'];
+        $postId = 1;
+
+        // SQLクエリを準備
+        $stmt = $pdo->prepare("INSERT INTO reply (post_id, reply) VALUES (:post_id, :reply)");
+        $stmt->bindParam(':post_id', $postId);
+        $stmt->bindParam(':reply', $replyContent);
+
+        // クエリを実行
+        $stmt->execute();
+
+        // 成功した場合、ページを再読み込み
+        header("Location: ".$_SERVER['PHP_SELF']);
+        exit();
+    }
+
+    // 追加のデータベース処理
+    $postId = 1;
+    $stmt = $pdo->prepare("SELECT * FROM reply WHERE post_id = :post_id");
+    $stmt->bindParam(':post_id', $postId);
+    $stmt->execute();
+    $replyData = $stmt->fetchAll(PDO::FETCH_ASSOC);
+} catch (PDOException $e) {
+    echo "エラー：" . $e->getMessage();
+}
+?>
+
+
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -122,21 +163,7 @@
     <!-- サイドバー -->
     <?php include '../sidebar/sidebar.php'; ?>
     <div class="main-content">
-    <!-- ここまで -->
-    <?php
-        $servername = "localhost";
-        $username = "kobe";
-        $password = "denshi";
-
-        // Create connection
-        $conn = new mysqli($servername, $username, $password);
-
-        // Check connection
-        if ($conn->connect_error) {
-            die("Connection failed: " . $conn->connect_error);
-        } 
-        echo "Connected successfully";
-        ?>
+    <!-- ここまで -->  
     <div class="post-detail">
         <div class="user-info">
             <div class="user-icon"></div>
@@ -157,12 +184,15 @@
             <div class="reply-list-content" id="replyList">
                 <div class="reply-item">
                     <div class="reply-user">質問者さん</div>
-                    <div class="reply-content">これはリプライの例です。</div>
+                    <div class="reply-content">めちゃ困りです。</div>
                 </div>
+            <!-- ループ処理でデータを表示-->
+            <?php foreach ($replyData as $reply): ?>
                 <div class="reply-item">
-                    <div class="reply-user author">投稿者さん</div>
-                    <div class="reply-content">これは投稿者からの回答の例です。</div>
+                <div class="reply-user">回答者</div><!--< ?php echo $reply['user']; ?> -->
+                    <div class="reply-content"><?php echo $reply['reply']; ?></div>
                 </div>
+                <?php endforeach; ?>
             </div>
         </div>
         <div class="post-actions">
@@ -176,8 +206,10 @@
             </div>
         </div>
         <div class="reply-form">
-            <textarea class="reply-input" placeholder="リプライを入力してください"></textarea>
-            <button class="reply-submit">送信</button>
+            <form method="POST" action="Post_Detail.php">
+                <textarea name="input-post" class="reply-input" placeholder="リプライを入力してください"></textarea>
+                <button type="submit" name="submit-post" class="reply-submit">送信</button>
+            </form>
         </div>
     </div>
     <div class="post-message"></div>
