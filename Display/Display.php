@@ -184,6 +184,7 @@
     </div>
     <div class="post-message" id="postMessage"></div> <!-- 追加: 投稿メッセージの要素 -->
     <script>
+        
         // ページ読み込み時に投稿メッセージがあれば表示する
         window.onload = function () {
             var postMessage = localStorage.getItem('postMessage');
@@ -199,7 +200,7 @@
             }
         };
         function handleSortChange(value) {
-            var postList = document.querySelector('.post-list');
+            var postList = document.qudisplayerySelector('.post-list');
             var postDetails = Array.from(postList.querySelectorAll('.post-detail'));
 
             switch (value) {
