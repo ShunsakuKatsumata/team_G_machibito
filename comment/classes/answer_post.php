@@ -10,11 +10,18 @@ class answer_post extends dbdata{
 
     // 取得
     public function get_answers($post_id){
-        // 現在利用しているユーザーを指定
         $sql = "select * from question_answer where post_id = ?";
         $stmt = $this->query($sql, [$post_id]);
         $items = $stmt->fetchAll();
         return $items;
+    }
+
+    // post_idと回答IDを指定
+    public function get_answers_answerid($ident, $post_id){
+        $sql = 'select * from question_answer where post_id=? and ident=?';
+        $stmt = $this->query($sql, [$ident, $post_id]);
+        $item = $stmt->fetchAll();
+        return $item;
     }
 
     // // 選択した投稿内容を取得する

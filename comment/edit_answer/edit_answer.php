@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
     <head> 
-        <link rel="stylesheet" href="comment.css">
+        <link rel="stylesheet" href="../comment.css">
         <meta charset="UTF-8">
     </head>
     <body>
@@ -12,9 +12,9 @@
                     <div style="text-align:right; padding-top:20px;">12回答</div>
                     <br>
                     <?php
-                        $ident = $_GET['ident'];
+                        $ident = $_GET['post_id'];
                         // テーブルの中身を取り出す
-                        require_once __DIR__.'/classes/question_post.php';
+                        require_once __DIR__.'/../classes/question_post.php';
                         $question_post = new question_post();
                         $item = $question_post->get_question_ident($ident);
                     
@@ -52,38 +52,21 @@
                 <!-- コメント欄 -->
                 <!-- 質問者の返信がある場合 -->
                 <?php
-                $post_id = $_GET['ident'];
+                $comment_id = $_GET['commentId'];
+                $post_id = $_GET['post_id'];
                 // テーブルの中身を取り出す
-                require_once __DIR__.'/classes/answer_post.php';
+                require_once __DIR__.'/../classes/answer_post.php';
                 $answer_post = new answer_post();
-                $items = $answer_post->get_answers($post_id);
-                foreach($items as $item){
-                    echo '<div class="detail_reply">';
-                    echo '<h3>回答</h3>';
-                    echo '<table>';
-                        echo '<tr>';
-                            echo '<td>'.$item['answer'].'</td>';
-                        echo '</tr>';
-                        echo '<tr>';
-                            echo '<td><button onclick="location.href=\'./edit_answer/edit_answer.php?post_id='.$ident.'&commentId='.$item['ident'].'\'">編集</button></td>';
-                        echo '</tr>';
-                    echo '</table>';
-                    echo '</div>';
-                }
+                $item_answer = $answer_post->get_answers_answerid($post_id, $comment_id);
+                echo '<div class="detail_reply">';
+                echo '<h3>回答</h3>';
+                echo '<table>';
+                    echo '<tr>';
+                        echo '<td>'.$item_answer['answer'].'</td>';
+                    echo '</tr>';
+                echo '</table>';
+                echo '</div>';
                 ?>
-                <!-- コメント記入 -->
-                <!-- <br> -->
-                <form method="POST" action="./post_answer/answer_post_add.php">
-                    <div class="write_comment">
-                        <?php
-                        // <!-- <label>コメント記入</label> -->
-                        $ident = $_GET['ident'];
-                        echo '<p><textarea name="answer_post" rows="3" cols="45" placeholder="質問に回答する"></textarea></p>';
-                        echo '<p><button>送信</button></p>';                      
-                        echo '<input type="hidden" name="answer_ident" value="'.$ident.'">';
-                        ?>
-                    </div>
-                </form>
             </div>
     </body>
 </html>

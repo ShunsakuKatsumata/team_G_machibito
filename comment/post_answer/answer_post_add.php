@@ -10,7 +10,7 @@
     $answer_post->answer_question($answer_ident, $speak_myknowledge);
 
     // require_once __DIR__.'/comment_detail.php?ident='.$answer_ident;
-    header("Location: comment_detail.php?ident=$answer_ident");
+    header("Location: ./../comment_detail.php?ident=$answer_ident");
     exit;
 
     // comment_home画面に移動

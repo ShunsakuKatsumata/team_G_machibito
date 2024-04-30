@@ -30,7 +30,11 @@ class question_post extends dbdata{
         $sql = "update question_post set title=?,detail=? where ident=?";
         $result = $this->exec($sql, [$title, $detail, $ident]);
     }
-    
+
+    public function delete_question($ident){
+        $sql = "delete from question_post where ident=?";
+        $result = $this->exec($sql, [$ident]);
+    } 
 }
 
 ?>
