@@ -44,14 +44,10 @@ body {
 .title-input {
     flex: 1;
     padding: 10px;
-    background-color: #f5f5f5;
-    border: 1px solid #ccc;
     border-radius: 5px;
 }
 
 .content-input {
-    background-color: #f5f5f5;
-    border: 1px solid #ccc;
     width: 97%;
     height: 250px;
     padding: 10px;
@@ -60,8 +56,6 @@ body {
 }
 
 .tag-input {
-    background-color: #f5f5f5;
-    border: 1px solid #ccc;
     width: 97%;
     height: 75px;
     margin-top: 20px;
@@ -70,18 +64,33 @@ body {
     resize: vertical;
 }
 
+.title-input,
+.content-input,
+.tag-input {
+    padding: 10px;
+    background-color: #f5f5f5;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    /* 角を削る */
+    margin-bottom: 5px;
+    /* 必要に応じてマージンを追加 */
+    resize: vertical;
+}
+
+
 .button-container {
     display: flex;
     justify-content: flex-end;
     margin-top: 20px;
 }
 
-.post-button,
-.clear-button {
+.clear-button,
+.post-button {
     padding: 10px 20px;
     border: none;
     border-radius: 5px;
     cursor: pointer;
+    transition: background-color 0.3s ease;
 }
 
 .clear-button {
@@ -93,6 +102,14 @@ body {
 .post-button {
     background-color: #007bff;
     color: #fff;
+}
+
+.clear-button:hover {
+    background-color: rgb(255, 110, 110);
+}
+
+.post-button:hover {
+    background-color: rgb(149, 153, 255);
 }
 
 .error-message {
@@ -111,4 +128,36 @@ body {
 
 .show-message {
     opacity: 1;
+}
+
+.popup {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.4);
+}
+
+.popup-content {
+    background-color: #fefefe;
+    margin: 15% auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%;
+}
+
+.popup-trigger {
+    cursor: pointer;
+    position: relative;
+    right: 70%;
+    font-size: 30px;
+    color: #aaa;
+}
+
+.popup-trigger:hover {
+    color: #555;
 }
