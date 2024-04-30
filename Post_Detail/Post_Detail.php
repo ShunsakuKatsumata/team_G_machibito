@@ -24,10 +24,10 @@ try {
         $postData = $stmt->fetch(PDO::FETCH_ASSOC);
 
         if (!$postData) {
-            // post_idに対応する投稿が見つからなかった場合のエラーハンドリング
+            // post_idに対応する投稿が見つからなかった場合のエラー処理　未記入
         }
     } else {
-        // post_idがURLに含まれていない場合のエラーハンドリング
+        // post_idがURLに含まれていない場合のエラー処理　未記入
     }
 
     // リプライを投稿するデータベース処理
@@ -47,8 +47,15 @@ try {
             header("Location: ".$_SERVER['PHP_SELF']."?post_id=".$postId);
             exit();
         } else {
-            // $postIdがnullの場合のエラーハンドリング
+            // $postIdがnullの場合のエラーエラー処理　未記入
         }
+
+        $stmt = $pdo->prepare('SELECT title, content FROM post WHERE post_id = ?');
+        $stmt->execute([$postId]);
+        $data = $stmt->fetch();
+
+        echo 'Title: ' . $data['title'] . "\n";
+        echo 'Content: ' . $data['content'] . "\n";
     }
 
     // リプライを表示するデータベース処理
@@ -56,6 +63,18 @@ try {
     $stmt->bindParam(':post_id', $postId);
     $stmt->execute();
     $replyData = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+    // タイトルを表示するデータベース
+    $stmt = $pdo->prepare("SELECT title FROM post WHERE post_id = :post_id");
+    $stmt->bindParam(':post_id', $postId);
+    $stmt->execute();
+    $titleData = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    // 本文を表示するデータベース
+    $stmt = $pdo->prepare("SELECT content FROM post WHERE post_id = :post_id");
+    $stmt->bindParam(':post_id', $postId);
+    $stmt->execute();
+    $contentData = $stmt->fetch(PDO::FETCH_ASSOC);
 } catch (PDOException $e) {
     echo "エラー：" . $e->getMessage();
 }
@@ -193,10 +212,10 @@ try {
             <div class="user-icon"></div>
             <span>投稿者名</span>
         </div>
-        <div class="post-title">投稿のタイトル</div>
+        <div class="post-title"><?php echo $titleData['title'];?></div>
         <div class="post-content">
-            投稿の本文が表示されます。
-            改行を含む本文の場合も、適切に表示されます。
+        <?php echo $contentData['content'];?>
+        <!-- ここだけはhtmlで出力したいかも -->
         </div>
         <div class="reply-list">
             <div class="reply-list-header">
