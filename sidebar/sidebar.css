@@ -1,17 +1,11 @@
-.main-content {
-    margin-left: calc(200px + 20px);
-    /* サイドバーの幅 + パディング */
-    box-sizing: border-box;
-    /* パディングとボーダーを要素の幅と高さに含める */
-    width: calc(100% - 220px);
-    /* 全体の幅からサイドバーの幅を引いた値を設定 */
-    overflow-x: hidden;
-    /* 横方向のスクロールを防ぐ */
-}
-
 .sidebar-sidebar {
     position: fixed;
-    width: 180px;
+    width: 15%;
+    /* 画面幅の20%に設定 */
+    min-width: 200px;
+    /* 最小幅を設定 */
+    max-width: 300px;
+    /* 最大幅を設定 */
     height: 100vh;
     background: #262626;
     color: #fff;
@@ -63,8 +57,8 @@
 
 .sidebar-image {
     margin: 0 auto;
-    width: 180px;
-    /* 画像の幅を調整する値に変更 */
+    width: 100%;
+    /* 幅を100%に設定 */
     height: auto;
     /* 高さを自動調整 */
 }

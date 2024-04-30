@@ -8,10 +8,11 @@
     <link rel="stylesheet" href="Display.css">
     <title>記事一覧</title>
 </head>
+
 <body>
-        <!-- サイドバー -->
-        <?php include '../sidebar/sidebar.php'; ?>
-        <div class="main-content">
+    <!-- サイドバー -->
+    <?php include '../sidebar/sidebar.php'; ?>
+    <div class="main-content" style="margin-left: calc(15% + 20px);">
         <!-- ここまで -->
     <div class="search-bar">
         <input type="text" class="search-input" placeholder="検索...">
@@ -86,51 +87,50 @@
             var postList = document.querySelector('.post-list');
             var postDetails = Array.from(postList.querySelectorAll('.post-detail'));
 
-            switch (value) {
-                case 'date-asc':
-                    // 日付昇順でソート
-                    postDetails.sort(function(a, b) {
-                        var dateA = new Date(a.querySelector('.post-date').textContent.trim());
-                        var dateB = new Date(b.querySelector('.post-date').textContent.trim());
-                        return dateA - dateB;
-                    });
-                    break;
-                case 'date-desc':
-                    // 日付降順でソート
-                    postDetails.sort(function(a, b) {
-                        var dateA = new Date(a.querySelector('.post-date').textContent.trim());
-                        var dateB = new Date(b.querySelector('.post-date').textContent.trim());
-                        return dateB - dateA;
-                    });
-                    break;
-                case 'likes-asc':
-                    // 評価昇順でソート
-                    postDetails.sort(function(a, b) {
-                        var dateA = new Date(a.querySelector('.post-date').textContent.trim());
-                        var dateB = new Date(b.querySelector('.post-date').textContent.trim());
-                        return dateA - dateB;
-                    });
-                    break;
-                case 'likes-desc':
-                    // 評価降順でソート
-                    postDetails.sort(function(a, b) {
-                        var dateA = new Date(a.querySelector('.post-date').textContent.trim());
-                        var dateB = new Date(b.querySelector('.post-date').textContent.trim());
-                        return dateB - dateA;
-                    });
-                    break;
-                default:
-                    return;
+                switch (value) {
+                    case 'date-asc':
+                        // 日付昇順でソート
+                        postDetails.sort(function(a, b) {
+                            var dateA = new Date(a.querySelector('.post-date').textContent.trim());
+                            var dateB = new Date(b.querySelector('.post-date').textContent.trim());
+                            return dateA - dateB;
+                        });
+                        break;
+                    case 'date-desc':
+                        // 日付降順でソート
+                        postDetails.sort(function(a, b) {
+                            var dateA = new Date(a.querySelector('.post-date').textContent.trim());
+                            var dateB = new Date(b.querySelector('.post-date').textContent.trim());
+                            return dateB - dateA;
+                        });
+                        break;
+                    case 'likes-asc':
+                        // 評価昇順でソート
+                        postDetails.sort(function(a, b) {
+                            var dateA = new Date(a.querySelector('.post-date').textContent.trim());
+                            var dateB = new Date(b.querySelector('.post-date').textContent.trim());
+                            return dateA - dateB;
+                        });
+                        break;
+                    case 'likes-desc':
+                        // 評価降順でソート
+                        postDetails.sort(function(a, b) {
+                            var dateA = new Date(a.querySelector('.post-date').textContent.trim());
+                            var dateB = new Date(b.querySelector('.post-date').textContent.trim());
+                            return dateB - dateA;
+                        });
+                        break;
+                    default:
+                        return;
+                }
+                // ソートされた要素を再配置
+                postDetails.forEach(function(postDetail) {
+                    postList.appendChild(postDetail);
+                });
             }
-            // ソートされた要素を再配置
-            postDetails.forEach(function(postDetail) {
-                postList.appendChild(postDetail);
-            });
-    }
-</script>
+        </script>
 
 
 </body>
 
 </html>
-
