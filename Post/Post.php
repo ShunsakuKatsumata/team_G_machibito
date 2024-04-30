@@ -6,37 +6,41 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $content = $_POST['content'];
     $tag = $_POST['tag'];
 
+    // フォームの入力値が空でないかをチェックする
+    if (empty($title) || empty($content) || empty($tag)) {
+        echo "タイトル・内容・タグを入力して下さい";
+    } else {
+        // データベースに接続する
+        $dsn = 'mysql:host=localhost;dbname=post;charset=utf8';
+        $username = 'kobe';
+        $password = 'denshi';
 
-    // データベースに接続する
-    $dsn = 'mysql:host=localhost;dbname=post;charset=utf8';
-    $username = 'kobe';
-    $password = 'denshi';
+        try {
+            $pdo = new PDO($dsn, $username, $password);
+            $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-    try {
-        $pdo = new PDO($dsn, $username, $password);
-        $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            // データを挿入するクエリを準備する
+            $sql = "INSERT INTO post (title, content, tag) VALUES (:title, :content, :tag)";
+            $stmt = $pdo->prepare($sql);
 
-        // データを挿入するクエリを準備する
-        $sql = "INSERT INTO post (title, content, tag) VALUES (:title, :content, :tag)";
-        $stmt = $pdo->prepare($sql);
+            // パラメータをバインドする
+            $stmt->bindParam(':title', $title, PDO::PARAM_STR);
+            $stmt->bindParam(':content', $content, PDO::PARAM_STR);
+            $stmt->bindParam(':tag', $tag, PDO::PARAM_STR);
 
-        // パラメータをバインドする
-        $stmt->bindParam(':title', $title, PDO::PARAM_STR);
-        $stmt->bindParam(':content', $content, PDO::PARAM_STR);
-        $stmt->bindParam(':tag', $tag, PDO::PARAM_STR);
+            // クエリを実行する
+            $stmt->execute();
 
-        // クエリを実行する
-        $stmt->execute();
+            // 投稿一覧画面にリダイレクトする
+            header("Location: ../Display/Display.php");
+            exit();
+        } catch (PDOException $e) {
+            echo "エラー：" . $e->getMessage();
+        }
 
-        // 投稿一覧画面にリダイレクトする
-        header("Location: ../Display/Display.php");
-        exit();
-    } catch (PDOException $e) {
-        echo "エラー：" . $e->getMessage();
+        // データベース接続を閉じる
+        $pdo = null;
     }
-
-    // データベース接続を閉じる
-    $pdo = null;
 }
 ?>
 
@@ -79,12 +83,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         const tagInput = document.querySelector('.tag-input');
         const errorMessage = document.querySelector('.error-message');
 
-        postButton.addEventListener('click', () => {
+        postButton.addEventListener('click', (event) => {
             const title = titleInput.value.trim();
             const content = contentInput.value.trim();
             const tag = tagInput.value.trim();
 
             if (title === '' || content === '' || tag === '') {
+                event.preventDefault(); // フォームの送信をキャンセル
                 showErrorMessage('タイトル・本文・タグを入力してください');
             } else {
                 localStorage.setItem('postMessage', '投稿しました');
@@ -110,17 +115,27 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             errorMessage.classList.remove('show-message');
         }
 
+        // ローカルストレージから投稿メッセージを取得し、表示する
+        window.onload = function() {
+            const postMessage = localStorage.getItem('postMessage');
+            if (postMessage) {
+                showPostMessage(postMessage);
+                localStorage.removeItem('postMessage'); // メッセージを削除する
+            }
+        }
+
         function showPostMessage(message) {
-            var postMessage = document.createElement('div');
-            postMessage.textContent = message;
-            postMessage.classList.add('post-message');
-            document.body.appendChild(postMessage);
+            const postMessageDiv = document.createElement('div');
+            postMessageDiv.textContent = message;
+            postMessageDiv.classList.add('post-message');
+            document.body.appendChild(postMessageDiv);
 
             setTimeout(function() {
-                postMessage.style.opacity = '0'; // 3 秒後にメッセージを非表示にする
+                postMessageDiv.style.opacity = '0'; // 3 秒後にメッセージを非表示にする
             }, 3000);
         }
     </script>
+
 </body>
 
 </html>
