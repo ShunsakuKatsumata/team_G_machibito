@@ -6,6 +6,11 @@ body {
     background-color: #f0f0f0;
 }
 
+.main-content {
+    margin-left: calc(30% + 20px);
+    max-width: 800px;
+}
+
 /* 検索バーのスタイル */
 .search-bar {
     max-width: 800px;
@@ -42,7 +47,7 @@ body {
 /* 投稿リストのスタイル */
 .post-list {
     max-width: 800px;
-    margin: 0 auto;
+    margin-left: calc(30% + 20px);
 }
 
 /* 投稿の詳細スタイル */

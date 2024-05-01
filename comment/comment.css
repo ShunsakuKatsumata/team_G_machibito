@@ -140,7 +140,14 @@ li{
 /* 質問と回答の間に空白 */
 .detail_q{
     margin:10px 20% 10px 20%;
+    /* overflow:hidden; */
 }
+
+/* .user_icon_name{
+    display: flex;
+    display: table;
+    background-color: #007bff;
+} */
 
 .user_icon{
     float:left;
@@ -148,8 +155,17 @@ li{
 
 .user_name{
     padding-top: 12px;
+} 
+
+/* 編集と削除 */
+.post_edit_button{
+    background-color: #00B16B;
+}
+.post_delete_button{
+    background-color: #dc3545;
 }
 
+/* コメント記入 */
 .write_comment{
     text-align: left;
     margin:0 20%;

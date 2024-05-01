@@ -75,6 +75,17 @@ try {
     $stmt->bindParam(':post_id', $postId);
     $stmt->execute();
     $contentData = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    // いいね数を表示するデータベース
+    $stmt = $pdo->prepare("SELECT nice FROM post WHERE post_id = :post_id");
+    $stmt->bindParam(':post_id', $postId);
+    $stmt->execute();
+    $currentNice = $stmt->fetchColumn();
+
+    // 初期のいいね数を設定
+    $count = intval($currentNice);
+    echo "<script type='text/javascript'>var count = " . json_encode($count) . ";</script>";
+
 } catch (PDOException $e) {
     echo "エラー：" . $e->getMessage();
 }
@@ -107,7 +118,11 @@ try {
 
             // いいねの状態とカウントを管理する変数
             let isLiked = false;
-            let count = 123;
+            // count =123; 過去の初期値
+
+            window.onload = function() {
+            document.getElementById('likeCount').textContent = count;
+            };
 
             // 初期のいいねの数を表示
             likeCount.textContent = count;
@@ -224,15 +239,16 @@ try {
                     <img class="toggle-icon" src="../Image/toggle2.png" alt="Toggle">
                 </div>
             </div>
+            <!-- ユーザー管理が追加されてから追加する処理() -->
             <div class="reply-list-content" id="replyList">
                 <div class="reply-item">
-                    <div class="reply-user">質問者さん</div>
-                    <div class="reply-content">めちゃ困りです。</div>
+                    <div class="reply-user"></div>
+                    <div class="reply-content"></div>
                 </div>
             <!-- ループ処理でデータを表示-->
             <?php foreach ($replyData as $reply): ?>
                 <div class="reply-item">
-                <div class="reply-user">回答者</div><!--< ?php echo $reply['user']; ?> -->
+                <div class="reply-user">閲覧者</div><!--< ?php echo $reply['user']; ?> -->
                     <div class="reply-content"><?php echo $reply['reply']; ?></div>
                 </div>
                 <?php endforeach; ?>
