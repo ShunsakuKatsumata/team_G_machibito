@@ -15,8 +15,11 @@ tag text,
 nice INT DEFAULT 0
 );
 
-insert into post(post_id, title, content, tag, nice) values(1, '参考書の選び方', '僕にも分かりません', '参考書', 0);
-insert into post(post_id, title, content, tag, nice) values(2, '同窓会について', 'ごめん、同級会には行けません。いま、シンガポールにいます。この国を南北に縦断する地下鉄を、私は作っています。本当は、あの頃が恋しいけれど、でも……今はもう少しだけ、知らないふりをします。私の作るこの地下鉄も、きっといつか、誰かの青春を乗せるから。', '同窓会', 0);
+insert into post(post_id, title, content, tag, nice) values(1, 'Pythonでの文字列操作の基本', 'Pythonでは文字列操作は非常に重要です。この記事では、文字列の結合、分割、置換などの基本的な操作方法を解説します。また、文字列操作を効率的に行うためのベストプラクティスも紹介します。', 'Python,文字列操作,チュートリアル', 20);
+insert into post(post_id, title, content, tag, nice) values(2, 'Gitを使ったバージョン管理の基本', 'プロジェクトの管理や共同作業をする際に不可欠なGitの基本的な使い方を解説します。リポジトリの作成からコミット、プッシュ、プルまでの流れを実践的な例を交えながら詳しく説明します。', 'Git,バージョン管理,チュートリアル', 14);
+insert into post(post_id, title, content, tag, nice) values(3, 'JavaScriptでの配列操作の豆知識', 'JavaScriptにおける配列操作は非常に柔軟であり、効率的なコーディングに欠かせません。この記事では、配列の追加、削除、マッピング、フィルタリングなど、便利な配列操作のテクニックを紹介します。', 'JavaScript,配列操作,Tips', 13);
+insert into post(post_id, title, content, tag, nice) values(4, 'Dockerを使ったコンテナ化の入門ガイド', 'Dockerを使えば、アプリケーションやサービスを簡単にコンテナ化して環境を構築できます。この記事では、Dockerの基本的な概念からコンテナの作成、イメージの管理、Docker Composeの利用方法までをわかりやすく解説します。', 'Docker,コンテナ化,入門', 23);
+insert into post(post_id, title, content, tag, nice) values(5, 'プログラミング言語の選択: Python vs. JavaScript vs. Ruby', '新しいプロジェクトを始める際には、どのプログラミング言語を選択するかが重要です。この記事では、Python、JavaScript、およびRubyの特徴や用途、利点、欠点を比較し、それぞれの言語の適切な使用場面について考察します。', 'Python,JavaScript,Ruby,比較記事', 48);
 
 
 CREATE TABLE reply (
@@ -24,7 +27,11 @@ CREATE TABLE reply (
     reply TEXT
 );
 
-INSERT INTO reply(post_id,reply) VALUES(1,'こんなのはどうでしょう');
-INSERT INTO reply(post_id,reply) VALUES(1,'ｲｲｶﾓ');
-INSERT INTO reply(post_id,reply) VALUES(2,'wwww');
-INSERT INTO reply(post_id,reply) VALUES(2,';(--);');
+INSERT INTO reply(post_id,reply) VALUES(1,'pythonでの文字列操作が分かりました');
+INSERT INTO reply(post_id,reply) VALUES(2,'見やすいですね');
+INSERT INTO reply(post_id,reply) VALUES(3,'分かりやすかったです。ありがとうございます。');
+INSERT INTO reply(post_id,reply) VALUES(4,'悩みが解決しました。');
+INSERT INTO reply(post_id,reply) VALUES(4,'難しいですよね');
+INSERT INTO reply(post_id,reply) VALUES(4,'↑そうなんですよね');
+INSERT INTO reply(post_id,reply) VALUES(5,'Python一択');
+INSERT INTO reply(post_id,reply) VALUES(5,'断然Rubyだね');

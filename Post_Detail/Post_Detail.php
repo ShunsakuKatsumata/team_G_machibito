@@ -224,15 +224,16 @@ try {
                     <img class="toggle-icon" src="../Image/toggle2.png" alt="Toggle">
                 </div>
             </div>
+            <!-- ユーザー管理が追加されてから追加する処理() -->
             <div class="reply-list-content" id="replyList">
                 <div class="reply-item">
-                    <div class="reply-user">質問者さん</div>
-                    <div class="reply-content">めちゃ困りです。</div>
+                    <div class="reply-user"></div>
+                    <div class="reply-content"></div>
                 </div>
             <!-- ループ処理でデータを表示-->
             <?php foreach ($replyData as $reply): ?>
                 <div class="reply-item">
-                <div class="reply-user">回答者</div><!--< ?php echo $reply['user']; ?> -->
+                <div class="reply-user">閲覧者</div><!--< ?php echo $reply['user']; ?> -->
                     <div class="reply-content"><?php echo $reply['reply']; ?></div>
                 </div>
                 <?php endforeach; ?>
