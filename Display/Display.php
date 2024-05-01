@@ -12,20 +12,22 @@
 <body>
     <!-- サイドバー -->
     <?php include '../sidebar/sidebar.php'; ?>
-    <div class="main-content" style="margin-left: calc(15% + 20px);">
+    <div class="main-content">
         <!-- ここまで -->
-    <div class="search-bar">
-        <input type="text" class="search-input" placeholder="検索...">
-        <div class="sort-buttons">
-            <select class="sort-select" onchange="handleSortChange(this.value)">
-                <option value="">ソート選択...</option>
-                <option value="date-asc">日付 昇順</option>
-                <option value="date-desc">日付 降順</option>
-                <option value="likes-asc">評価 昇順</option>
-                <option value="likes-desc">評価 降順</option>
-            </select>
-        </div>
-    </div>
+    <form method="GET" class="search-bar">
+            <input type="text" name="search" class="search-input" placeholder="検索..." value="<?php echo isset($_GET['search']) ? htmlspecialchars($_GET['search']) : ''; ?>">
+            <div class="sort-buttons">
+                <button type="submit" class="sort-select">検索</button>
+            </div>
+                <select class="sort-select" onchange="handleSortChange(this.value)">
+                    <option value="">ソート選択...</option>
+                    <option value="date-asc">日付 昇順</option>
+                    <option value="date-desc">日付 降順</option>
+                    <option value="likes-asc">評価 昇順</option>
+                    <option value="likes-desc">評価 降順</option>
+                </select>
+            </div>
+    </form>
     <div class="post-list">
         <?php
         // データベースに接続
