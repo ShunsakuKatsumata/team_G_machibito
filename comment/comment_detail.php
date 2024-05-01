@@ -2,9 +2,11 @@
 <html>
     <head> 
         <link rel="stylesheet" href="comment.css">
+        <link rel="stylesheet" href="../sidebar/sidebar.css">
         <meta charset="UTF-8">
     </head>
     <body>
+        <?php include '../sidebar/sidebar.php'; ?>
         <!-- 質問 -->
             <div class="detail1">
                 <div class="detail_q">
