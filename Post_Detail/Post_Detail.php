@@ -1,5 +1,7 @@
 <!-- データベ～ス -->
 <?php
+session_start();
+
 $dsn = 'mysql:host=localhost;dbname=post;charset=utf8';
 $username = 'kobe';
 $password = 'denshi';
@@ -8,30 +10,71 @@ try {
     $pdo = new PDO($dsn, $username, $password);
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-    // 元々のデータベース処理
+    if (isset($_GET['post_id'])) {
+        $_SESSION['post_id'] = $_GET['post_id']; // セッションにpost_idを保存
+    }
+
+    if (isset($_SESSION['post_id'])) {
+        $postId = $_SESSION['post_id'];
+
+        // post_idを使用してデータベースから該当の投稿を取得
+        $stmt = $pdo->prepare("SELECT * FROM post WHERE post_id = :post_id");
+        $stmt->bindParam(':post_id', $postId);
+        $stmt->execute();
+        $postData = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        if (!$postData) {
+            // post_idに対応する投稿が見つからなかった場合のエラー処理　未記入
+        }
+    } else {
+        // post_idがURLに含まれていない場合のエラー処理　未記入
+    }
+
+    // リプライを投稿するデータベース処理
     if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $replyContent = $_POST['input-post'];
-        $postId = 1;
-
+    
         // SQLクエリを準備
         $stmt = $pdo->prepare("INSERT INTO reply (post_id, reply) VALUES (:post_id, :reply)");
         $stmt->bindParam(':post_id', $postId);
         $stmt->bindParam(':reply', $replyContent);
-
+    
         // クエリを実行
         $stmt->execute();
-
+    
         // 成功した場合、ページを再読み込み
-        header("Location: ".$_SERVER['PHP_SELF']);
-        exit();
+        if ($postId !== null) {
+            header("Location: ".$_SERVER['PHP_SELF']."?post_id=".$postId);
+            exit();
+        } else {
+            // $postIdがnullの場合のエラーエラー処理　未記入
+        }
+
+        $stmt = $pdo->prepare('SELECT title, content FROM post WHERE post_id = ?');
+        $stmt->execute([$postId]);
+        $data = $stmt->fetch();
+
+        echo 'Title: ' . $data['title'] . "\n";
+        echo 'Content: ' . $data['content'] . "\n";
     }
 
-    // 追加のデータベース処理
-    $postId = 1;
+    // リプライを表示するデータベース処理
     $stmt = $pdo->prepare("SELECT * FROM reply WHERE post_id = :post_id");
     $stmt->bindParam(':post_id', $postId);
     $stmt->execute();
     $replyData = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+    // タイトルを表示するデータベース
+    $stmt = $pdo->prepare("SELECT title FROM post WHERE post_id = :post_id");
+    $stmt->bindParam(':post_id', $postId);
+    $stmt->execute();
+    $titleData = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    // 本文を表示するデータベース
+    $stmt = $pdo->prepare("SELECT content FROM post WHERE post_id = :post_id");
+    $stmt->bindParam(':post_id', $postId);
+    $stmt->execute();
+    $contentData = $stmt->fetch(PDO::FETCH_ASSOC);
 } catch (PDOException $e) {
     echo "エラー：" . $e->getMessage();
 }
@@ -169,10 +212,10 @@ try {
             <div class="user-icon"></div>
             <span>投稿者名</span>
         </div>
-        <div class="post-title">投稿のタイトル</div>
+        <div class="post-title"><?php echo $titleData['title'];?></div>
         <div class="post-content">
-            投稿の本文が表示されます。
-            改行を含む本文の場合も、適切に表示されます。
+        <?php echo $contentData['content'];?>
+        <!-- ここだけはhtmlで出力したいかも -->
         </div>
         <div class="reply-list">
             <div class="reply-list-header">
