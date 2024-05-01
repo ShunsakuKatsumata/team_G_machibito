@@ -10,19 +10,31 @@ class answer_post extends dbdata{
 
     // 取得
     public function get_answers($post_id){
-        $sql = "select * from question_answer where post_id = ?";
+        $sql = "select * from question_answer where post_id=?";
         $stmt = $this->query($sql, [$post_id]);
         $items = $stmt->fetchAll();
         return $items;
     }
 
-    // post_idと回答IDを指定
-    public function get_answers_answerid($ident, $post_id){
-        $sql = 'select * from question_answer where post_id=? and ident=?';
-        $stmt = $this->query($sql, [$ident, $post_id]);
-        $item = $stmt->fetchAll();
-        return $item;
+    // 回答IDを指定
+    public function get_answer_answerid($ident){
+        $sql = "select * from question_answer where ident=?";
+        $stmt = $this->query($sql, [$ident]);
+        $items = $stmt->fetchAll();
+        return $items;
     }
+
+    // 投稿した回答を編集する
+    public function edit_answer($ident, $answer){
+        $sql = "update question_answer set answer=? where ident=?";
+        $result = $this->exec($sql, [$answer, $ident]);
+    }
+
+    // 投稿した回答を削除する
+    public function delete_answer($ident){
+        $sql = "delete from question_answer where ident=?";
+        $result = $this->exec($sql, [$ident]);
+    } 
 
     // // 選択した投稿内容を取得する
     // public function get_question_ident($ident){

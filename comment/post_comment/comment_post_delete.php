@@ -9,7 +9,7 @@
     $question_post->delete_question($ident);
 
     // comment_home画面に移動
-    header("Location: ./../comment_home.php");
+    header("Location: ./../comment_detail.php");
     exit;
 ?>
 

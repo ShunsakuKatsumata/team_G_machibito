@@ -64,8 +64,13 @@
                         echo '<tr>';
                             echo '<td>'.$item['answer'].'</td>';
                         echo '</tr>';
+                        // 編集ボタン
                         echo '<tr>';
-                            echo '<td><button onclick="location.href=\'./edit_answer/edit_answer.php?post_id='.$ident.'&commentId='.$item['ident'].'\'">編集</button></td>';
+                            echo '<td><button class="post_edit_button" onclick="location.href=\'./edit_answer/edit_answer.php?post_id='.$ident.'&commentId='.$item['ident'].'\'">編集</button></td>';
+                        echo '</tr>';
+                        // 削除ボタン
+                        echo '<tr>';
+                            echo '<td><button class="post_delete_button" onclick="location.href=\'./post_answer/answer_post_delete.php?post_id='.$ident.'&commentId='.$item['ident'].'\'">削除</button></td>';
                         echo '</tr>';
                     echo '</table>';
                     echo '</div>';

@@ -1,17 +1,16 @@
 <?php
     // 変数を受け取る
-    $ident = $_POST['question_ident_edit_text'];
-    $title = $_POST['qustion_title_edit_text'];
-    $detail = $_POST['question_detail_edit_text'];
+    $ident = $_POST['answer_ident_edit_text'];
+    $answer = $_POST['answer_edit_text'];
+
+    // 質問のIDを受け取る（画面遷移で使う）
+    $post_id = $_GET['postid'];
 
     // 関数の実行
-    require_once __DIR__.'/../classes/question_post.php';
-    $question_post = new question_post();
-    $question_post->edit_question($ident, $title, $detail);
-
-    // echo $ident;
-
+    require_once __DIR__.'/../classes/answer_post.php';
+    $answer_post = new answer_post();
+    $answer_post->edit_answer($ident, $answer);
     // 
-    header("Location: ./../comment_detail.php?ident=$ident");
+    header("Location: ./../comment_detail.php?ident=$post_id");
     exit;
 ?>

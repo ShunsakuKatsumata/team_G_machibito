@@ -53,7 +53,6 @@
                         echo '</tr>';
                     }
                 ?>
-                        
             </table>
             
         </div>

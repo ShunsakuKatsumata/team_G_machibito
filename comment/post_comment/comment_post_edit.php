@@ -13,5 +13,5 @@
 
     // 
     header("Location: ./../comment_detail.php?ident=$ident");
-    exit;
+    exit;1
 ?>

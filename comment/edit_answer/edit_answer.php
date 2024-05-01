@@ -27,25 +27,6 @@
                             echo '<td>'.$item['detail'].'</td>';
                         echo '</tr>';
                     echo '</table>';
-
-                    // formを追加
-                    // ?ident="'.$item['ident'].
-                    // echo '<form method="POST" action="./new_question_post_edit.php">';
-                    echo '<button class="post_edit_button" onclick="location.href=\'./new_post/new_question_post_edit.php?ident='.$ident.'\'">編集</button>';
-                        // echo '<input name="question_ident_edit" type="hidden" value="'.$ident.'>';
-                    //     echo '<input name="question_title_edit" type="hidden" value="'.$item['title'].'>';
-                    //     echo '<input name="question_detail_edit" type="hidden" value="'.$item['detail'].'>';
-                    // echo '</form>';
-
-                    // formを追加
-                    echo '<form method="POST" action="./post_comment/comment_post_delete.php">';
-                        echo '<button class="post_delete_button">削除</button>';
-                        echo '<input type="hidden" name="ident_delete" value='.$ident.'>';
-                    echo '</form>';
-
-                    // echo '<form method="POST" action="answer_post_add.php">';
-                    //     echo '<input type="hidden" name="comment_detail_ident" value="'.$ident.'">';
-                    // echo '</form>';
                     ?>
                 </div>
                 
@@ -57,15 +38,32 @@
                 // テーブルの中身を取り出す
                 require_once __DIR__.'/../classes/answer_post.php';
                 $answer_post = new answer_post();
-                $item_answer = $answer_post->get_answers_answerid($post_id, $comment_id);
-                echo '<div class="detail_reply">';
-                echo '<h3>回答</h3>';
-                echo '<table>';
-                    echo '<tr>';
-                        echo '<td>'.$item_answer['answer'].'</td>';
-                    echo '</tr>';
-                echo '</table>';
-                echo '</div>';
+                $item_answer = $answer_post->get_answer_answerid($comment_id);
+                // $item_answer = $answer_post->get_answers(4);
+                echo '<form method="POST" action="../post_answer/answer_post_edit.php?postid='.$post_id.'">';
+                    echo '<div class="detail_reply">';
+                    echo '<h3>回答</h3>';
+                    echo '<table>';
+                        foreach($item_answer as $item){
+                            echo '<tr>';
+                                echo '<td><textarea name="answer_edit_text" class="title-input" rows="3" cols="45">'.$item['answer'].'</textarea></td>';
+                            echo '</tr>';
+                            echo '<input type="hidden" name="answer_ident_edit_text" value="'.$item['ident'].'">';
+                            
+                            // 投稿ボタン
+                            echo '<tr>';
+                                echo '<td><div class="button-container">';
+                                    echo '<button name="button1" class="post-button">更新</button>';
+                                echo '</div></td>';
+                            echo '</tr>';
+                        }
+                    echo '</table>';
+                    echo '</div>';
+                    // 更新ボタン
+                    
+                    
+                    // 変更予定 
+                echo '</form>';
                 ?>
             </div>
     </body>
