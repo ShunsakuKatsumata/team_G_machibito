@@ -1,0 +1,19 @@
+set names utf8;
+drop database if exists pbl1;
+create database pbl1 character set utf8 collate utf8_general_ci;
+
+grant all privileges on php.* to pbl1@localhost identified by 'sprint2';
+
+use pbl1;
+
+# 投稿した質問を格納するテーブル
+create table question_post(ident int auto_increment primary key, 
+                    title varchar(100), 
+                    detail varchar(1000)                    
+);
+
+# 質問に対する回答を格納するテーブル
+create table question_answer(ident int auto_increment primary key, 
+                    answer varchar(1000),
+                    post_id int(11)
+);
