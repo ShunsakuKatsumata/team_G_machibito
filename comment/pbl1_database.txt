@@ -7,7 +7,7 @@ grant all privileges on php.* to pbl1@localhost identified by 'sprint2';
 use pbl1;
 
 
-create table question_post(uid int auto_increment primary key, 
+create table question_post(ident int auto_increment primary key, 
                     title varchar(50), 
                     detail varchar(50)                    
 );
