@@ -35,3 +35,15 @@ INSERT INTO reply(post_id,reply) VALUES(4,'難しいですよね');
 INSERT INTO reply(post_id,reply) VALUES(4,'↑そうなんですよね');
 INSERT INTO reply(post_id,reply) VALUES(5,'Python一択');
 INSERT INTO reply(post_id,reply) VALUES(5,'断然Rubyだね');
+
+# 投稿した質問を格納するテーブル
+create table question_post(ident int auto_increment primary key, 
+                    title varchar(100), 
+                    detail varchar(1000)                    
+);
+
+# 質問に対する回答を格納するテーブル
+create table question_answer(ident int auto_increment primary key, 
+                    answer varchar(1000),
+                    post_id int(11)
+);
