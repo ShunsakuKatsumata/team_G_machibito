@@ -15,18 +15,18 @@
     <div class="main-content">
         <!-- ここまで -->
     <form method="GET" class="search-bar">
-            <input type="text" name="search" class="search-input" placeholder="検索..." value="<?php echo isset($_GET['search']) ? htmlspecialchars($_GET['search']) : ''; ?>">
-            <div class="sort-buttons">
-                <button type="submit" class="sort-select">検索</button>
-            </div>
-                <select class="sort-select" onchange="handleSortChange(this.value)">
-                    <option value="">ソート選択...</option>
-                    <option value="date-asc">日付 昇順</option>
-                    <option value="date-desc">日付 降順</option>
-                    <option value="likes-asc">評価 昇順</option>
-                    <option value="likes-desc">評価 降順</option>
-                </select>
-            </div>
+        <input type="text" name="search" class="search-input" placeholder="検索..." value="<?php echo isset($_GET['search']) ? htmlspecialchars($_GET['search']) : ''; ?>">
+        <div class="sort-buttons">
+            <button type="submit" class="sort-select">検索</button>
+        </div>
+            <select class="sort-select" onchange="handleSortChange(this.value)">
+                <option value="">ソート選択...</option>
+                <option value="date-asc">日付 昇順</option>
+                <option value="date-desc">日付 降順</option>
+                <option value="likes-asc">評価 昇順</option>
+                <option value="likes-desc">評価 降順</option>
+            </select>
+        </div>
     </form>
     <div class="post-list">
         <?php
@@ -40,10 +40,14 @@
         if ($conn->connect_error) {
             die("データベース接続エラー: " . $conn->connect_error);
         }
-        // データベースから投稿を取得
-        $sql = "SELECT * FROM post";
-        $result = $conn->query($sql);
-        // 結果を表示
+        // 検索キーワードがあれば、そのキーワードに基づいてSQLクエリを実行
+        $search = isset($_GET['search']) ? $_GET['search'] : '';
+        $sql = "SELECT * FROM post WHERE tag LIKE ?";
+        $stmt = $conn->prepare($sql);
+        $searchTerm = '%' . $search . '%';
+        $stmt->bind_param('s', $searchTerm);
+        $stmt->execute();
+        $result = $stmt->get_result();
         if ($result->num_rows > 0) {
             while($row = $result->fetch_assoc()) {
                 $row['post_id'];
