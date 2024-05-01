@@ -75,6 +75,17 @@ try {
     $stmt->bindParam(':post_id', $postId);
     $stmt->execute();
     $contentData = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    // いいね数を表示するデータベース
+    $stmt = $pdo->prepare("SELECT nice FROM post WHERE post_id = :post_id");
+    $stmt->bindParam(':post_id', $postId);
+    $stmt->execute();
+    $currentNice = $stmt->fetchColumn();
+
+    // 初期のいいね数を設定
+    $count = intval($currentNice);
+    echo "<script type='text/javascript'>var count = " . json_encode($count) . ";</script>";
+
 } catch (PDOException $e) {
     echo "エラー：" . $e->getMessage();
 }
@@ -107,7 +118,11 @@ try {
 
             // いいねの状態とカウントを管理する変数
             let isLiked = false;
-            let count = 123;
+            // count =123; 過去の初期値
+
+            window.onload = function() {
+            document.getElementById('likeCount').textContent = count;
+            };
 
             // 初期のいいねの数を表示
             likeCount.textContent = count;
