@@ -16,16 +16,17 @@ body {
 }
 
 .post-container {
-    max-width: 800px;
+    width: 70%;
     padding: 20px;
     background-color: #fff;
     border-radius: 5px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    margin-left: calc(15% + 20px);
     box-sizing: border-box;
-    width: calc(100% - 220px);
+    /* パディングと境界ボックスに合わせる */
+    margin-left: 18%;
     overflow-x: hidden;
 }
+
 
 .user-info {
     display: flex;
@@ -49,7 +50,7 @@ body {
 
 .content-input {
     width: 97%;
-    height: 250px;
+    height: 200px;
     padding: 10px;
     border-radius: 5px;
     resize: vertical;
@@ -57,7 +58,7 @@ body {
 
 .tag-input {
     width: 97%;
-    height: 75px;
+    height: 35px;
     margin-top: 20px;
     padding: 10px;
     border-radius: 5px;

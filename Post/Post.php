@@ -16,7 +16,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         // タグを半角スペースと全角スペースで区切り、配列に分割
         $tags_array = preg_split('/[\s　]+/u', $tags_input);
 
-
         // 各タグに対してトリミングを行い、空のタグを削除
         $tags_array = array_map('trim', $tags_array);
         $tags_array = array_filter($tags_array);
@@ -24,12 +23,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         // タグをカンマで連結して文字列にする
         $tags_combined = implode(",", $tags_array);
 
-        // データベースに接続する
-        $dsn = 'mysql:host=localhost;dbname=post;charset=utf8';
-        $username = 'kobe';
-        $password = 'denshi';
-
         try {
+            // データベースに接続する
+            $dsn = 'mysql:host=localhost;dbname=post;charset=utf8';
+            $username = 'kobe';
+            $password = 'denshi';
             $pdo = new PDO($dsn, $username, $password);
             $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
@@ -49,11 +47,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             header("Location: ../Display/Display.php");
             exit();
         } catch (PDOException $e) {
-            echo "エラー：" . $e->getMessage();
+            error_log("データベースエラー: " . $e->getMessage());
+            echo "エラーが発生しました。管理者にお知らせください。";
+        } finally {
+            // データベース接続を閉じる
+            unset($pdo);
         }
-
-        // データベース接続を閉じる
-        $pdo = null;
     }
 }
 ?>
