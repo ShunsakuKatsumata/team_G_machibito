@@ -47,3 +47,10 @@ create table question_answer(ident int auto_increment primary key,
                     answer varchar(1000),
                     post_id int(11)
 );
+
+CREATE TABLE account (
+    user_id INT PRIMARY KEY AUTO_INCREMENT,
+    user_name VARCHAR(255) NOT NULL,
+    email VARCHAR(255) NOT NULL,
+    password VARCHAR(255) NOT NULL
+);
