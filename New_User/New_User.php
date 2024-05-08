@@ -30,7 +30,7 @@
         $db_host = 'localhost';
         $db_user = 'kobe';
         $db_password = 'denshi';
-        $db_name = 'post';
+        $db_name = 'account';
         $conn = new mysqli($db_host, $db_user, $db_password, $db_name);
 
         // 接続をチェック
