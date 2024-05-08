@@ -20,9 +20,17 @@ class answer_post extends dbdata{
     public function get_answer_answerid($ident){
         $sql = "select * from question_answer where ident=?";
         $stmt = $this->query($sql, [$ident]);
-        $items = $stmt->fetchAll();
+        $items = $stmt->fetch();
         return $items;
     }
+
+    // // 選択した投稿内容を取得する
+    // public function get_question_ident($ident){
+    //     $sql = 'select * from question_post where ident=?';
+    //     $stmt = $this->query($sql, [$ident]);
+    //     $item = $stmt->fetch();
+    //     return $item;
+    // }
 
     // 投稿した回答を編集する
     public function edit_answer($ident, $answer){
@@ -36,13 +44,12 @@ class answer_post extends dbdata{
         $result = $this->exec($sql, [$ident]);
     } 
 
-    // // 選択した投稿内容を取得する
-    // public function get_question_ident($ident){
-    //     $sql = 'select * from question_post where ident=?';
-    //     $stmt = $this->query($sql, [$ident]);
-    //     $item = $stmt->fetch();
-    //     return $item;
-    // }
+    // 
+    public function edit_goodcount($ident, $like_count, $like_state){
+        $sql = "update question_answer set like_count=?, like_state=? where ident=?";
+        $result = $this->exec($sql, [$like_count, $like_state, $ident]);
+    }
+    
     
 }
 

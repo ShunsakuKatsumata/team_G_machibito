@@ -4,41 +4,10 @@
         <link rel="stylesheet" href="comment.css">
         <link rel="stylesheet" href="../sidebar/sidebar.css">
         <meta charset="UTF-8">
-
-        <script>
-            window.addEventListener('DOMContentLoaded', () => {
-                // 要素を取得
-                const likeButton = document.querySelector('.answer_like_button');
-                const likeIcon = document.querySelector('.answer_like_icon');
-
-                // いいねの状態とカウントを管理する変数
-                let isLiked = false;
-
-                // いいねボタンのクリックイベント
-                likeButton.addEventListener('click', () => {
-                    
-                    // いいねの状態を反転
-                    isLiked = !isLiked;
-
-                    // いいねの状態に応じてアイコンとカウントを更新
-                    if (isLiked) {
-                        console.log('a');
-                        likeIcon.src = "./../Image/Good_pink.png";
-                        likeButton.classList.add('liked');
-                        // count++;
-                    } else {
-                        console.log('b');
-                        likeIcon.src = "./../Image/Good_white.png";
-                        likeButton.classList.remove('liked');
-                        // count--;
-                    }
-                });
-            });
-        </script>
+        
     </head>
     <body>
         <?php include '../sidebar/sidebar.php'; ?>
-        
             <div class="detail1">
                 <!-- 質問詳細画面 -->
                 <!-- 投稿された質問 -->
@@ -84,22 +53,24 @@
                     echo '<h3>回答</h3>';
                     echo '<table>';
                         echo '<tr>';
+                            // echo '<td>'.$item['ident'].'</td>';
                             echo '<td>'.$item['answer'].'</td>';
                         echo '</tr>';
                         // いいねボタン
                         echo '<tr>';
-                            echo '<td class="answer_like_flex">';
-                                $answer_like_isliked = false;
-                                echo '<form method="POST" action="./post_answer/good_count_add.php">';
+                            echo '<form method="POST" action="./post_answer/good_count_add.php">';
+                                echo '<td class="answer_like_flex">';
                                     echo '<div class="answer_like_button">';
-                                        echo '<img class="answer_like_icon" src="./../Image/Good_white.png">';
-                                        if ($answer_like_isliked){
-                                            echo '<input type="hidden" name="answer_like_isliked" value='.$answer_like_bool.'>';
-                                        }
-                                    echo '</div>';
-                                echo '</form>';
-                                echo '<span class="answer_like_count">'.$item['like_count'].'</span>';
-                            echo '</td>';
+                                        echo '<a href="./post_answer/good_count_add.php?comment_id='.$item['ident'].'"><img class="answer_like_icon" src="./../Image/Good_white.png"></a>';
+                                        echo '</div>';
+                                    echo '<span class="answer_like_count">'.$item['like_count'].'</span>';
+                                echo '</td>';
+                            echo '</form>';
+
+                            // 回答テーブルのデータをjsonに変換し、JavaScriptに送る
+                            $like_state_each_comment = json_encode($item['like_state']);
+                            echo $like_state_each_comment;
+
                         echo '</tr>';
                         // 編集ボタン
                         echo '<tr>';
@@ -126,5 +97,33 @@
                     </div>
                 </form>
             </div>
+            <script>
+                window.addEventListener('DOMContentLoaded', () => {
+                    // 要素を取得
+                    const likeButton = document.querySelector('.answer_like_button');
+                    const likeIcon = document.querySelector('.answer_like_icon');
+                    
+                    
+                    // いいねボタンのクリックイベント
+                    likeButton.addEventListener('click', () => {
+                        // like_stateを取得
+                        var like_state = JSON.parse('<?php echo $like_state_each_comment; ?>');
+                        // console.log(like_state);
+
+                        // いいねの状態に応じてアイコンとカウントを更新
+                        if (like_state) {
+                            console.log('a');
+                            likeIcon.src = "./../Image/Good_pink.png";
+                            likeButton.classList.add('liked');
+                            // count++;
+                        } else {
+                            console.log('b');
+                            likeIcon.src = "./../Image/Good_white.png";
+                            likeButton.classList.remove('liked');
+                            // count--;
+                        }
+                    });
+                });
+            </script>
     </body>
 </html>

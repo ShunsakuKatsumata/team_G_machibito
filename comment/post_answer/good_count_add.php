@@ -1,16 +1,43 @@
-<?php
-    // 変数を受け取る
-    $ident = $_POST['answer_ident_edit_text'];
-    $answer = $_POST['answer_edit_text'];
+<!DOCTYPE html>
+<html>
+    <head> 
+        <link rel="stylesheet" href="comment.css">
+        <link rel="stylesheet" href="../sidebar/sidebar.css">
+        <meta charset="UTF-8">
 
-    // 質問のIDを受け取る（画面遷移で使う）
-    $post_id = $_GET['postid'];
+    </head>
+    <body>
+        <?php
+            // 変数を受け取る
+            $comment_id = $_GET['comment_id'];
 
-    // 回答の編集
-    require_once __DIR__.'/../classes/answer_post.php';
-    $answer_post = new answer_post();
-    $answer_post->edit_answer($ident, $answer);
-    // 
-    header("Location: ./../comment_detail.php?ident=$post_id");
-    exit;
-?>
+            // 値を取得
+            require_once __DIR__.'/../classes/answer_post.php';
+            $answer_post = new answer_post();
+            $item = $answer_post->get_answer_answerid($comment_id);
+
+            if($item['like_state']==1){
+                // テーブルをアップデート
+                $like_state = 0;
+                // $like_count = $item['like_count'] - 1;
+                $like_count = $item['like_count'] + 1;
+                $answer_post->edit_goodcount($comment_id, $like_count, $like_state);
+            }else{
+                // テーブルをアップデート
+                $like_state = 1;
+                $like_count = $item['like_count'] + 1;
+                $answer_post->edit_goodcount($comment_id, $like_count, $like_state);
+            }
+
+            // require_onceで呼び出し
+            // require_once __DIR__.'/../comment_detail.php?ident='.$item['post_id'];
+            $comment_detail_id = $item['post_id'];
+            header("Location: ./../comment_detail.php?ident=$comment_detail_id");
+            exit;
+
+            
+        ?>
+</body>
+
+<!-- // header("Location: ./../comment_detail.php?ident=$post_id");
+            // exit; -->
