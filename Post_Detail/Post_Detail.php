@@ -33,11 +33,13 @@ try {
     // リプライを投稿するデータベース処理
     if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $replyContent = $_POST['input-post'];
+        $userId = $_SESSION['user']['user_id']; // セッションからユーザーIDを取得
     
         // SQLクエリを準備
-        $stmt = $pdo->prepare("INSERT INTO reply (post_id, reply) VALUES (:post_id, :reply)");
+        $stmt = $pdo->prepare("INSERT INTO reply (post_id, reply, user_id) VALUES (:post_id, :reply, :user_id)");
         $stmt->bindParam(':post_id', $postId);
         $stmt->bindParam(':reply', $replyContent);
+        $stmt->bindParam(':user_id', $userId);
     
         // クエリを実行
         $stmt->execute();
@@ -85,6 +87,17 @@ try {
     // 初期のいいね数を設定
     $count = intval($currentNice);
     echo "<script type='text/javascript'>var count = " . json_encode($count) . ";</script>";
+
+    // ユーザー名を取得するデータベース
+    $stmt = $pdo->prepare("
+    SELECT reply.*, account.user_name 
+    FROM reply 
+    JOIN account ON reply.user_id = account.user_id 
+    WHERE post_id = :post_id
+    ");
+    $stmt->bindParam(':post_id', $postId);
+    $stmt->execute();
+    $replyData = $stmt->fetchAll();
 
 } catch (PDOException $e) {
     echo "エラー：" . $e->getMessage();
@@ -248,10 +261,10 @@ try {
             <!-- ループ処理でデータを表示-->
             <?php foreach ($replyData as $reply): ?>
                 <div class="reply-item">
-                <div class="reply-user">閲覧者</div><!--< ?php echo $reply['user']; ?> -->
+                    <div class="reply-user"><?php echo $reply['user_name']; ?></div>
                     <div class="reply-content"><?php echo $reply['reply']; ?></div>
                 </div>
-                <?php endforeach; ?>
+            <?php endforeach; ?>
             </div>
         </div>
         <div class="post-actions">
