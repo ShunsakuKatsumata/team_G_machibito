@@ -31,31 +31,20 @@ try {
     }
 
     // リプライを投稿するデータベース処理
-    if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['submit-post'])) {
         $replyContent = $_POST['input-post'];
-    
+
         // SQLクエリを準備
         $stmt = $pdo->prepare("INSERT INTO reply (post_id, reply) VALUES (:post_id, :reply)");
         $stmt->bindParam(':post_id', $postId);
         $stmt->bindParam(':reply', $replyContent);
-    
+
         // クエリを実行
         $stmt->execute();
-    
+
         // 成功した場合、ページを再読み込み
-        if ($postId !== null) {
-            header("Location: ".$_SERVER['PHP_SELF']."?post_id=".$postId);
-            exit();
-        } else {
-            // $postIdがnullの場合のエラーエラー処理　未記入
-        }
-
-        $stmt = $pdo->prepare('SELECT title, content FROM post WHERE post_id = ?');
-        $stmt->execute([$postId]);
-        $data = $stmt->fetch();
-
-        echo 'Title: ' . $data['title'] . "\n";
-        echo 'Content: ' . $data['content'] . "\n";
+        header("Location: " . $_SERVER['PHP_SELF'] . "?post_id=" . $postId);
+        exit();
     }
 
     // リプライを表示するデータベース処理
@@ -85,11 +74,11 @@ try {
     // 初期のいいね数を設定
     $count = intval($currentNice);
     echo "<script type='text/javascript'>var count = " . json_encode($count) . ";</script>";
-
 } catch (PDOException $e) {
     echo "エラー：" . $e->getMessage();
 }
 ?>
+
 
 
 
@@ -104,7 +93,6 @@ try {
     <title>投稿詳細</title>
 
     <script>
-        
         window.addEventListener('DOMContentLoaded', () => {
             // 各要素を取得
             const likeButton = document.querySelector('.like-button');
@@ -121,7 +109,7 @@ try {
             // count =123; 過去の初期値
 
             window.onload = function() {
-            document.getElementById('likeCount').textContent = count;
+                document.getElementById('likeCount').textContent = count;
             };
 
             // 初期のいいねの数を表示
@@ -198,22 +186,22 @@ try {
             const replyListContent = document.querySelector('.reply-list-content');
             const toggleIcon = replyListToggle.querySelector('.toggle-icon');
 
-            if (!replyListContent.classList.contains('show')) {
-                replyListContent.style.maxHeight = '0';
-            }
+            // 初期状態でリプライリストを開いた状態にする
+            replyListContent.classList.add('show');
+            toggleIcon.style.transform = 'rotate(180deg)'; // 初期状態で▽の向きにする
 
-                replyListToggle.addEventListener('click', () => {
-                    replyListContent.classList.toggle('show');
+            replyListToggle.addEventListener('click', () => {
+                replyListContent.classList.toggle('show');
 
-                    if (replyListContent.classList.contains('show')) {
-                        replyListContent.style.maxHeight = replyListContent.scrollHeight + 'px';
-                        toggleIcon.style.transform = 'rotate(180deg)';
-                    } else {
-                        replyListContent.style.maxHeight = '0';
-                        toggleIcon.style.transform = 'rotate(0deg)';
-                    }
-                });
+                if (replyListContent.classList.contains('show')) {
+                    replyListContent.style.maxHeight = replyListContent.scrollHeight + 'px';
+                    toggleIcon.style.transform = 'rotate(180deg)';
+                } else {
+                    replyListContent.style.maxHeight = '0';
+                    toggleIcon.style.transform = 'rotate(0deg)'; // △に変更
+                }
             });
+        });
     </script>
 </head>
 
@@ -221,57 +209,57 @@ try {
     <!-- サイドバー -->
     <?php include '../sidebar/sidebar.php'; ?>
     <div class="main-content">
-    <!-- ここまで -->  
-    <div class="post-detail">
-        <div class="user-info">
-            <div class="user-icon"></div>
-            <span>投稿者名</span>
-        </div>
-        <div class="post-title"><?php echo $titleData['title'];?></div>
-        <div class="post-content">
-        <?php echo $contentData['content'];?>
-        <!-- ここだけはhtmlで出力したいかも -->
-        </div>
-        <div class="reply-list">
-            <div class="reply-list-header">
-                <span class="reply-list-title">リプライ</span>
-                <div class="reply-list-toggle">
-                    <img class="toggle-icon" src="../Image/toggle2.png" alt="Toggle">
+        <!-- ここまで -->
+        <div class="post-detail">
+            <div class="user-info">
+                <div class="user-icon"></div>
+                <span>投稿者名</span>
+            </div>
+            <div class="post-title"><?php echo $titleData['title']; ?></div>
+            <div class="post-content">
+                <?php echo $contentData['content']; ?>
+                <!-- ここだけはhtmlで出力したいかも -->
+            </div>
+            <div class="reply-list">
+                <div class="reply-list-header">
+                    <span class="reply-list-title">リプライ</span>
+                    <div class="reply-list-toggle">
+                        <img class="toggle-icon" src="../Image/toggle2.png" alt="Toggle">
+                    </div>
+                </div>
+                <!-- ユーザー管理が追加されてから追加する処理() -->
+                <div class="reply-list-content" id="replyList">
+                    <div class="reply-item">
+                        <div class="reply-user"></div>
+                        <div class="reply-content"></div>
+                    </div>
+                    <!-- ループ処理でデータを表示-->
+                    <?php foreach ($replyData as $reply) : ?>
+                        <div class="reply-item">
+                            <div class="reply-user">閲覧者</div><!--< ?php echo $reply['user']; ?> -->
+                            <div class="reply-content"><?php echo $reply['reply']; ?></div>
+                        </div>
+                    <?php endforeach; ?>
                 </div>
             </div>
-            <!-- ユーザー管理が追加されてから追加する処理() -->
-            <div class="reply-list-content" id="replyList">
-                <div class="reply-item">
-                    <div class="reply-user"></div>
-                    <div class="reply-content"></div>
+            <div class="post-actions">
+                <div class="like-button" id="likeButton">
+                    <img class="like-icon" src="../Image/Good_white.png" alt="Like">
+                    <span class="like-count">0</span>
                 </div>
-            <!-- ループ処理でデータを表示-->
-            <?php foreach ($replyData as $reply): ?>
-                <div class="reply-item">
-                <div class="reply-user">閲覧者</div><!--< ?php echo $reply['user']; ?> -->
-                    <div class="reply-content"><?php echo $reply['reply']; ?></div>
+                <div class="reply-button">
+                    <img class="reply-icon" src="../Image/SpeechBubble.png" alt="Reply">
+                    <span>リプライする</span>
                 </div>
-                <?php endforeach; ?>
+            </div>
+            <div class="reply-form">
+                <form method="POST" action="Post_Detail.php">
+                    <textarea name="input-post" class="reply-input" placeholder="リプライを入力してください"></textarea>
+                    <button type="submit" name="submit-post" class="reply-submit">送信</button>
+                </form>
             </div>
         </div>
-        <div class="post-actions">
-            <div class="like-button" id="likeButton">
-                <img class="like-icon" src="../Image/Good_white.png" alt="Like">
-                <span class="like-count">0</span>
-            </div>
-            <div class="reply-button">
-                <img class="reply-icon" src="../Image/SpeechBubble.png" alt="Reply">
-                <span>リプライする</span>
-            </div>
-        </div>
-        <div class="reply-form">
-            <form method="POST" action="Post_Detail.php">
-                <textarea name="input-post" class="reply-input" placeholder="リプライを入力してください"></textarea>
-                <button type="submit" name="submit-post" class="reply-submit">送信</button>
-            </form>
-        </div>
-    </div>
-    <div class="post-message"></div>
+        <div class="post-message"></div>
 </body>
 
 </html>
