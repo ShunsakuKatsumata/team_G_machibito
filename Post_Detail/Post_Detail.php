@@ -10,44 +10,40 @@ try {
     $pdo = new PDO($dsn, $username, $password);
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
+    // URLパラメータからpost_idを取得
     if (isset($_GET['post_id'])) {
-        $_SESSION['post_id'] = $_GET['post_id']; // セッションにpost_idを保存
-    }
-
-    if (isset($_SESSION['post_id'])) {
-        $postId = $_SESSION['post_id'];
-
-        // post_idを使用してデータベースから該当の投稿を取得
-        $stmt = $pdo->prepare("SELECT * FROM post WHERE post_id = :post_id");
-        $stmt->bindParam(':post_id', $postId);
-        $stmt->execute();
-        $postData = $stmt->fetch(PDO::FETCH_ASSOC);
-
-        if (!$postData) {
-            // post_idに対応する投稿が見つからなかった場合のエラー処理　未記入
-        }
-
-        // いいね数を取得
-        $stmt = $pdo->prepare("SELECT nice FROM post WHERE post_id = :post_id");
-        $stmt->bindParam(':post_id', $postId);
-        $stmt->execute();
-        $currentNice = $stmt->fetchColumn();
-
-        // 初期のいいね数を設定
-        $count = intval($currentNice);
+        $postId = $_GET['post_id'];
     } else {
-        // post_idがURLに含まれていない場合のエラー処理　未記入
+        // post_idがURLに含まれていない場合はエラー処理などを行う
+        die("エラー：投稿IDが指定されていません");
     }
 
-    // セッションにいいねの状態を保存（初期値はfalse）
-    $isLiked = isset($_SESSION['isLiked']) ? $_SESSION['isLiked'] : false;
+    // post_idを使用してデータベースから該当の投稿を取得
+    $stmt = $pdo->prepare("SELECT * FROM post WHERE post_id = :post_id");
+    $stmt->bindParam(':post_id', $postId);
+    $stmt->execute();
+    $postData = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    if (!$postData) {
+        die("エラー：該当する投稿が見つかりません");
+    }
+
+    // いいね数を取得
+    $stmt = $pdo->prepare("SELECT nice FROM post WHERE post_id = :post_id");
+    $stmt->bindParam(':post_id', $postId);
+    $stmt->execute();
+    $currentNice = $stmt->fetchColumn();
+
+    // セッションに投稿ごとのいいねの状態を保存（初期値はfalse）
+    $isLikedKey = 'isLiked_' . $postId;
+    $isLiked = isset($_SESSION[$isLikedKey]) ? $_SESSION[$isLikedKey] : false;
 
     // いいねの処理
     if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['liked']) && $_POST['liked'] === 'toggle') {
         $isLiked = !$isLiked;
 
         // データベースのいいね数を増減
-        $count = $isLiked ? $count + 1 : $count - 1;
+        $count = intval($currentNice) + ($isLiked ? 1 : -1);
 
         // データベースのいいね数を更新
         $stmt = $pdo->prepare("UPDATE post SET nice = :nice WHERE post_id = :post_id");
@@ -55,8 +51,8 @@ try {
         $stmt->bindParam(':post_id', $postId, PDO::PARAM_INT);
         $stmt->execute();
 
-        // セッションにいいねの状態を保存
-        $_SESSION['isLiked'] = $isLiked;
+        // セッションに投稿ごとのいいねの状態を保存
+        $_SESSION[$isLikedKey] = $isLiked;
 
         // 更新成功をクライアントに返す
         echo json_encode(array('success' => true, 'count' => $count, 'isLiked' => $isLiked));
@@ -135,7 +131,7 @@ try {
             // いいねボタンのクリックイベント
             likeButton.addEventListener('click', () => {
                 const xhr = new XMLHttpRequest();
-                xhr.open('POST', '<?php echo $_SERVER['PHP_SELF']; ?>', true);
+                xhr.open('POST', '<?php echo $_SERVER['PHP_SELF'] . '?post_id=' . $postId; ?>', true);
                 xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
                 const postData = 'liked=toggle';
                 xhr.send(postData);
@@ -146,6 +142,8 @@ try {
                         if (xhr.status === 200) {
                             // ページの再読み込み
                             location.reload(); // ページを再読み込みして更新を反映
+                            const response = JSON.parse(xhr.responseText);
+                            updateLikeButton(response.isLiked, response.count);
                         } else {
                             // エラーが発生した場合の処理
                             console.error('いいねの処理中にエラーが発生しました');
@@ -153,6 +151,13 @@ try {
                     }
                 };
             });
+            function updateLikeButton(isLiked, count) {
+                const likeIcon = likeButton.querySelector('.like-icon');
+                const likeCount = likeButton.querySelector('.like-count');
+
+                likeIcon.src = isLiked ? '../Image/Good_pink.png' : '../Image/Good_white.png';
+                likeCount.textContent = count;
+            }
         });
         
         window.addEventListener('DOMContentLoaded', () => {
@@ -240,7 +245,7 @@ try {
         <div class="post-title"><?php echo $titleData['title'];?></div>
         <div class="post-content">
         <?php echo $contentData['content'];?>
-        <!-- ここだけはhtmlで出力したいかも -->
+        
         </div>
         <div class="reply-list">
             <div class="reply-list-header">
@@ -267,19 +272,19 @@ try {
         <div class="post-actions">
             <div class="like-button" id="likeButton">
                 <img class="like-icon" src="<?php echo $isLiked ? '../Image/Good_pink.png' : '../Image/Good_white.png'; ?>" alt="Like">
-                <span class="like-count"><?php echo $count; ?></span>
+                <span class="like-count"><?php echo $currentNice; ?></span>
             </div>
-        <div class="reply-button">
-            <img class="reply-icon" src="../Image/SpeechBubble.png" alt="Reply">
-            <span>リプライする</span>
+            <div class="reply-button">
+                <img class="reply-icon" src="../Image/SpeechBubble.png" alt="Reply">
+                <span>リプライする</span>
+            </div>
         </div>
-    </div>
-    <div class="reply-form">
-            <form method="POST" action="Post_Detail.php">
-                <textarea name="input-post" class="reply-input" placeholder="リプライを入力してください"></textarea>
-                <button type="submit" name="submit-post" class="reply-submit">送信</button>
-            </form>
-        </div>
+        <div class="reply-form">
+                <form method="POST" action="Post_Detail.php?post_id=<?php echo $postId; ?>">
+                    <textarea name="input-post" class="reply-input" placeholder="リプライを入力してください"></textarea>
+                    <button type="submit" name="submit-post" class="reply-submit">送信</button>
+                </form>
+            </div>
     <div class="post-message"></div>
 </body>
 
