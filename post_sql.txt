@@ -56,7 +56,7 @@ CREATE TABLE account (
 );
 
 INSERT INTO account (user_name, email, password) VALUES
-('Alice', 'alice@example.com', 'password1'),
-('Bob', 'bob@example.com', 'password2'),
+('Sayori', 'sayori@example.com', 'password1'),
+('Natsuki', 'Natsuki@example.com', 'password2'),
 ('Yuri', 'yurie@example.com', 'password3'),
 ('Monika', 'monika@example.com', 'password4');

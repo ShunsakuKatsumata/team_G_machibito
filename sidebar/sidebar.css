@@ -12,6 +12,7 @@
     padding: 20px;
     left: 0;
     top: 0;
+    z-index: 1; /* サイドバーが他の要素に覆われないようにz-indexを設定 */
 }
 
 .sidebar-sidebar nav ul {
