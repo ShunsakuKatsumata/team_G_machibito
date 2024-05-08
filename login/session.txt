@@ -1,0 +1,11 @@
+
+
+配列の中身
+$user = array(
+    'user_id' => 'ユーザーのID',
+    'user_name' => 'ユーザー名',
+    'email' => 'メールアドレス',
+    'password' => 'パスワード',
+ );
+
+ $_SESSION['user']['user_id'];
