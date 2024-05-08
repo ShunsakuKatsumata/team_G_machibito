@@ -15,7 +15,7 @@ try {
         $postId = $_GET['post_id'];
     } else {
         // post_idがURLに含まれていない場合はエラー処理などを行う
-        die("エラー：投稿IDが指定されていません");
+        die("エラー：投稿IDが見つかりません");
     }
 
     // post_idを使用してデータベースから該当の投稿を取得
@@ -23,10 +23,6 @@ try {
     $stmt->bindParam(':post_id', $postId);
     $stmt->execute();
     $postData = $stmt->fetch(PDO::FETCH_ASSOC);
-
-    if (!$postData) {
-        die("エラー：該当する投稿が見つかりません");
-    }
 
     // いいね数を取得
     $stmt = $pdo->prepare("SELECT nice FROM post WHERE post_id = :post_id");
@@ -76,7 +72,7 @@ try {
             header("Location: ".$_SERVER['PHP_SELF']."?post_id=".$postId);
             exit();
         } else {
-            // $postIdがnullの場合のエラーエラー処理　未記入
+            // $postIdがnullの場合のエラー処理　未記入
         }
 
         $stmt = $pdo->prepare('SELECT title, content FROM post WHERE post_id = ?');
