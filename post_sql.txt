@@ -6,49 +6,7 @@ grant all privileges on post.* to kobe@localhost identified by 'denshi';
 
 use post; 
 
-create table post(
-post_id int auto_increment primary key,
-post_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-title text,
-content text,
-tag text,
-nice INT DEFAULT 0
-);
-
-insert into post(post_id, title, content, tag, nice) values(1, 'Pythonでの文字列操作の基本', 'Pythonでは文字列操作は非常に重要です。この記事では、文字列の結合、分割、置換などの基本的な操作方法を解説します。また、文字列操作を効率的に行うためのベストプラクティスも紹介します。', 'Python,文字列操作,チュートリアル', 20);
-insert into post(post_id, title, content, tag, nice) values(2, 'Gitを使ったバージョン管理の基本', 'プロジェクトの管理や共同作業をする際に不可欠なGitの基本的な使い方を解説します。リポジトリの作成からコミット、プッシュ、プルまでの流れを実践的な例を交えながら詳しく説明します。', 'Git,バージョン管理,チュートリアル', 14);
-insert into post(post_id, title, content, tag, nice) values(3, 'JavaScriptでの配列操作の豆知識', 'JavaScriptにおける配列操作は非常に柔軟であり、効率的なコーディングに欠かせません。この記事では、配列の追加、削除、マッピング、フィルタリングなど、便利な配列操作のテクニックを紹介します。', 'JavaScript,配列操作,Tips', 13);
-insert into post(post_id, title, content, tag, nice) values(4, 'Dockerを使ったコンテナ化の入門ガイド', 'Dockerを使えば、アプリケーションやサービスを簡単にコンテナ化して環境を構築できます。この記事では、Dockerの基本的な概念からコンテナの作成、イメージの管理、Docker Composeの利用方法までをわかりやすく解説します。', 'Docker,コンテナ化,入門', 23);
-insert into post(post_id, title, content, tag, nice) values(5, 'プログラミング言語の選択: Python vs. JavaScript vs. Ruby', '新しいプロジェクトを始める際には、どのプログラミング言語を選択するかが重要です。この記事では、Python、JavaScript、およびRubyの特徴や用途、利点、欠点を比較し、それぞれの言語の適切な使用場面について考察します。', 'Python,JavaScript,Ruby,比較記事', 48);
-
-
-CREATE TABLE reply (
-    post_id INT,
-    reply TEXT NOT NULL,
-    user_id INT NOT NULL
-);
-
-INSERT INTO reply(post_id,reply,user_id) VALUES(1,'pythonでの文字列操作が分かりました',1);
-INSERT INTO reply(post_id,reply,user_id) VALUES(2,'見やすいですね',2);
-INSERT INTO reply(post_id,reply,user_id) VALUES(3,'分かりやすかったです。ありがとうございます。',3);
-INSERT INTO reply(post_id,reply,user_id) VALUES(4,'悩みが解決しました。',1);
-INSERT INTO reply(post_id,reply,user_id) VALUES(4,'難しいですよね',2);
-INSERT INTO reply(post_id,reply,user_id) VALUES(4,'↑そうなんですよね',3);
-INSERT INTO reply(post_id,reply,user_id) VALUES(5,'Python一択',2);
-INSERT INTO reply(post_id,reply,user_id) VALUES(5,'断然Rubyだね',4);
-
-# 投稿した質問を格納するテーブル
-create table question_post(ident int auto_increment primary key, 
-                    title varchar(100), 
-                    detail varchar(1000)                    
-);
-
-# 質問に対する回答を格納するテーブル
-create table question_answer(ident int auto_increment primary key, 
-                    answer varchar(1000),
-                    post_id int(11)
-);
-
+# アカウント情報を格納
 CREATE TABLE account (
     user_id INT PRIMARY KEY AUTO_INCREMENT,
     user_name VARCHAR(255) NOT NULL,
@@ -61,3 +19,57 @@ INSERT INTO account (user_name, email, password) VALUES
 ('Natsuki', 'Natsuki@example.com', 'password2'),
 ('Yuri', 'yurie@example.com', 'password3'),
 ('Monika', 'monika@example.com', 'password4');
+
+# 投稿に対するリプライを格納
+CREATE TABLE reply (
+    post_id INT,
+    reply TEXT NOT NULL,
+    user_id INT,
+    FOREIGN KEY (user_id) REFERENCES account(user_id)
+);
+
+INSERT INTO reply(post_id, reply, user_id) VALUES(1, 'pythonでの文字列操作が分かりました', 1);
+INSERT INTO reply(post_id, reply, user_id) VALUES(2, '見やすいですね', 2);
+INSERT INTO reply(post_id, reply, user_id) VALUES(3, '分かりやすかったです。ありがとうございます。', 3);
+INSERT INTO reply(post_id, reply, user_id) VALUES(4, '悩みが解決しました。', 4);
+INSERT INTO reply(post_id, reply, user_id) VALUES(4, '難しいですよね', 1);
+INSERT INTO reply(post_id, reply, user_id) VALUES(4, '↑そうなんですよね', 2);
+INSERT INTO reply(post_id, reply, user_id) VALUES(5, 'Python一択', 3);
+INSERT INTO reply(post_id, reply, user_id) VALUES(5, '断然Rubyだね', 4);
+
+# 投稿した質問を格納する
+create table question_post(
+    ident int auto_increment primary key, 
+    title varchar(100), 
+    detail varchar(1000),
+    user_id INT,
+    FOREIGN KEY (user_id) REFERENCES account(user_id)
+                           
+);
+
+# 質問に対する回答を格納
+create table question_answer(
+    ident int auto_increment primary key, 
+    answer varchar(1000),
+    post_id int(11),
+    user_id INT,
+    FOREIGN KEY (user_id) REFERENCES account(user_id)
+);
+
+# 記事の内容を格納
+CREATE TABLE post (
+    post_id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT,
+    post_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    title TEXT,
+    content TEXT,
+    tag TEXT,
+    nice INT DEFAULT 0,
+    FOREIGN KEY (user_id) REFERENCES account(user_id)
+);
+
+insert into post(post_id, user_id, title, content, tag, nice) values(1, 1, 'Pythonでの文字列操作の基本', 'Pythonでは文字列操作は非常に重要です。この記事では、文字列の結合、分割、置換などの基本的な操作方法を解説します。また、文字列操作を効率的に行うためのベストプラクティスも紹介します。', 'Python,文字列操作,チュートリアル', 20);
+insert into post(post_id, user_id, title, content, tag, nice) values(2, 2, 'Gitを使ったバージョン管理の基本', 'プロジェクトの管理や共同作業をする際に不可欠なGitの基本的な使い方を解説します。リポジトリの作成からコミット、プッシュ、プルまでの流れを実践的な例を交えながら詳しく説明します。', 'Git,バージョン管理,チュートリアル', 14);
+insert into post(post_id, user_id, title, content, tag, nice) values(3, 3, 'JavaScriptでの配列操作の豆知識', 'JavaScriptにおける配列操作は非常に柔軟であり、効率的なコーディングに欠かせません。この記事では、配列の追加、削除、マッピング、フィルタリングなど、便利な配列操作のテクニックを紹介します。', 'JavaScript,配列操作,Tips', 13);
+insert into post(post_id, user_id, title, content, tag, nice) values(4, 4, 'Dockerを使ったコンテナ化の入門ガイド', 'Dockerを使えば、アプリケーションやサービスを簡単にコンテナ化して環境を構築できます。この記事では、Dockerの基本的な概念からコンテナの作成、イメージの管理、Docker Composeの利用方法までをわかりやすく解説します。', 'Docker,コンテナ化,入門', 23);
+insert into post(post_id, user_id, title, content, tag, nice) values(5, 1, 'プログラミング言語の選択: Python vs. JavaScript vs. Ruby', '新しいプロジェクトを始める際には、どのプログラミング言語を選択するかが重要です。この記事では、Python、JavaScript、およびRubyの特徴や用途、利点、欠点を比較し、それぞれの言語の適切な使用場面について考察します。', 'Python,JavaScript,Ruby,比較記事', 48);
