@@ -31,7 +31,7 @@ try {
     }
 
     // リプライを投稿するデータベース処理
-    if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['submit-post'])) {
         $replyContent = $_POST['input-post'];
         $userId = $_SESSION['user']['user_id']; // セッションからユーザーIDを取得
     
@@ -43,21 +43,10 @@ try {
     
         // クエリを実行
         $stmt->execute();
-    
+
         // 成功した場合、ページを再読み込み
-        if ($postId !== null) {
-            header("Location: ".$_SERVER['PHP_SELF']."?post_id=".$postId);
-            exit();
-        } else {
-            // $postIdがnullの場合のエラーエラー処理　未記入
-        }
-
-        $stmt = $pdo->prepare('SELECT title, content FROM post WHERE post_id = ?');
-        $stmt->execute([$postId]);
-        $data = $stmt->fetch();
-
-        echo 'Title: ' . $data['title'] . "\n";
-        echo 'Content: ' . $data['content'] . "\n";
+        header("Location: " . $_SERVER['PHP_SELF'] . "?post_id=" . $postId);
+        exit();
     }
 
     // リプライを表示するデータベース処理
@@ -106,6 +95,7 @@ try {
 
 
 
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -117,7 +107,6 @@ try {
     <title>投稿詳細</title>
 
     <script>
-        
         window.addEventListener('DOMContentLoaded', () => {
             // 各要素を取得
             const likeButton = document.querySelector('.like-button');
@@ -134,7 +123,7 @@ try {
             // count =123; 過去の初期値
 
             window.onload = function() {
-            document.getElementById('likeCount').textContent = count;
+                document.getElementById('likeCount').textContent = count;
             };
 
             // 初期のいいねの数を表示
@@ -211,22 +200,22 @@ try {
             const replyListContent = document.querySelector('.reply-list-content');
             const toggleIcon = replyListToggle.querySelector('.toggle-icon');
 
-            if (!replyListContent.classList.contains('show')) {
-                replyListContent.style.maxHeight = '0';
-            }
+            // 初期状態でリプライリストを開いた状態にする
+            replyListContent.classList.add('show');
+            toggleIcon.style.transform = 'rotate(180deg)'; // 初期状態で▽の向きにする
 
-                replyListToggle.addEventListener('click', () => {
-                    replyListContent.classList.toggle('show');
+            replyListToggle.addEventListener('click', () => {
+                replyListContent.classList.toggle('show');
 
-                    if (replyListContent.classList.contains('show')) {
-                        replyListContent.style.maxHeight = replyListContent.scrollHeight + 'px';
-                        toggleIcon.style.transform = 'rotate(180deg)';
-                    } else {
-                        replyListContent.style.maxHeight = '0';
-                        toggleIcon.style.transform = 'rotate(0deg)';
-                    }
-                });
+                if (replyListContent.classList.contains('show')) {
+                    replyListContent.style.maxHeight = replyListContent.scrollHeight + 'px';
+                    toggleIcon.style.transform = 'rotate(180deg)';
+                } else {
+                    replyListContent.style.maxHeight = '0';
+                    toggleIcon.style.transform = 'rotate(0deg)'; // △に変更
+                }
             });
+        });
     </script>
 </head>
 

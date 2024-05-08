@@ -7,7 +7,7 @@ body {
 }
 
 .main-content {
-    margin-left: calc(30% + 20px);
+    margin-left: 27%;
     max-width: 800px;
 }
 
@@ -47,7 +47,7 @@ body {
 /* 投稿リストのスタイル */
 .post-list {
     max-width: 800px;
-    margin-left: calc(30% + 20px);
+    margin-left: 27%;
 }
 
 /* 投稿の詳細スタイル */
@@ -90,8 +90,7 @@ body {
     font-size: 24px;
     font-weight: bold;
     margin-bottom: 5px;
-    color: blue;
-    text-decoration: underline;
+    color: rgb(0, 0, 0);
     cursor: pointer;
 }
 
@@ -111,6 +110,7 @@ body {
     width: 20px;
     height: 20px;
     margin-right: 5px;
+    margin-bottom: -4px;
 }
 
 /* 投稿メッセージのスタイル */
@@ -129,8 +129,8 @@ body {
 }
 
 /* 投稿タグのスタイル */
-.post-tag{
+.post-tag {
     text-align: right;
     padding: 10px;
-    margin-top:10px;
+    margin-top: 10px;
 }
