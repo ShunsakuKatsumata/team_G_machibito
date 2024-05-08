@@ -9,14 +9,6 @@
         <!-- サイドバー設定 -->
         <?php include '../sidebar/sidebar.php'; ?>
         <div class="comment_home">
-            <!-- <header>
-                <h3>タイトル</h3>
-                <div class="search-box">
-                    <input type="text">
-                    <img src="">
-                </div>
-                
-            </header> -->
             <ul class="menu">
                 <li class="menu-item_red">回答募集中&nbsp;|&nbsp;</li>
                 <li class="menu-item_blue">解決済み&nbsp;|&nbsp;</li>
@@ -36,6 +28,7 @@
             <?php
                 
             ?>
+            <!-- 投稿された質問一覧（タイトルが表示されている） -->
             <table id="comment_home_item" align="center">
                 <?php
                 // onclick="location.href='comment_detail.html'">
@@ -61,12 +54,3 @@
         </div>
     </body>
 </html>
-
-<!-- <a target="_blank" href="https://icons8.com/icon/103378/descending-sorting">ソート</a> アイコン by <a target="_blank" href="https://icons8.com">Icons8</a> -->
-
-<!-- <tr align="left">
-                <td id="a"></td>
-            </tr>
-            <tr align="right">
-                <td>返信</td>
-            </tr> -->

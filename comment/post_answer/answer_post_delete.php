@@ -3,7 +3,7 @@
     $comment_id = $_GET['commentId'];
     $post_id = $_GET['post_id'];
 
-    // 関数の実行
+    // 回答の削除
     require_once __DIR__.'/../classes/answer_post.php';
     $answer_post = new answer_post();
     $answer_post->delete_answer($comment_id);

@@ -2,13 +2,13 @@
 require_once __DIR__ .'/comment_dbdata.php';
 
 class answer_post extends dbdata{
-    // 追加
+    // 回答を投稿
     public function answer_question($post_id, $speak_myknowledge){
         $sql = "insert into question_answer(post_id, answer) values(?, ?)";
         $result = $this->query($sql, [$post_id, $speak_myknowledge]);
     }
 
-    // 取得
+    // 回答を取得
     public function get_answers($post_id){
         $sql = "select * from question_answer where post_id=?";
         $stmt = $this->query($sql, [$post_id]);
@@ -16,7 +16,7 @@ class answer_post extends dbdata{
         return $items;
     }
 
-    // 回答IDを指定
+    // 回答IDを指定して取得
     public function get_answer_answerid($ident){
         $sql = "select * from question_answer where ident=?";
         $stmt = $this->query($sql, [$ident]);

@@ -157,6 +157,20 @@ li{
     padding-top: 12px;
 } 
 
+/* 回答のいいねボタン*/
+.answer_like_flex{
+    display: flex;
+}
+
+.answer_like_icon{
+    width:30px;
+    height:30px;
+}
+
+.answer_like_count{
+    margin-top: 10px;
+}
+
 /* 編集と削除 */
 .post_edit_button{
     background-color: #00B16B;
