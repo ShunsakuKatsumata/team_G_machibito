@@ -7,14 +7,6 @@ body {
     margin: 0;
 }
 
-.container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    margin: 0;
-}
-
 .post-container {
     width: 70%;
     padding: 20px;
@@ -29,27 +21,19 @@ body {
 
 
 .user-info {
-    display: flex;
     align-items: center;
-    margin-bottom: 20px;
-}
-
-.user-icon {
-    width: 50px;
-    height: 50px;
-    border-radius: 50%;
-    background-color: #ccc;
-    margin-right: 10px;
+    margin-bottom: 10px;
 }
 
 .title-input {
+    width: 97.5%;
     flex: 1;
     padding: 10px;
     border-radius: 5px;
 }
 
 .content-input {
-    width: 97%;
+    width: 97.5%;
     height: 200px;
     padding: 10px;
     border-radius: 5px;
@@ -57,9 +41,9 @@ body {
 }
 
 .tag-input {
-    width: 97%;
+    width: 97.5%;
     height: 35px;
-    margin-top: 20px;
+    margin-top: 10px;
     padding: 10px;
     border-radius: 5px;
     resize: vertical;
@@ -82,7 +66,7 @@ body {
 .button-container {
     display: flex;
     justify-content: flex-end;
-    margin-top: 20px;
+    margin-top: 15px;
 }
 
 .clear-button,
@@ -92,12 +76,14 @@ body {
     border-radius: 5px;
     cursor: pointer;
     transition: background-color 0.3s ease;
+    height: 40px;
+    margin-right: 5%;
 }
 
 .clear-button {
-    background-color: #dc3545;
+    background-color: #fe3f52;
     color: #fff;
-    margin-right: 10px;
+    margin-right: 40px;
 }
 
 .post-button {
@@ -106,11 +92,11 @@ body {
 }
 
 .clear-button:hover {
-    background-color: rgb(255, 110, 110);
+    background-color: #ff8694;
 }
 
 .post-button:hover {
-    background-color: rgb(149, 153, 255);
+    background-color: #77b9ff;
 }
 
 .error-message {
@@ -145,16 +131,17 @@ body {
 
 .popup-content {
     background-color: #fefefe;
-    margin: 15% auto;
+    margin: 10% auto;
     padding: 20px;
     border: 1px solid #888;
-    width: 80%;
+    width: 50%;
+    margin-right: 15%;
 }
 
 .popup-trigger {
     cursor: pointer;
     position: relative;
-    right: 70%;
+    right: 60%;
     font-size: 30px;
     color: #aaa;
 }
