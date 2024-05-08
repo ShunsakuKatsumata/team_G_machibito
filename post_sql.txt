@@ -24,17 +24,18 @@ insert into post(post_id, title, content, tag, nice) values(5, 'プログラミ�
 
 CREATE TABLE reply (
     post_id INT,
-    reply TEXT
+    reply TEXT NOT NULL,
+    user_id INT NOT NULL
 );
 
-INSERT INTO reply(post_id,reply) VALUES(1,'pythonでの文字列操作が分かりました');
-INSERT INTO reply(post_id,reply) VALUES(2,'見やすいですね');
-INSERT INTO reply(post_id,reply) VALUES(3,'分かりやすかったです。ありがとうございます。');
-INSERT INTO reply(post_id,reply) VALUES(4,'悩みが解決しました。');
-INSERT INTO reply(post_id,reply) VALUES(4,'難しいですよね');
-INSERT INTO reply(post_id,reply) VALUES(4,'↑そうなんですよね');
-INSERT INTO reply(post_id,reply) VALUES(5,'Python一択');
-INSERT INTO reply(post_id,reply) VALUES(5,'断然Rubyだね');
+INSERT INTO reply(post_id,reply,user_id) VALUES(1,'pythonでの文字列操作が分かりました',1);
+INSERT INTO reply(post_id,reply,user_id) VALUES(2,'見やすいですね',2);
+INSERT INTO reply(post_id,reply,user_id) VALUES(3,'分かりやすかったです。ありがとうございます。',3);
+INSERT INTO reply(post_id,reply,user_id) VALUES(4,'悩みが解決しました。',1);
+INSERT INTO reply(post_id,reply,user_id) VALUES(4,'難しいですよね',2);
+INSERT INTO reply(post_id,reply,user_id) VALUES(4,'↑そうなんですよね',3);
+INSERT INTO reply(post_id,reply,user_id) VALUES(5,'Python一択',2);
+INSERT INTO reply(post_id,reply,user_id) VALUES(5,'断然Rubyだね',4);
 
 # 投稿した質問を格納するテーブル
 create table question_post(ident int auto_increment primary key, 
@@ -54,3 +55,9 @@ CREATE TABLE account (
     email VARCHAR(255) NOT NULL,
     password VARCHAR(255) NOT NULL
 );
+
+INSERT INTO account (user_name, email, password) VALUES
+('Sayori', 'sayori@example.com', 'password1'),
+('Natsuki', 'Natsuki@example.com', 'password2'),
+('Yuri', 'yurie@example.com', 'password3'),
+('Monika', 'monika@example.com', 'password4');
