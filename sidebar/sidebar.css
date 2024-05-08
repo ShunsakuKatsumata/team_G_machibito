@@ -1,17 +1,13 @@
 .sidebar-sidebar {
     position: fixed;
     width: 15%;
-    /* 画面幅の20%に設定 */
-    min-width: 200px;
-    /* 最小幅を設定 */
-    max-width: 300px;
-    /* 最大幅を設定 */
     height: 100vh;
     background: #262626;
     color: #fff;
     padding: 20px;
     left: 0;
     top: 0;
+    z-index: 1; /* サイドバーが他の要素に覆われないようにz-indexを設定 */
 }
 
 .sidebar-sidebar nav ul {

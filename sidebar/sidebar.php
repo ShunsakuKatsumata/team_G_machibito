@@ -28,6 +28,15 @@
             <li><a href="../comment/comment_home.php"><img src="../Image/question.png" alt="質問">質問する</a></li>
             <!-- <li><a href=""><img src="../Image/good.png" alt="いいね">いいね</a></li> -->
             <!-- <li><a href=""><img src="../Image/setting.png" alt="設定">設定</a></li> -->
+            <li>
+            <a href="<?php echo isset($_SESSION['user']['user_name']) ? '../mypage/mypage.php' : '../login/login.php'; ?>">
+            <img src="../Image/question.png" alt="ログイン">
+            <?php
+                // ユーザー名がセッションに存在する場合はユーザー名を表示、存在しない場合は「ログイン」を表示
+                echo isset($_SESSION['user']['user_name']) ? $_SESSION['user']['user_name'] : 'ログイン';
+            ?>
+            </a>
+            </li>
         </ul>
     </nav>
 </div>
