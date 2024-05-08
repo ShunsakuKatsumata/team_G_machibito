@@ -88,18 +88,6 @@ try {
     $stmt->execute();
     $replyData = $stmt->fetchAll();
 
-    if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['delete_reply'])) {
-        $deleteReplyId = $_POST['delete_reply_id'];
-    
-        $stmt = $pdo->prepare("DELETE FROM reply WHERE reply_id = :reply_id AND user_id = :user_id");
-        $stmt->bindParam(':reply_id', $deleteReplyId);
-        $stmt->bindParam(':user_id', $_SESSION['user']['user_id']);
-        $stmt->execute();
-    
-        header("Location: " . $_SERVER['PHP_SELF'] . "?post_id=" . $postId);
-        exit();
-    }
-
 } catch (PDOException $e) {
     echo "エラー：" . $e->getMessage();
 }
@@ -264,12 +252,6 @@ try {
                 <div class="reply-item">
                     <div class="reply-user"><?php echo $reply['user_name']; ?></div>
                     <div class="reply-content"><?php echo $reply['reply']; ?></div>
-                    <?php if ($_SESSION['user']['user_id'] == $reply['user_id']): ?>
-                        <form method="post">
-                            <input type="hidden" name="delete_reply_id" value="<?php echo $reply['reply_id']; ?>">
-                            <input type="submit" name="delete_reply" value="Delete">
-                        </form>
-                    <?php endif; ?>
                 </div>
             <?php endforeach; ?>
             </div>
