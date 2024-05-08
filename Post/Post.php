@@ -1,4 +1,5 @@
 <?php
+session_start();
 // フォームが送信されたかどうかを確認する
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // フォームから送信されたデータを取得する
