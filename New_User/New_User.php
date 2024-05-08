@@ -28,9 +28,9 @@
     <?php
         // データベースに接続
         $db_host = 'localhost';
-        $db_user = 'your_username';
-        $db_password = 'your_password';
-        $db_name = 'your_database_name';
+        $db_user = 'kobe';
+        $db_password = 'denshi';
+        $db_name = 'post';
         $conn = new mysqli($db_host, $db_user, $db_password, $db_name);
 
         // 接続をチェック
