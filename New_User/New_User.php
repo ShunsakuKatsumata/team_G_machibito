@@ -30,7 +30,7 @@
         $db_host = 'localhost';
         $db_user = 'kobe';
         $db_password = 'denshi';
-        $db_name = 'account';
+        $db_name = 'post';
         $conn = new mysqli($db_host, $db_user, $db_password, $db_name);
 
         // 接続をチェック
@@ -44,7 +44,7 @@
         $password = $_POST['password'];
 
         // データベースに挿入する準備
-        $sql = "INSERT INTO users (username, email, password) VALUES (?, ?, ?)";
+        $sql = "INSERT INTO account (user_name, email, password) VALUES (?, ?, ?)";
         $stmt = $conn->prepare($sql);
         $stmt->bind_param('sss', $username, $email, $password);
 
