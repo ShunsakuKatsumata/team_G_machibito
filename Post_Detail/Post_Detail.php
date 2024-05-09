@@ -10,25 +10,52 @@ try {
     $pdo = new PDO($dsn, $username, $password);
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
+    // URLパラメータからpost_idを取得
     if (isset($_GET['post_id'])) {
-        $_SESSION['post_id'] = $_GET['post_id']; // セッションにpost_idを保存
-    }
-
-    if (isset($_SESSION['post_id'])) {
-        $postId = $_SESSION['post_id'];
-
-        // post_idを使用してデータベースから該当の投稿を取得
-        $stmt = $pdo->prepare("SELECT * FROM post WHERE post_id = :post_id");
-        $stmt->bindParam(':post_id', $postId);
-        $stmt->execute();
-        $postData = $stmt->fetch(PDO::FETCH_ASSOC);
-
-        if (!$postData) {
-            // post_idに対応する投稿が見つからなかった場合のエラー処理　未記入
-        }
+        $postId = $_GET['post_id'];
     } else {
-        // post_idがURLに含まれていない場合のエラー処理　未記入
+        // post_idがURLに含まれていない場合はエラー処理などを行う
+        die("エラー：投稿IDが見つかりません");
     }
+
+    // post_idを使用してデータベースから該当の投稿を取得
+    $stmt = $pdo->prepare("SELECT * FROM post WHERE post_id = :post_id");
+    $stmt->bindParam(':post_id', $postId);
+    $stmt->execute();
+    $postData = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    
+    // いいね数を取得
+    $stmt = $pdo->prepare("SELECT nice FROM post WHERE post_id = :post_id");
+    $stmt->bindParam(':post_id', $postId);
+    $stmt->execute();
+    $currentNice = $stmt->fetchColumn();
+
+    // セッションに投稿ごとのいいねの状態を保存（初期値はfalse）
+    $isLikedKey = 'isLiked_' . $postId;
+    $isLiked = isset($_SESSION[$isLikedKey]) ? $_SESSION[$isLikedKey] : false;
+
+    // いいねの処理
+    if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['liked']) && $_POST['liked'] === 'toggle') {
+        $isLiked = !$isLiked;
+
+        // データベースのいいね数を増減
+        $count = intval($currentNice) + ($isLiked ? 1 : -1);
+
+        // データベースのいいね数を更新
+        $stmt = $pdo->prepare("UPDATE post SET nice = :nice WHERE post_id = :post_id");
+        $stmt->bindParam(':nice', $count, PDO::PARAM_INT);
+        $stmt->bindParam(':post_id', $postId, PDO::PARAM_INT);
+        $stmt->execute();
+
+        // セッションに投稿ごとのいいねの状態を保存
+        $_SESSION[$isLikedKey] = $isLiked;
+
+        // 更新成功をクライアントに返す
+        echo json_encode(array('success' => true, 'count' => $count, 'isLiked' => $isLiked));
+        exit;
+    }
+
 
     // リプライを投稿するデータベース処理
     if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['submit-post'])) {
@@ -45,8 +72,19 @@ try {
         $stmt->execute();
 
         // 成功した場合、ページを再読み込み
-        header("Location: " . $_SERVER['PHP_SELF'] . "?post_id=" . $postId);
-        exit();
+        if ($postId !== null) {
+            header("Location: " . $_SERVER['PHP_SELF'] . "?post_id=" . $postId);
+            exit();
+        } else {
+            // $postIdがnullの場合のエラー処理　未記入
+        }
+
+        $stmt = $pdo->prepare('SELECT title, content FROM post WHERE post_id = ?');
+        $stmt->execute([$postId]);
+        $data = $stmt->fetch();
+
+        echo 'Title: ' . $data['title'] . "\n";
+        echo 'Content: ' . $data['content'] . "\n";
     }
 
     // リプライを表示するデータベース処理
