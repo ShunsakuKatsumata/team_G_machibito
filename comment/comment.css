@@ -174,7 +174,7 @@ li {
         background-color: #fff;
     }
 
-    textarea {
+    .textarea {
         background-color: #f5f5f5;
     }
 
@@ -182,3 +182,4 @@ li {
         overflow-y: scroll;
         /* 常に垂直方向のスクロールバーを表示 */
     }
+}
