@@ -53,4 +53,30 @@
             
         </div>
     </body>
+    <script>
+        window.addEventListener('DOMContentLoaded', () => {
+            // 要素を取得
+            const likeButton = document.querySelector('.answer_like_button');
+            const likeIcon = document.querySelector('.answer_like_icon');
+            
+            // いいねボタンのクリックイベント
+            likeButton.addEventListener('click', () => {
+                // like_stateを取得
+                var like_state = JSON.parse('<?php echo $like_state_each_comment; ?>');
+
+                // いいねの状態に応じてアイコンとカウントを更新
+                if (like_state) {
+                    console.log('a');
+                    likeIcon.src = "./../Image/Good_pink.png";
+                    likeButton.classList.add('liked');
+                    // count++;
+                } else {
+                    console.log('b');
+                    likeIcon.src = "./../Image/Good_white.png";
+                    likeButton.classList.remove('liked');
+                    // count--;
+                }
+            });
+        });
+    </script>
 </html>

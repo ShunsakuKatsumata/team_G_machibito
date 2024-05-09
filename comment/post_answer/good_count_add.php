@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html>
     <head> 
-        <link rel="stylesheet" href="comment.css">
-        <link rel="stylesheet" href="../sidebar/sidebar.css">
+        <link rel="stylesheet" href="../comment.css">
+        <link rel="stylesheet" href="sidebar/sidebar.css">
         <meta charset="UTF-8">
 
     </head>
@@ -16,7 +16,7 @@
             $answer_post = new answer_post();
             $item = $answer_post->get_answer_answerid($comment_id);
 
-            if($item['like_state']==1){
+            if($item['like_state']){
                 // テーブルをアップデート
                 $like_state = 0;
                 // $like_count = $item['like_count'] - 1;
@@ -29,12 +29,9 @@
                 $answer_post->edit_goodcount($comment_id, $like_count, $like_state);
             }
 
-            // require_onceで呼び出し
-            // require_once __DIR__.'/../comment_detail.php?ident='.$item['post_id'];
             $comment_detail_id = $item['post_id'];
             header("Location: ./../comment_detail.php?ident=$comment_detail_id");
             exit;
-
             
         ?>
 </body>

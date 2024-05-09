@@ -103,24 +103,20 @@
                     const likeButton = document.querySelector('.answer_like_button');
                     const likeIcon = document.querySelector('.answer_like_icon');
                     
-                    
                     // いいねボタンのクリックイベント
                     likeButton.addEventListener('click', () => {
                         // like_stateを取得
                         var like_state = JSON.parse('<?php echo $like_state_each_comment; ?>');
-                        // console.log(like_state);
-
+                        console.log(typeof(like_state));
                         // いいねの状態に応じてアイコンとカウントを更新
                         if (like_state) {
                             console.log('a');
-                            likeIcon.src = "./../Image/Good_pink.png";
+                            likeIcon.src = "./../Image/Good_white.png";
                             likeButton.classList.add('liked');
-                            // count++;
                         } else {
                             console.log('b');
-                            likeIcon.src = "./../Image/Good_white.png";
+                            likeIcon.src = "./../Image/Good_pink.png";
                             likeButton.classList.remove('liked');
-                            // count--;
                         }
                     });
                 });
