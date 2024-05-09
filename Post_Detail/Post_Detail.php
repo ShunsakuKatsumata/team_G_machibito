@@ -10,6 +10,10 @@ try {
     $pdo = new PDO($dsn, $username, $password);
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
     
+    if (isset($_GET['post_id'])) {
+        $_SESSION['post_id'] = $_GET['post_id']; // セッションにpost_idを保存
+    }
+
     if (isset($_SESSION['post_id'])) {
         $postId = $_SESSION['post_id'];
 
@@ -141,6 +145,17 @@ try {
         header("Location: " . $_SERVER['PHP_SELF'] . "?post_id=" . $postId);
         exit();
     }
+
+    // 投稿者名を取得するデータベース
+    $stmt = $pdo->prepare("
+    SELECT post.*, account.user_name 
+    FROM post 
+    JOIN account ON post.user_id = account.user_id 
+    WHERE post_id = :post_id
+    ");
+    $stmt->bindParam(':post_id', $postId);
+    $stmt->execute();
+    $postData = $stmt->fetch();
 
 } catch (PDOException $e) {
     echo "エラー：" . $e->getMessage();
@@ -277,7 +292,9 @@ try {
     <div class="post-detail">
         <div class="user-info">
             <div class="user-icon"></div>
-            <span>投稿者名</span>
+            <div class="post-user">
+                <?php echo '投稿者: ' . $postData['user_name']; ?><!-- 投稿者名 -->
+            </div>
         </div>
         <div class="post-title"><?php echo $titleData['title'];?></div>
         <div class="post-content">
