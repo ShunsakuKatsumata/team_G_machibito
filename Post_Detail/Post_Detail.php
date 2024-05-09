@@ -83,10 +83,24 @@ try {
     FROM reply 
     JOIN account ON reply.user_id = account.user_id 
     WHERE post_id = :post_id
-    ");
+    ORDER BY reply.reply_id ASC
+    ");// ORDER BYで昇順に並び替え
     $stmt->bindParam(':post_id', $postId);
     $stmt->execute();
     $replyData = $stmt->fetchAll();
+
+    // リプライ削除処理
+    if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['delete_reply'])) {
+        $deleteReplyId = $_POST['delete_reply_id'];
+    
+        $stmt = $pdo->prepare("DELETE FROM reply WHERE reply_id = :reply_id AND user_id = :user_id");
+        $stmt->bindParam(':reply_id', $deleteReplyId);
+        $stmt->bindParam(':user_id', $_SESSION['user']['user_id']);
+        $stmt->execute();
+    
+        header("Location: " . $_SERVER['PHP_SELF'] . "?post_id=" . $postId);
+        exit();
+    }
 
 } catch (PDOException $e) {
     echo "エラー：" . $e->getMessage();
@@ -238,7 +252,7 @@ try {
             <div class="reply-list-header">
                 <span class="reply-list-title">リプライ</span>
                 <div class="reply-list-toggle">
-                    <img class="toggle-icon" src="../Image/toggle2.png" alt="Toggle">
+                    <img class="toggle-icon" src="../Image/post-toggle.png" alt="Toggle">
                 </div>
             </div>
             <!-- ユーザー管理が追加されてから追加する処理() -->
@@ -249,11 +263,21 @@ try {
                 </div>
             <!-- ループ処理でデータを表示-->
             <?php foreach ($replyData as $reply): ?>
-                <div class="reply-item">
-                    <div class="reply-user"><?php echo $reply['user_name']; ?></div>
-                    <div class="reply-content"><?php echo $reply['reply']; ?></div>
+            <div class="reply-item">
+                <div class="reply-user">
+                    <?php echo $reply['user_name']; ?>
+                    <?php if ($_SESSION['user']['user_id'] == $reply['user_id']): ?>
+                        <form method="post" style="display: inline;">
+                            <input type="hidden" name="delete_reply_id" value="<?php echo $reply['reply_id']; ?>">
+                            <button type="submit" name="delete_reply" style="border: none; background: none;">
+                                <img src="../image/batsumaru.png" alt="Delete" style="width: 14px; height: 14px; transition: transform 0.3s ease-in-out;">
+                            </button>
+                        </form>
+                    <?php endif; ?>
                 </div>
-            <?php endforeach; ?>
+                <div class="reply-content"><?php echo $reply['reply']; ?></div>
+            </div>
+        <?php endforeach; ?>
             </div>
         </div>
         <div class="post-actions">
