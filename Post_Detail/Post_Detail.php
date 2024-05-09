@@ -1,190 +1,155 @@
-<!-- データベ～ス -->
-<?php
-session_start();
+<!DOCTYPE html>
+<html lang="ja">
 
-$dsn = 'mysql:host=localhost;dbname=post;charset=utf8';
-$username = 'kobe';
-$password = 'denshi';
+<head>
+    <?php
+    session_start(); ?>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../sidebar/sidebar.css">
+    <link rel="stylesheet" href="post_detail.css">
+    <title>投稿詳細</title>
 
-try {
-    $pdo = new PDO($dsn, $username, $password);
-    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    <!-- データベ～ス -->
+    <?php
+    $dsn = 'mysql:host=localhost;dbname=post;charset=utf8';
+    $username = 'kobe';
+    $password = 'denshi';
 
-    // URLパラメータからpost_idを取得
-    if (isset($_GET['post_id'])) {
-        $postId = $_GET['post_id'];
-    } else {
-        // post_idがURLに含まれていない場合はエラー処理などを行う
-        die("エラー：投稿IDが見つかりません");
-    }
+    try {
+        $pdo = new PDO($dsn, $username, $password);
+        $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-    // post_idを使用してデータベースから該当の投稿を取得
-    $stmt = $pdo->prepare("SELECT * FROM post WHERE post_id = :post_id");
-    $stmt->bindParam(':post_id', $postId);
-    $stmt->execute();
-    $postData = $stmt->fetch(PDO::FETCH_ASSOC);
-
-    // いいね数を取得
-    $stmt = $pdo->prepare("SELECT nice FROM post WHERE post_id = :post_id");
-    $stmt->bindParam(':post_id', $postId);
-    $stmt->execute();
-    $currentNice = $stmt->fetchColumn();
-
-    // セッションに投稿ごとのいいねの状態を保存（初期値はfalse）
-    $isLikedKey = 'isLiked_' . $postId;
-    $isLiked = isset($_SESSION[$isLikedKey]) ? $_SESSION[$isLikedKey] : false;
-
-    // いいねの処理
-    if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['liked']) && $_POST['liked'] === 'toggle') {
-        $isLiked = !$isLiked;
-
-        // データベースのいいね数を増減
-        $count = intval($currentNice) + ($isLiked ? 1 : -1);
-
-        // データベースのいいね数を更新
-        $stmt = $pdo->prepare("UPDATE post SET nice = :nice WHERE post_id = :post_id");
-        $stmt->bindParam(':nice', $count, PDO::PARAM_INT);
-        $stmt->bindParam(':post_id', $postId, PDO::PARAM_INT);
-        $stmt->execute();
-
-        // セッションに投稿ごとのいいねの状態を保存
-        $_SESSION[$isLikedKey] = $isLiked;
-
-        // 更新成功をクライアントに返す
-        echo json_encode(array('success' => true, 'count' => $count, 'isLiked' => $isLiked));
-        exit;
-    }
-
-    // リプライを投稿するデータベース処理
-    if ($_SERVER["REQUEST_METHOD"] == "POST") {
-        $replyContent = $_POST['input-post'];
-        $userId = $_SESSION['user']['user_id']; // セッションからユーザーIDを取得
-
-        // SQLクエリを準備
-        $stmt = $pdo->prepare("INSERT INTO reply (post_id, reply) VALUES (:post_id, :reply)");
-        $stmt->bindParam(':post_id', $postId);
-        $stmt->bindParam(':reply', $replyContent);
-
-        // クエリを実行
-        $stmt->execute();
-
-        // 成功した場合、ページを再読み込み
-        if ($postId !== null) {
-            header("Location: " . $_SERVER['PHP_SELF'] . "?post_id=" . $postId);
-            exit();
-        } else {
-            // $postIdがnullの場合のエラー処理　未記入
+        if (isset($_GET['post_id'])) {
+            $_SESSION['post_id'] = $_GET['post_id']; // セッションにpost_idを保存
         }
 
-        $stmt = $pdo->prepare('SELECT title, content FROM post WHERE post_id = ?');
-        $stmt->execute([$postId]);
-        $data = $stmt->fetch();
+        if (isset($_SESSION['post_id'])) {
+            $postId = $_SESSION['post_id'];
 
-        echo 'Title: ' . $data['title'] . "\n";
-        echo 'Content: ' . $data['content'] . "\n";
-    }
+            // post_idを使用してデータベースから該当の投稿を取得
+            $stmt = $pdo->prepare("SELECT * FROM post WHERE post_id = :post_id");
+            $stmt->bindParam(':post_id', $postId);
+            $stmt->execute();
+            $postData = $stmt->fetch(PDO::FETCH_ASSOC);
 
-    // リプライを表示するデータベース処理
-    $stmt = $pdo->prepare("SELECT * FROM reply WHERE post_id = :post_id");
-    $stmt->bindParam(':post_id', $postId);
-    $stmt->execute();
-    $replyData = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            if (!$postData) {
+                // post_idに対応する投稿が見つからなかった場合のエラー処理　未記入
+            }
+        } else {
+            // post_idがURLに含まれていない場合のエラー処理　未記入
+        }
 
-    // タイトルを表示するデータベース
-    $stmt = $pdo->prepare("SELECT title FROM post WHERE post_id = :post_id");
-    $stmt->bindParam(':post_id', $postId);
-    $stmt->execute();
-    $titleData = $stmt->fetch(PDO::FETCH_ASSOC);
+        // リプライを投稿するデータベース処理
+        if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['submit-post'])) {
+            $replyContent = $_POST['input-post'];
+            $userId = $_SESSION['user']['user_id']; // セッションからユーザーIDを取得
 
-    // 本文を表示するデータベース
-    $stmt = $pdo->prepare("SELECT content FROM post WHERE post_id = :post_id");
-    $stmt->bindParam(':post_id', $postId);
-    $stmt->execute();
-    $contentData = $stmt->fetch(PDO::FETCH_ASSOC);
+            // SQLクエリを準備
+            $stmt = $pdo->prepare("INSERT INTO reply (post_id, reply, user_id) VALUES (:post_id, :reply, :user_id)");
+            $stmt->bindParam(':post_id', $postId);
+            $stmt->bindParam(':reply', $replyContent);
+            $stmt->bindParam(':user_id', $userId);
 
-    // いいね数を表示するデータベース
-    $stmt = $pdo->prepare("SELECT nice FROM post WHERE post_id = :post_id");
-    $stmt->bindParam(':post_id', $postId);
-    $stmt->execute();
-    $currentNice = $stmt->fetchColumn();
+            // クエリを実行
+            $stmt->execute();
 
-    // 初期のいいね数を設定
-    $count = intval($currentNice);
-    echo "<script type='text/javascript'>var count = " . json_encode($count) . ";</script>";
+            // 成功した場合、ページを再読み込み
+            header("Location: " . $_SERVER['PHP_SELF'] . "?post_id=" . $postId);
+            exit();
+        }
 
-    // ユーザー名を取得するデータベース
-    $stmt = $pdo->prepare("
+        // リプライを表示するデータベース処理
+        $stmt = $pdo->prepare("SELECT * FROM reply WHERE post_id = :post_id");
+        $stmt->bindParam(':post_id', $postId);
+        $stmt->execute();
+        $replyData = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        // タイトルを表示するデータベース
+        $stmt = $pdo->prepare("SELECT title FROM post WHERE post_id = :post_id");
+        $stmt->bindParam(':post_id', $postId);
+        $stmt->execute();
+        $titleData = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        // 本文を表示するデータベース
+        $stmt = $pdo->prepare("SELECT content FROM post WHERE post_id = :post_id");
+        $stmt->bindParam(':post_id', $postId);
+        $stmt->execute();
+        $contentData = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        // いいね数を表示するデータベース
+        $stmt = $pdo->prepare("SELECT nice FROM post WHERE post_id = :post_id");
+        $stmt->bindParam(':post_id', $postId);
+        $stmt->execute();
+        $currentNice = $stmt->fetchColumn();
+
+        // 初期のいいね数を設定
+        $count = intval($currentNice);
+        echo "<script type='text/javascript'>var count = " . json_encode($count) . ";</script>";
+
+        // ユーザー名を取得するデータベース
+        $stmt = $pdo->prepare("
     SELECT reply.*, account.user_name 
     FROM reply 
     JOIN account ON reply.user_id = account.user_id 
     WHERE post_id = :post_id
     ");
-    $stmt->bindParam(':post_id', $postId);
-    $stmt->execute();
-    $replyData = $stmt->fetchAll();
-} catch (PDOException $e) {
-    echo "エラー：" . $e->getMessage();
-}
-?>
+        $stmt->bindParam(':post_id', $postId);
+        $stmt->execute();
+        $replyData = $stmt->fetchAll();
+    } catch (PDOException $e) {
+        echo "エラー：" . $e->getMessage();
+    }
+    ?>
 
-
-
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="../sidebar/sidebar.css">
-    <link rel="stylesheet" href="post_detail.css">
-    <title><?php echo htmlspecialchars($titleData['title']); ?></title>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const likeButton = document.querySelector('.like-button');
-            const likeIcon = likeButton.querySelector('.like-icon');
-            const likeCount = likeButton.querySelector('.like-count');
-
-            // いいねボタンのクリックイベント
-            likeButton.addEventListener('click', () => {
-                const xhr = new XMLHttpRequest();
-                xhr.open('POST', '<?php echo $_SERVER['PHP_SELF'] . '?post_id=' . $postId; ?>', true);
-                xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-                const postData = 'liked=toggle';
-                xhr.send(postData);
-
-                // リクエスト完了時の処理
-                xhr.onreadystatechange = function() {
-                    if (xhr.readyState === XMLHttpRequest.DONE) {
-                        if (xhr.status === 200) {
-                            // ページの再読み込み
-                            location.reload(); // ページを再読み込みして更新を反映
-                            const response = JSON.parse(xhr.responseText);
-                            updateLikeButton(response.isLiked, response.count);
-                        } else {
-                            // エラーが発生した場合の処理
-                            console.error('いいねの処理中にエラーが発生しました');
-                        }
-                    }
-                };
-            });
-
-            function updateLikeButton(isLiked, count) {
-                const likeIcon = likeButton.querySelector('.like-icon');
-                const likeCount = likeButton.querySelector('.like-count');
-
-                likeIcon.src = isLiked ? '../Image/Good_pink.png' : '../Image/Good_white.png';
-                likeCount.textContent = count;
-            }
-        });
-
         window.addEventListener('DOMContentLoaded', () => {
             // 各要素を取得
+            const likeButton = document.querySelector('.like-button');
+            const likeIcon = document.querySelector('.like-icon');
+            const likeCount = document.querySelector('.like-count');
             const replyButton = document.querySelector('.reply-button');
             const replyForm = document.querySelector('.reply-form');
             const replySubmitButton = document.querySelector('.reply-submit');
             const postMessage = document.querySelector('.post-message');
             const replyInput = document.querySelector('.reply-input');
+
+            // いいねの状態とカウントを管理する変数
+            let isLiked = false;
+            // count =123; 過去の初期値
+
+            window.onload = function() {
+                document.getElementById('likeCount').textContent = count;
+            };
+
+            // 初期のいいねの数を表示
+            likeCount.textContent = count;
+
+            // いいねボタンのクリックイベント
+            likeButton.addEventListener('click', () => {
+                // いいねの状態を反転
+                isLiked = !isLiked;
+
+                // いいねの状態に応じてアイコンとカウントを更新
+                if (isLiked) {
+                    likeIcon.src = "../Image/Good_pink.png";
+                    likeButton.classList.add('liked');
+                    count++;
+                } else {
+                    likeIcon.src = "../Image/Good_white.png";
+                    likeButton.classList.remove('liked');
+                    count--;
+                }
+
+                // 更新したカウントを表示
+                likeButton.querySelector('.like-count').textContent = count;
+                // アニメーションを再生
+                if (likeButton.querySelector('.like-icon').src.includes('Good_pink.png')) {
+                    likeButton.querySelector('.like-icon').style.animation = 'none';
+                    void likeButton.offsetWidth;
+                    likeButton.querySelector('.like-icon').style.animation = 'enlarge 0.5s ease';
+                }
+            });
 
             // リプライボタンのクリックイベント
             replyButton.addEventListener('click', () => {
@@ -231,9 +196,9 @@ try {
             const replyListContent = document.querySelector('.reply-list-content');
             const toggleIcon = replyListToggle.querySelector('.toggle-icon');
 
-            if (!replyListContent.classList.contains('show')) {
-                replyListContent.style.maxHeight = '0';
-            }
+            // 初期状態でリプライリストを開いた状態にする
+            replyListContent.classList.add('show');
+            toggleIcon.style.transform = 'rotate(180deg)'; // 初期状態で▽の向きにする
 
             replyListToggle.addEventListener('click', () => {
                 replyListContent.classList.toggle('show');
@@ -243,7 +208,7 @@ try {
                     toggleIcon.style.transform = 'rotate(180deg)';
                 } else {
                     replyListContent.style.maxHeight = '0';
-                    toggleIcon.style.transform = 'rotate(0deg)';
+                    toggleIcon.style.transform = 'rotate(0deg)'; // △に変更
                 }
             });
         });
@@ -269,7 +234,7 @@ try {
                 <div class="reply-list-header">
                     <span class="reply-list-title">リプライ</span>
                     <div class="reply-list-toggle">
-                        <img class="toggle-icon" src="../Image/toggle2.png" alt="Toggle">
+                        <img class="toggle-icon" src="../Image/post-toggle.png" alt="Toggle">
                     </div>
                 </div>
                 <!-- ユーザー管理が追加されてから追加する処理() -->

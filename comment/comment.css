@@ -1,5 +1,6 @@
-body{
-    margin:10px 30%;
+body {
+    overflow-y: scroll;
+    margin: 10px 30%;
     background-color: #f5f5f5;
 }
 
@@ -8,67 +9,67 @@ body{
     white-space: nowrap;
 } */
 
-.search-box{
+.search-box {
     text-align: right;
 }
 
-.comment_home{
+.comment_home {
     background-color: #fff;
     border: 1px solid #ccc;
-    border-radius:10px;
+    border-radius: 10px;
 }
 
-.menu{
+.menu {
     text-align: left;
     /* margin:15px 50px; */
 }
 
-.menu_sort{
+.menu_sort {
     text-align: left;
     /* margin:15px 50px; */
 }
 
 /* ヘッダー home.html */
-.menu-item_red{
+.menu-item_red {
     /* border: solid 1px #000000; */
-    float:left;
-    padding-top:12px;
+    float: left;
+    padding-top: 12px;
     /* background-color: #dc3545; */
     /* margin:5px 0 0; */
 }
 
-.menu-item_blue{
+.menu-item_blue {
     /* border: solid 1px #000000; */
     /* display: inline-block; */
     /* background-color: #007bff; */
     /* margin:5px 0 0; */
-    float:left;
-    padding-top:12px;
+    float: left;
+    padding-top: 12px;
 }
 
-.menu-item_blue{
+.menu-item_blue {
     /* border: solid 1px #000000; */
     /* display: inline-block; */
-    float:left;
-    padding-top:12px;
+    float: left;
+    padding-top: 12px;
     /* background-color: #007bff; */
     /* margin:5px 0 0; */
 }
 
-.menu-item_q{
+.menu-item_q {
     /* border: solid 1px #000000; */
     display: inline-block;
-    color:#fff;
+    color: #fff;
     border: none;
     border-radius: 5px;
     padding: 10px, 20px;
     background-color: #007bff;
-    margin-left:12px;
-    padding:10px 25px;
+    margin-left: 12px;
+    padding: 10px 25px;
 }
 
-li{
-    list-style:none;
+li {
+    list-style: none;
 }
 
 /* テーブル JavaScriptで指定 */
@@ -81,56 +82,60 @@ li{
     background-color: #ccc;
 } */
 
-#comment_home_item td{
+#comment_home_item td {
     /* border: solid 1px #000000; */
     /* border-radius: 10px; */
     /* width:450px; */
     /* height:30px; */
     /* background-color: #ccc; */
-    margin-top:7px;
+    margin-top: 7px;
 }
 
-.list_button{
-    height:80px; 
-    width:450px; 
-    background:#f5f5f5;
-    border-radius:30px;
+.list_button {
+    height: 80px;
+    width: 450px;
+    background: #f5f5f5;
+    border-radius: 30px;
     border: solid 1px #ccc;
 }
 
-.language, .post, .date, .comment_number{
+.language,
+.post,
+.date,
+.comment_number {
     display: block;
 }
 
-.language{
+.language {
     text-align: left;
     padding: 0 2px;
 }
 
-.post{
+.post {
     text-align: center;
 }
 
-.date{
+.date {
     text-align: left;
-    float:left;
+    float: left;
 }
 
-.comment_number{
+.comment_number {
     text-align: right;
 }
 
-.detail1{
+.detail1 {
     background-color: #fff;
     border: 1px solid #ccc;
-    border-radius:10px;
+    border-radius: 10px;
 }
 
 /* detail.html */
-.detail_q, .detail_reply{
+.detail_q,
+.detail_reply {
     border: solid 1px #000000;
     border-radius: 10px;
-    margin:0 20%;
+    margin: 0 20%;
     text-align: left;
     padding: 0 10px 10px;
     background-color: #f5f5f5;
@@ -138,8 +143,8 @@ li{
 }
 
 /* 質問と回答の間に空白 */
-.detail_q{
-    margin:10px 20% 10px 20%;
+.detail_q {
+    margin: 10px 20% 10px 20%;
     /* overflow:hidden; */
 }
 
@@ -149,28 +154,35 @@ li{
     background-color: #007bff;
 } */
 
-.user_icon{
-    float:left;
+.user_icon {
+    float: left;
 }
 
-.user_name{
+.user_name {
     padding-top: 12px;
-} 
+}
 
 /* 編集と削除 */
-.post_edit_button{
+.post_edit_button {
     background-color: #00B16B;
 }
-.post_delete_button{
+
+.post_delete_button {
     background-color: #dc3545;
 }
 
 /* コメント記入 */
-.write_comment{
+.write_comment {
     text-align: left;
-    margin:0 20%;
+    margin: 0 20%;
     background-color: #fff;
 }
-textarea{
+
+textarea {
     background-color: #f5f5f5;
+}
+
+.sidebar {
+    overflow-y: scroll;
+    /* 常に垂直方向のスクロールバーを表示 */
 }
