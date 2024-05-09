@@ -9,20 +9,22 @@ $password = 'denshi';
 try {
     $pdo = new PDO($dsn, $username, $password);
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    
+    if (isset($_SESSION['post_id'])) {
+        $postId = $_SESSION['post_id'];
 
-    // URLパラメータからpost_idを取得
-    if (isset($_GET['post_id'])) {
-        $postId = $_GET['post_id'];
+        // post_idを使用してデータベースから該当の投稿を取得
+        $stmt = $pdo->prepare("SELECT * FROM post WHERE post_id = :post_id");
+        $stmt->bindParam(':post_id', $postId);
+        $stmt->execute();
+        $postData = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        if (!$postData) {
+            // post_idに対応する投稿が見つからなかった場合のエラー処理　未記入
+        }
     } else {
-        // post_idがURLに含まれていない場合はエラー処理などを行う
-        die("エラー：投稿IDが見つかりません");
+        // post_idがURLに含まれていない場合のエラー処理　未記入
     }
-
-    // post_idを使用してデータベースから該当の投稿を取得
-    $stmt = $pdo->prepare("SELECT * FROM post WHERE post_id = :post_id");
-    $stmt->bindParam(':post_id', $postId);
-    $stmt->execute();
-    $postData = $stmt->fetch(PDO::FETCH_ASSOC);
 
     
     // いいね数を取得
