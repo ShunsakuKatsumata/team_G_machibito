@@ -34,13 +34,13 @@ try {
     if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['submit-post'])) {
         $replyContent = $_POST['input-post'];
         $userId = $_SESSION['user']['user_id']; // セッションからユーザーIDを取得
-    
+
         // SQLクエリを準備
         $stmt = $pdo->prepare("INSERT INTO reply (post_id, reply, user_id) VALUES (:post_id, :reply, :user_id)");
         $stmt->bindParam(':post_id', $postId);
         $stmt->bindParam(':reply', $replyContent);
         $stmt->bindParam(':user_id', $userId);
-    
+
         // クエリを実行
         $stmt->execute();
 
@@ -87,7 +87,6 @@ try {
     $stmt->bindParam(':post_id', $postId);
     $stmt->execute();
     $replyData = $stmt->fetchAll();
-
 } catch (PDOException $e) {
     echo "エラー：" . $e->getMessage();
 }
@@ -223,57 +222,57 @@ try {
     <!-- サイドバー -->
     <?php include '../sidebar/sidebar.php'; ?>
     <div class="main-content">
-    <!-- ここまで -->  
-    <div class="post-detail">
-        <div class="user-info">
-            <div class="user-icon"></div>
-            <span>投稿者名</span>
-        </div>
-        <div class="post-title"><?php echo $titleData['title'];?></div>
-        <div class="post-content">
-        <?php echo $contentData['content'];?>
-        <!-- ここだけはhtmlで出力したいかも -->
-        </div>
-        <div class="reply-list">
-            <div class="reply-list-header">
-                <span class="reply-list-title">リプライ</span>
-                <div class="reply-list-toggle">
-                    <img class="toggle-icon" src="../Image/toggle2.png" alt="Toggle">
+        <!-- ここまで -->
+        <div class="post-detail">
+            <div class="user-info">
+                <div class="user-icon"></div>
+                <span>投稿者名</span>
+            </div>
+            <div class="post-title"><?php echo $titleData['title']; ?></div>
+            <div class="post-content">
+                <?php echo $contentData['content']; ?>
+                <!-- ここだけはhtmlで出力したいかも -->
+            </div>
+            <div class="reply-list">
+                <div class="reply-list-header">
+                    <span class="reply-list-title">リプライ</span>
+                    <div class="reply-list-toggle">
+                        <img class="toggle-icon" src="../Image/post-toggle.png" alt="Toggle">
+                    </div>
+                </div>
+                <!-- ユーザー管理が追加されてから追加する処理() -->
+                <div class="reply-list-content" id="replyList">
+                    <div class="reply-item">
+                        <div class="reply-user"></div>
+                        <div class="reply-content"></div>
+                    </div>
+                    <!-- ループ処理でデータを表示-->
+                    <?php foreach ($replyData as $reply) : ?>
+                        <div class="reply-item">
+                            <div class="reply-user"><?php echo $reply['user_name']; ?></div>
+                            <div class="reply-content"><?php echo $reply['reply']; ?></div>
+                        </div>
+                    <?php endforeach; ?>
                 </div>
             </div>
-            <!-- ユーザー管理が追加されてから追加する処理() -->
-            <div class="reply-list-content" id="replyList">
-                <div class="reply-item">
-                    <div class="reply-user"></div>
-                    <div class="reply-content"></div>
+            <div class="post-actions">
+                <div class="like-button" id="likeButton">
+                    <img class="like-icon" src="../Image/Good_white.png" alt="Like">
+                    <span class="like-count">0</span>
                 </div>
-            <!-- ループ処理でデータを表示-->
-            <?php foreach ($replyData as $reply): ?>
-                <div class="reply-item">
-                    <div class="reply-user"><?php echo $reply['user_name']; ?></div>
-                    <div class="reply-content"><?php echo $reply['reply']; ?></div>
+                <div class="reply-button">
+                    <img class="reply-icon" src="../Image/SpeechBubble.png" alt="Reply">
+                    <span>リプライする</span>
                 </div>
-            <?php endforeach; ?>
+            </div>
+            <div class="reply-form">
+                <form method="POST" action="Post_Detail.php">
+                    <textarea name="input-post" class="reply-input" placeholder="リプライを入力してください"></textarea>
+                    <button type="submit" name="submit-post" class="reply-submit">送信</button>
+                </form>
             </div>
         </div>
-        <div class="post-actions">
-            <div class="like-button" id="likeButton">
-                <img class="like-icon" src="../Image/Good_white.png" alt="Like">
-                <span class="like-count">0</span>
-            </div>
-            <div class="reply-button">
-                <img class="reply-icon" src="../Image/SpeechBubble.png" alt="Reply">
-                <span>リプライする</span>
-            </div>
-        </div>
-        <div class="reply-form">
-            <form method="POST" action="Post_Detail.php">
-                <textarea name="input-post" class="reply-input" placeholder="リプライを入力してください"></textarea>
-                <button type="submit" name="submit-post" class="reply-submit">送信</button>
-            </form>
-        </div>
-    </div>
-    <div class="post-message"></div>
+        <div class="post-message"></div>
 </body>
 
 </html>
