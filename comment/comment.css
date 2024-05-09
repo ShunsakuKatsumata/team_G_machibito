@@ -153,6 +153,11 @@ li{
     background-color: #dc3545;
 }
 
+/*  */
+.menu_sort_answer_list{
+    margin:0 12.5%;
+}
+
 /* コメント記入 */
 .write_comment{
     text-align: left;
