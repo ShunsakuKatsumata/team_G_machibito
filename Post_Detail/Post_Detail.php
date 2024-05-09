@@ -26,6 +26,12 @@
 
         if (isset($_SESSION['post_id'])) {
             $postId = $_SESSION['post_id'];
+try {
+    $pdo = new PDO($dsn, $username, $password);
+    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    
+    if (isset($_SESSION['post_id'])) {
+        $postId = $_SESSION['post_id'];
 
             // post_idを使用してデータベースから該当の投稿を取得
             $stmt = $pdo->prepare("SELECT * FROM post WHERE post_id = :post_id");
@@ -40,6 +46,39 @@
             // post_idがURLに含まれていない場合のエラー処理　未記入
         }
 
+
+        // いいね数を取得
+        $stmt = $pdo->prepare("SELECT nice FROM post WHERE post_id = :post_id");
+        $stmt->bindParam(':post_id', $postId);
+        $stmt->execute();
+        $currentNice = $stmt->fetchColumn();
+
+        // セッションに投稿ごとのいいねの状態を保存（初期値はfalse）
+        $isLikedKey = 'isLiked_' . $postId;
+        $isLiked = isset($_SESSION[$isLikedKey]) ? $_SESSION[$isLikedKey] : false;
+
+        // いいねの処理
+        if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['liked']) && $_POST['liked'] === 'toggle') {
+            $isLiked = !$isLiked;
+
+            // データベースのいいね数を増減
+            $count = intval($currentNice) + ($isLiked ? 1 : -1);
+
+            // データベースのいいね数を更新
+            $stmt = $pdo->prepare("UPDATE post SET nice = :nice WHERE post_id = :post_id");
+            $stmt->bindParam(':nice', $count, PDO::PARAM_INT);
+            $stmt->bindParam(':post_id', $postId, PDO::PARAM_INT);
+            $stmt->execute();
+
+            // セッションに投稿ごとのいいねの状態を保存
+            $_SESSION[$isLikedKey] = $isLiked;
+
+            // 更新成功をクライアントに返す
+            echo json_encode(array('success' => true, 'count' => $count, 'isLiked' => $isLiked));
+            exit;
+        }
+
+
         // リプライを投稿するデータベース処理
         if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['submit-post'])) {
             $replyContent = $_POST['input-post'];
@@ -53,6 +92,19 @@
 
             // クエリを実行
             $stmt->execute();
+    // リプライを投稿するデータベース処理
+    if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['submit-post'])) {
+        $replyContent = $_POST['input-post'];
+        $userId = $_SESSION['user']['user_id']; // セッションからユーザーIDを取得
+    
+        // SQLクエリを準備
+        $stmt = $pdo->prepare("INSERT INTO reply (post_id, reply, user_id) VALUES (:post_id, :reply, :user_id)");
+        $stmt->bindParam(':post_id', $postId);
+        $stmt->bindParam(':reply', $replyContent);
+        $stmt->bindParam(':user_id', $userId);
+    
+        // クエリを実行
+        $stmt->execute();
 
             // 成功した場合、ページを再読み込み
             header("Location: " . $_SERVER['PHP_SELF'] . "?post_id=" . $postId);
@@ -93,127 +145,151 @@
     FROM reply 
     JOIN account ON reply.user_id = account.user_id 
     WHERE post_id = :post_id
-    ");
+    ORDER BY reply.reply_id ASC
+    "); // ORDER BYで昇順に並び替え
         $stmt->bindParam(':post_id', $postId);
         $stmt->execute();
         $replyData = $stmt->fetchAll();
+
+        // リプライ削除処理
+        if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['delete_reply'])) {
+            $deleteReplyId = $_POST['delete_reply_id'];
+
+            $stmt = $pdo->prepare("DELETE FROM reply WHERE reply_id = :reply_id AND user_id = :user_id");
+            $stmt->bindParam(':reply_id', $deleteReplyId);
+            $stmt->bindParam(':user_id', $_SESSION['user']['user_id']);
+            $stmt->execute();
+
+            header("Location: " . $_SERVER['PHP_SELF'] . "?post_id=" . $postId);
+            exit();
+        }
     } catch (PDOException $e) {
         echo "エラー：" . $e->getMessage();
     }
     ?>
 
-    <script>
+
+    <!DOCTYPE html>
+    <html lang="en">
+
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="../sidebar/sidebar.css">
+        <link rel="stylesheet" href="post_detail.css">
+        <title><?php echo htmlspecialchars($titleData['title']); ?></title>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
+        <script>
+            document.addEventListener('DOMContentLoaded', () => {
+                const likeButton = document.querySelector('.like-button');
+                const likeIcon = likeButton.querySelector('.like-icon');
+                const likeCount = likeButton.querySelector('.like-count');
+
+                // いいねボタンのクリックイベント
+                likeButton.addEventListener('click', () => {
+                    const xhr = new XMLHttpRequest();
+                    xhr.open('POST', '<?php echo $_SERVER['PHP_SELF'] . '?post_id=' . $postId; ?>', true);
+                    xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+                    const postData = 'liked=toggle';
+                    xhr.send(postData);
+
+                    // リクエスト完了時の処理
+                    xhr.onreadystatechange = function() {
+                        if (xhr.readyState === XMLHttpRequest.DONE) {
+                            if (xhr.status === 200) {
+                                // ページの再読み込み
+                                location.reload(); // ページを再読み込みして更新を反映
+                                const response = JSON.parse(xhr.responseText);
+                                updateLikeButton(response.isLiked, response.count);
+                            } else {
+                                // エラーが発生した場合の処理
+                                console.error('いいねの処理中にエラーが発生しました');
+                            }
+                        }
+                    };
+                });
+
+                function updateLikeButton(isLiked, count) {
+                    const likeIcon = likeButton.querySelector('.like-icon');
+                    const likeCount = likeButton.querySelector('.like-count');
+
+                likeIcon.src = isLiked ? '../Image/Good_pink.png' : '../Image/Good_white.png';
+                likeCount.textContent = count;
+            }
+        });
+
         window.addEventListener('DOMContentLoaded', () => {
             // 各要素を取得
-            const likeButton = document.querySelector('.like-button');
-            const likeIcon = document.querySelector('.like-icon');
-            const likeCount = document.querySelector('.like-count');
             const replyButton = document.querySelector('.reply-button');
             const replyForm = document.querySelector('.reply-form');
             const replySubmitButton = document.querySelector('.reply-submit');
             const postMessage = document.querySelector('.post-message');
             const replyInput = document.querySelector('.reply-input');
 
-            // いいねの状態とカウントを管理する変数
-            let isLiked = false;
-            // count =123; 過去の初期値
+                // リプライボタンのクリックイベント
+                replyButton.addEventListener('click', () => {
+                    // リプライフォームの表示・非表示を切り替え
+                    replyForm.classList.toggle('show-reply-form');
+                });
 
-            window.onload = function() {
-                document.getElementById('likeCount').textContent = count;
-            };
+                // リプライ送信ボタンのクリックイベント
+                replySubmitButton.addEventListener('click', () => {
+                    // リプライ送信処理 空かチェック
+                    if (replyInput.value.trim() === '') {
+                        // 内容が空の場合はエラーメッセージを表示
+                        showErrorMessage('内容を入力してください');
+                    } else {
+                        // 内容が入力されている場合は投稿しましたメッセージを表示
+                        showPostMessage();
+                    }
+                });
 
-            // 初期のいいねの数を表示
-            likeCount.textContent = count;
-
-            // いいねボタンのクリックイベント
-            likeButton.addEventListener('click', () => {
-                // いいねの状態を反転
-                isLiked = !isLiked;
-
-                // いいねの状態に応じてアイコンとカウントを更新
-                if (isLiked) {
-                    likeIcon.src = "../Image/Good_pink.png";
-                    likeButton.classList.add('liked');
-                    count++;
-                } else {
-                    likeIcon.src = "../Image/Good_white.png";
-                    likeButton.classList.remove('liked');
-                    count--;
+                // 投稿しましたメッセージを表示する関数
+                function showPostMessage() {
+                    postMessage.textContent = '投稿しました';
+                    postMessage.style.opacity = '1';
+                    setTimeout(() => {
+                        postMessage.style.opacity = '0';
+                    }, 3000);
                 }
 
-                // 更新したカウントを表示
-                likeButton.querySelector('.like-count').textContent = count;
-                // アニメーションを再生
-                if (likeButton.querySelector('.like-icon').src.includes('Good_pink.png')) {
-                    likeButton.querySelector('.like-icon').style.animation = 'none';
-                    void likeButton.offsetWidth;
-                    likeButton.querySelector('.like-icon').style.animation = 'enlarge 0.5s ease';
-                }
-            });
-
-            // リプライボタンのクリックイベント
-            replyButton.addEventListener('click', () => {
-                // リプライフォームの表示・非表示を切り替え
-                replyForm.classList.toggle('show-reply-form');
-            });
-
-            // リプライ送信ボタンのクリックイベント
-            replySubmitButton.addEventListener('click', () => {
-                // リプライ送信処理 空かチェック
-                if (replyInput.value.trim() === '') {
-                    // 内容が空の場合はエラーメッセージを表示
-                    showErrorMessage('内容を入力してください');
-                } else {
-                    // 内容が入力されている場合は投稿しましたメッセージを表示
-                    showPostMessage();
+                // エラーメッセージを表示する関数
+                function showErrorMessage(message) {
+                    postMessage.textContent = message;
+                    postMessage.classList.add('error-message'); // エラーメッセージにクラスを追加
+                    postMessage.style.opacity = '1';
+                    setTimeout(() => {
+                        postMessage.style.opacity = '0';
+                        postMessage.classList.remove('error-message'); // エラーメッセージのクラスを削除
+                    }, 3000);
                 }
             });
 
-            // 投稿しましたメッセージを表示する関数
-            function showPostMessage() {
-                postMessage.textContent = '投稿しました';
-                postMessage.style.opacity = '1';
-                setTimeout(() => {
-                    postMessage.style.opacity = '0';
-                }, 3000);
-            }
+            // リプライリストの表示・非表示を切り替えるイベントリスナー
+            window.addEventListener('DOMContentLoaded', () => {
+                const replyListToggle = document.querySelector('.reply-list-toggle');
+                const replyListContent = document.querySelector('.reply-list-content');
+                const toggleIcon = replyListToggle.querySelector('.toggle-icon');
 
-            // エラーメッセージを表示する関数
-            function showErrorMessage(message) {
-                postMessage.textContent = message;
-                postMessage.classList.add('error-message'); // エラーメッセージにクラスを追加
-                postMessage.style.opacity = '1';
-                setTimeout(() => {
-                    postMessage.style.opacity = '0';
-                    postMessage.classList.remove('error-message'); // エラーメッセージのクラスを削除
-                }, 3000);
-            }
-        });
+                // 初期状態でリプライリストを開いた状態にする
+                replyListContent.classList.add('show');
+                toggleIcon.style.transform = 'rotate(180deg)'; // 初期状態で▽の向きにする
 
-        // リプライリストの表示・非表示を切り替えるイベントリスナー
-        window.addEventListener('DOMContentLoaded', () => {
-            const replyListToggle = document.querySelector('.reply-list-toggle');
-            const replyListContent = document.querySelector('.reply-list-content');
-            const toggleIcon = replyListToggle.querySelector('.toggle-icon');
+                replyListToggle.addEventListener('click', () => {
+                    replyListContent.classList.toggle('show');
 
-            // 初期状態でリプライリストを開いた状態にする
-            replyListContent.classList.add('show');
-            toggleIcon.style.transform = 'rotate(180deg)'; // 初期状態で▽の向きにする
-
-            replyListToggle.addEventListener('click', () => {
-                replyListContent.classList.toggle('show');
-
-                if (replyListContent.classList.contains('show')) {
-                    replyListContent.style.maxHeight = replyListContent.scrollHeight + 'px';
-                    toggleIcon.style.transform = 'rotate(180deg)';
-                } else {
-                    replyListContent.style.maxHeight = '0';
-                    toggleIcon.style.transform = 'rotate(0deg)'; // △に変更
-                }
+                    if (replyListContent.classList.contains('show')) {
+                        replyListContent.style.maxHeight = replyListContent.scrollHeight + 'px';
+                        toggleIcon.style.transform = 'rotate(180deg)';
+                    } else {
+                        replyListContent.style.maxHeight = '0';
+                        toggleIcon.style.transform = 'rotate(0deg)'; // △に変更
+                    }
+                });
             });
-        });
-    </script>
-</head>
+        </script>
+    </head>
 
 <body>
     <!-- サイドバー -->
@@ -246,7 +322,17 @@
                     <!-- ループ処理でデータを表示-->
                     <?php foreach ($replyData as $reply) : ?>
                         <div class="reply-item">
-                            <div class="reply-user"><?php echo $reply['user_name']; ?></div>
+                            <div class="reply-user">
+                                <?php echo $reply['user_name']; ?>
+                                <?php if ($_SESSION['user']['user_id'] == $reply['user_id']) : ?>
+                                    <form method="post" style="display: inline;">
+                                        <input type="hidden" name="delete_reply_id" value="<?php echo $reply['reply_id']; ?>">
+                                        <button type="submit" name="delete_reply" style="border: none; background: none;">
+                                            <img src="../image/batsumaru.png" alt="Delete" style="width: 14px; height: 14px; transition: transform 0.3s ease-in-out;">
+                                        </button>
+                                    </form>
+                                <?php endif; ?>
+                            </div>
                             <div class="reply-content"><?php echo $reply['reply']; ?></div>
                         </div>
                     <?php endforeach; ?>

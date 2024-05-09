@@ -5,8 +5,8 @@
         <meta charset="UTF-8">
     </head>
     <body>
-        <!-- 質問 -->
             <div class="detail1">
+                <!-- 質問 -->
                 <div class="detail_q">
                     <h3 style="text-align:left; float:left;">質問</h3>
                     <div style="text-align:right; padding-top:20px;">12回答</div>
@@ -59,20 +59,8 @@
                         }
                     echo '</table>';
                     echo '</div>';
-                    // 更新ボタン
-                    
-                    
-                    // 変更予定 
                 echo '</form>';
                 ?>
             </div>
     </body>
 </html>
-
-
-<!-- <tr align="left">
-                <td id="a"></td>
-            </tr>
-            <tr align="right">
-                <td>返信</td>
-            </tr> -->

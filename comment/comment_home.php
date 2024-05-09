@@ -1,28 +1,16 @@
 <!DOCTYPE html>
-<html lang="ja">
+<html>
 
 <head>
-    <?php
-    session_start(); ?>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="../sidebar/sidebar.css">
     <link rel="stylesheet" href="comment.css">
-    <title>質問画面</title>
+    <link rel="stylesheet" href="../sidebar/sidebar.css">
+    <meta charset="UTF-8">
 </head>
 
 <body>
     <!-- サイドバー設定 -->
     <?php include '../sidebar/sidebar.php'; ?>
     <div class="comment_home">
-        <!-- <header>
-                <h3>タイトル</h3>
-                <div class="search-box">
-                    <input type="text">
-                    <img src="">
-                </div>
-                
-            </header> -->
         <ul class="menu">
             <li class="menu-item_red">回答募集中&nbsp;|&nbsp;</li>
             <li class="menu-item_blue">解決済み&nbsp;|&nbsp;</li>
@@ -44,6 +32,7 @@
         <?php
 
         ?>
+        <!-- 投稿された質問一覧（タイトルが表示されている） -->
         <table id="comment_home_item" align="center">
             <?php
             // onclick="location.href='comment_detail.html'">
@@ -68,14 +57,31 @@
 
     </div>
 </body>
+<script>
+    window.addEventListener('DOMContentLoaded', () => {
+        // 要素を取得
+        const likeButton = document.querySelector('.answer_like_button');
+        const likeIcon = document.querySelector('.answer_like_icon');
+
+        // いいねボタンのクリックイベント
+        likeButton.addEventListener('click', () => {
+            // like_stateを取得
+            var like_state = JSON.parse('<?php echo $like_state_each_comment; ?>');
+
+            // いいねの状態に応じてアイコンとカウントを更新
+            if (like_state) {
+                console.log('a');
+                likeIcon.src = "./../Image/Good_pink.png";
+                likeButton.classList.add('liked');
+                // count++;
+            } else {
+                console.log('b');
+                likeIcon.src = "./../Image/Good_white.png";
+                likeButton.classList.remove('liked');
+                // count--;
+            }
+        });
+    });
+</script>
 
 </html>
-
-<!-- <a target="_blank" href="https://icons8.com/icon/103378/descending-sorting">ソート</a> アイコン by <a target="_blank" href="https://icons8.com">Icons8</a> -->
-
-<!-- <tr align="left">
-                <td id="a"></td>
-            </tr>
-            <tr align="right">
-                <td>返信</td>
-            </tr> -->
