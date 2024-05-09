@@ -24,6 +24,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         // タグをカンマで連結して文字列にする
         $tags_combined = implode(",", $tags_array);
 
+        // ユーザーがログインしているかどうかを確認
+        if (isset($_SESSION['user']['user_id'])) {
+            $user_id = $_SESSION['user']['user_id'];
+        } else {
+            // ユーザーがログインしていない場合は、何らかのエラー処理を行うか、ログインページにリダイレクトするなどの処理を行う
+            echo "ログインしていないため、投稿できません。";
+            exit();
+        }
+
         try {
             // データベースに接続する
             $dsn = 'mysql:host=localhost;dbname=post;charset=utf8';
@@ -33,13 +42,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
             // データを挿入するクエリを準備する
-            $sql = "INSERT INTO post (title, content, tag) VALUES (:title, :content, :tag)";
+            $sql = "INSERT INTO post (title, content, tag, user_id) VALUES (:title, :content, :tag, :user_id)";
             $stmt = $pdo->prepare($sql);
 
             // パラメータをバインドする
             $stmt->bindParam(':title', $title, PDO::PARAM_STR);
             $stmt->bindParam(':content', $content, PDO::PARAM_STR);
             $stmt->bindParam(':tag', $tags_combined, PDO::PARAM_STR);
+            $stmt->bindParam(':user_id', $user_id, PDO::PARAM_INT);
 
             // クエリを実行する
             $stmt->execute();
