@@ -118,10 +118,7 @@
                 // 関数の実行
                 $question_post->edit_question($ident, $title, $detail);
 
-                // comment_home画面に移動
-                // header("Location: comment_detail.php?ident=$answer_ident");
-                // exit;
-                // /./../post_comment/comment_post_edit.php
+                // 質問の編集（テキスト）
                 echo '<form method="POST" action="../post_comment/comment_post_edit.php">';
                     echo '<div class="user-info">';
                         echo '<div class="user-icon"></div>';
@@ -130,7 +127,6 @@
                     echo '<textarea name="question_detail_edit_text" class="content-input">'.$detail.'</textarea>';
                     // 編集ボタン
                     echo '<div class="button-container">';
-                        // echo '<button class="clear-button">削除する</button>';
                         echo '<button name="button1" class="post-button">投稿する</button>';
                     echo '</div>';
                     echo '<input type="hidden" name="question_ident_edit_text" value="'.$item['ident'].'">';

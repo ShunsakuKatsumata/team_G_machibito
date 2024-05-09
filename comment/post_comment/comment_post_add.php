@@ -3,7 +3,7 @@
     $title = $_POST['qustion_title'];
     $detail = $_POST['question_detail'];
 
-    // 関数の実行
+    // 質問の投稿
     require_once __DIR__.'/../classes/question_post.php';
     $question_post = new question_post();
     $question_post->post_questions($title, $detail);

@@ -4,11 +4,13 @@
         <link rel="stylesheet" href="comment.css">
         <link rel="stylesheet" href="../sidebar/sidebar.css">
         <meta charset="UTF-8">
+        
     </head>
     <body>
         <?php include '../sidebar/sidebar.php'; ?>
-        <!-- 質問 -->
             <div class="detail1">
+                <!-- 質問詳細画面 -->
+                <!-- 投稿された質問 -->
                 <div class="detail_q">
                     <h3 style="text-align:left; float:left;">質問</h3>
                     <div style="text-align:right; padding-top:20px;">12回答</div>
@@ -30,24 +32,11 @@
                         echo '</tr>';
                     echo '</table>';
 
-                    // formを追加
-                    // ?ident="'.$item['ident'].
-                    // echo '<form method="POST" action="./new_question_post_edit.php">';
+                    // 編集ボタン
                     echo '<button class="post_edit_button" onclick="location.href=\'./new_post/new_question_post_edit.php?ident='.$ident.'\'">編集</button>';
-                        // echo '<input name="question_ident_edit" type="hidden" value="'.$ident.'>';
-                    //     echo '<input name="question_title_edit" type="hidden" value="'.$item['title'].'>';
-                    //     echo '<input name="question_detail_edit" type="hidden" value="'.$item['detail'].'>';
-                    // echo '</form>';
 
-                    // formを追加
-                    echo '<form method="POST" action="./post_comment/comment_post_delete.php">';
-                        echo '<button class="post_delete_button">削除</button>';
-                        echo '<input type="hidden" name="ident_delete" value='.$ident.'>';
-                    echo '</form>';
-
-                    // echo '<form method="POST" action="answer_post_add.php">';
-                    //     echo '<input type="hidden" name="comment_detail_ident" value="'.$ident.'">';
-                    // echo '</form>';
+                    // 削除ボタン
+                    echo '<button class="post_delete_button" onclick="location.href=\'./post_comment/comment_post_delete.php?ident='.$ident.'\'">削除</button>';
                     ?>
                 </div>
                 
@@ -64,22 +53,38 @@
                     echo '<h3>回答</h3>';
                     echo '<table>';
                         echo '<tr>';
+                            // echo '<td>'.$item['ident'].'</td>';
                             echo '<td>'.$item['answer'].'</td>';
+                        echo '</tr>';
+                        // いいねボタン
+                        echo '<tr>';
+                            echo '<form method="POST" action="./post_answer/good_count_add.php">';
+                                echo '<td class="answer_like_flex">';
+                                    echo '<div class="answer_like_button">';
+                                        echo '<a href="./post_answer/good_count_add.php?comment_id='.$item['ident'].'"><img class="answer_like_icon" src="./../Image/Good_white.png"></a>';
+                                        echo '</div>';
+                                    echo '<span class="answer_like_count">'.$item['like_count'].'</span>';
+                                echo '</td>';
+                            echo '</form>';
+
+                            // 回答テーブルのデータをjsonに変換し、JavaScriptに送る
+                            $like_state_each_comment = json_encode($item['like_state']);
+                            echo $like_state_each_comment;
+
                         echo '</tr>';
                         // 編集ボタン
                         echo '<tr>';
-                            echo '<td><button class="post_edit_button" onclick="location.href=\'./edit_answer/edit_answer.php?post_id='.$ident.'&commentId='.$item['ident'].'\'">編集</button></td>';
+                            echo '<td><button class="post_edit_button" onclick="location.href=\'./edit_answer/edit_answer.php?post_id='.$post_id.'&commentId='.$item['ident'].'\'">編集</button></td>';
                         echo '</tr>';
                         // 削除ボタン
                         echo '<tr>';
-                            echo '<td><button class="post_delete_button" onclick="location.href=\'./post_answer/answer_post_delete.php?post_id='.$ident.'&commentId='.$item['ident'].'\'">削除</button></td>';
+                            echo '<td><button class="post_delete_button" onclick="location.href=\'./post_answer/answer_post_delete.php?post_id='.$post_id.'&commentId='.$item['ident'].'\'">削除</button></td>';
                         echo '</tr>';
                     echo '</table>';
                     echo '</div>';
                 }
                 ?>
-                <!-- コメント記入 -->
-                <!-- <br> -->
+                <!-- 回答を記入する場所 -->
                 <form method="POST" action="./post_answer/answer_post_add.php">
                     <div class="write_comment">
                         <?php
@@ -92,13 +97,29 @@
                     </div>
                 </form>
             </div>
+            <script>
+                window.addEventListener('DOMContentLoaded', () => {
+                    // 要素を取得
+                    const likeButton = document.querySelector('.answer_like_button');
+                    const likeIcon = document.querySelector('.answer_like_icon');
+                    
+                    // いいねボタンのクリックイベント
+                    likeButton.addEventListener('click', () => {
+                        // like_stateを取得
+                        var like_state = JSON.parse('<?php echo $like_state_each_comment; ?>');
+                        console.log(typeof(like_state));
+                        // いいねの状態に応じてアイコンとカウントを更新
+                        if (like_state) {
+                            console.log('a');
+                            likeIcon.src = "./../Image/Good_white.png";
+                            likeButton.classList.add('liked');
+                        } else {
+                            console.log('b');
+                            likeIcon.src = "./../Image/Good_pink.png";
+                            likeButton.classList.remove('liked');
+                        }
+                    });
+                });
+            </script>
     </body>
 </html>
-
-
-<!-- <tr align="left">
-                <td id="a"></td>
-            </tr>
-            <tr align="right">
-                <td>返信</td>
-            </tr> -->

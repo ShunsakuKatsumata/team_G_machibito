@@ -3,11 +3,6 @@ body{
     background-color: #f5f5f5;
 }
 
-/* h3{
-    text-align: left;
-    white-space: nowrap;
-} */
-
 .search-box{
     text-align: right;
 }
@@ -20,7 +15,6 @@ body{
 
 .menu{
     text-align: left;
-    /* margin:15px 50px; */
 }
 
 .menu_sort{
@@ -71,22 +65,8 @@ li{
     list-style:none;
 }
 
-/* テーブル JavaScriptで指定 */
-/* #comment_home_item{
-    border: solid 1px #000000; 
-    padding:10px 200px; 
-    margin-top:7px; 
-    display: inline-block; 
-    border-radius: 10px; 
-    background-color: #ccc;
-} */
 
 #comment_home_item td{
-    /* border: solid 1px #000000; */
-    /* border-radius: 10px; */
-    /* width:450px; */
-    /* height:30px; */
-    /* background-color: #ccc; */
     margin-top:7px;
 }
 
@@ -143,12 +123,6 @@ li{
     /* overflow:hidden; */
 }
 
-/* .user_icon_name{
-    display: flex;
-    display: table;
-    background-color: #007bff;
-} */
-
 .user_icon{
     float:left;
 }
@@ -156,6 +130,20 @@ li{
 .user_name{
     padding-top: 12px;
 } 
+
+/* 回答のいいねボタン*/
+.answer_like_flex{
+    display: flex;
+}
+
+.answer_like_icon{
+    width:30px;
+    height:30px;
+}
+
+.answer_like_count{
+    margin-top: 10px;
+}
 
 /* 編集と削除 */
 .post_edit_button{
