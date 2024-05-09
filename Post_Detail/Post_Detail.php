@@ -34,6 +34,8 @@ try {
     if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['submit-post'])) {
         $replyContent = $_POST['input-post'];
         $userId = $_SESSION['user']['user_id']; // セッションからユーザーIDを取得
+
+        $userId = $_SESSION['user']['user_id']; // セッションからユーザーIDを取得
     
         // SQLクエリを準備
         $stmt = $pdo->prepare("INSERT INTO reply (post_id, reply, user_id) VALUES (:post_id, :reply, :user_id)");
@@ -43,6 +45,7 @@ try {
     
         // クエリを実行
         $stmt->execute();
+
 
         // 成功した場合、ページを再読み込み
         header("Location: " . $_SERVER['PHP_SELF'] . "?post_id=" . $postId);
@@ -218,6 +221,8 @@ try {
             replyListContent.classList.add('show');
             toggleIcon.style.transform = 'rotate(180deg)'; // 初期状態で▽の向きにする
 
+            replyListToggle.addEventListener('click', () => {
+                replyListContent.classList.toggle('show');
             replyListToggle.addEventListener('click', () => {
                 replyListContent.classList.toggle('show');
 
