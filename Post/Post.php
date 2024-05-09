@@ -1,4 +1,5 @@
 <?php
+session_start();
 // フォームが送信されたかどうかを確認する
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // フォームから送信されたデータを取得する
@@ -16,7 +17,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         // タグを半角スペースと全角スペースで区切り、配列に分割
         $tags_array = preg_split('/[\s　]+/u', $tags_input);
 
-
         // 各タグに対してトリミングを行い、空のタグを削除
         $tags_array = array_map('trim', $tags_array);
         $tags_array = array_filter($tags_array);
@@ -24,12 +24,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         // タグをカンマで連結して文字列にする
         $tags_combined = implode(",", $tags_array);
 
-        // データベースに接続する
-        $dsn = 'mysql:host=localhost;dbname=post;charset=utf8';
-        $username = 'kobe';
-        $password = 'denshi';
-
         try {
+            // データベースに接続する
+            $dsn = 'mysql:host=localhost;dbname=post;charset=utf8';
+            $username = 'kobe';
+            $password = 'denshi';
             $pdo = new PDO($dsn, $username, $password);
             $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
@@ -49,11 +48,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             header("Location: ../Display/Display.php");
             exit();
         } catch (PDOException $e) {
-            echo "エラー：" . $e->getMessage();
+            error_log("データベースエラー: " . $e->getMessage());
+            echo "エラーが発生しました。管理者にお知らせください。";
+        } finally {
+            // データベース接続を閉じる
+            unset($pdo);
         }
-
-        // データベース接続を閉じる
-        $pdo = null;
     }
 }
 ?>
@@ -77,8 +77,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <div class="post-container">
         <form action="post.php" method="post">
             <div class="user-info">
-                <div class="user-icon"></div>
-                <input type="text" name="title" placeholder="タイトルを入力してください" class="title-input">
+                <textarea name="title" placeholder="タイトルを入力してください" class="title-input"></textarea>
             </div>
             <textarea name="content" placeholder="本文を入力してください" class="content-input"></textarea>
             <textarea name="tag" placeholder="タグを入力して下さい　　例）Python　C言語" class="tag-input"></textarea>
@@ -89,7 +88,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         <span class="close-popup" onclick="closePopup()">&times;</span>
                         <p>投稿方法の詳細</p>
                         <p>1. タイトル、本文、タグを入力します。未入力の欄があると投稿されません。</p>
-                        <p>2. 「投稿する」ボタンをクリックします。すると投稿が完了しホーム画面に遷移します。</p>
+                        <p>2. 投稿ボタンをクリックすると投稿が完了し、ホーム画面に遷移します。</p>
+                        <p>※ 公序良俗を守り投稿を作成してください。</p>
                     </div>
                 </div>
                 <span class="popup-trigger" onclick="openPopup()">?</span>
@@ -159,15 +159,30 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             }, 3000);
         }
 
-        // ポップアップを表示する関数
-        function openPopup() {
-            document.getElementById("popup").style.display = "block";
-        }
+        document.addEventListener('DOMContentLoaded', function() {
+            // ポップアップを開くための要素を取得
+            const popupTrigger = document.querySelector('.popup-trigger');
+            // ポップアップの要素を取得
+            const popup = document.getElementById('popup');
 
-        // ポップアップを閉じる関数
-        function closePopup() {
-            document.getElementById("popup").style.display = "none";
-        }
+            // ポップアップを開くイベントリスナーを設定
+            popupTrigger.addEventListener('click', function() {
+                popup.style.display = 'block';
+            });
+
+            // ポップアップの×ボタンをクリックしたときの処理
+            const closeButton = document.querySelector('.close-popup');
+            closeButton.addEventListener('click', function() {
+                popup.style.display = 'none';
+            });
+
+            // ポップアップ以外の部分がクリックされたときの処理
+            window.addEventListener('click', function(event) {
+                if (event.target === popup) {
+                    popup.style.display = 'none';
+                }
+            });
+        });
     </script>
 
 </body>
