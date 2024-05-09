@@ -83,7 +83,6 @@ try {
     FROM reply 
     JOIN account ON reply.user_id = account.user_id 
     WHERE post_id = :post_id
-<<<<<<< HEAD
     ORDER BY reply.reply_id ASC
     ");// ORDER BYで昇順に並び替え
     $stmt->bindParam(':post_id', $postId);
@@ -103,12 +102,6 @@ try {
         exit();
     }
 
-=======
-    ");
-    $stmt->bindParam(':post_id', $postId);
-    $stmt->execute();
-    $replyData = $stmt->fetchAll();
->>>>>>> develop
 } catch (PDOException $e) {
     echo "エラー：" . $e->getMessage();
 }
@@ -128,47 +121,6 @@ try {
     <title>投稿詳細</title>
 
     <script>
-<<<<<<< HEAD
-=======
-        document.addEventListener('DOMContentLoaded', () => {
-            const likeButton = document.querySelector('.like-button');
-            const likeIcon = likeButton.querySelector('.like-icon');
-            const likeCount = likeButton.querySelector('.like-count');
-
-            // いいねボタンのクリックイベント
-            likeButton.addEventListener('click', () => {
-                const xhr = new XMLHttpRequest();
-                xhr.open('POST', '<?php echo $_SERVER['PHP_SELF'] . '?post_id=' . $postId; ?>', true);
-                xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-                const postData = 'liked=toggle';
-                xhr.send(postData);
-
-                // リクエスト完了時の処理
-                xhr.onreadystatechange = function() {
-                    if (xhr.readyState === XMLHttpRequest.DONE) {
-                        if (xhr.status === 200) {
-                            // ページの再読み込み
-                            location.reload(); // ページを再読み込みして更新を反映
-                            const response = JSON.parse(xhr.responseText);
-                            updateLikeButton(response.isLiked, response.count);
-                        } else {
-                            // エラーが発生した場合の処理
-                            console.error('いいねの処理中にエラーが発生しました');
-                        }
-                    }
-                };
-            });
-
-            function updateLikeButton(isLiked, count) {
-                const likeIcon = likeButton.querySelector('.like-icon');
-                const likeCount = likeButton.querySelector('.like-count');
-
-                likeIcon.src = isLiked ? '../Image/Good_pink.png' : '../Image/Good_white.png';
-                likeCount.textContent = count;
-            }
-        });
-
->>>>>>> develop
         window.addEventListener('DOMContentLoaded', () => {
             // 各要素を取得
             const likeButton = document.querySelector('.like-button');
@@ -274,11 +226,7 @@ try {
                     toggleIcon.style.transform = 'rotate(180deg)';
                 } else {
                     replyListContent.style.maxHeight = '0';
-<<<<<<< HEAD
                     toggleIcon.style.transform = 'rotate(0deg)'; // △に変更
-=======
-                    toggleIcon.style.transform = 'rotate(0deg)';
->>>>>>> develop
                 }
             });
         });
@@ -289,7 +237,6 @@ try {
     <!-- サイドバー -->
     <?php include '../sidebar/sidebar.php'; ?>
     <div class="main-content">
-<<<<<<< HEAD
     <!-- ここまで -->  
     <div class="post-detail">
         <div class="user-info">
@@ -306,45 +253,13 @@ try {
                 <span class="reply-list-title">リプライ</span>
                 <div class="reply-list-toggle">
                     <img class="toggle-icon" src="../Image/post-toggle.png" alt="Toggle">
-=======
-        <!-- ここまで -->
-        <div class="post-detail">
-            <div class="user-info">
-                <div class="user-icon"></div>
-                <span>投稿者名</span>
-            </div>
-            <div class="post-title"><?php echo $titleData['title']; ?></div>
-            <div class="post-content">
-                <?php echo $contentData['content']; ?>
-                <!-- ここだけはhtmlで出力したいかも -->
-            </div>
-            <div class="reply-list">
-                <div class="reply-list-header">
-                    <span class="reply-list-title">リプライ</span>
-                    <div class="reply-list-toggle">
-                        <img class="toggle-icon" src="../Image/toggle2.png" alt="Toggle">
-                    </div>
-                </div>
-                <!-- ユーザー管理が追加されてから追加する処理() -->
-                <div class="reply-list-content" id="replyList">
-                    <div class="reply-item">
-                        <div class="reply-user"></div>
-                        <div class="reply-content"></div>
-                    </div>
-                    <!-- ループ処理でデータを表示-->
-                    <?php foreach ($replyData as $reply) : ?>
-                        <div class="reply-item">
-                            <div class="reply-user"><?php echo $reply['user_name']; ?></div>
-                            <div class="reply-content"><?php echo $reply['reply']; ?></div>
-                        </div>
-                    <?php endforeach; ?>
->>>>>>> develop
                 </div>
             </div>
-            <div class="post-actions">
-                <div class="like-button" id="likeButton">
-                    <img class="like-icon" src="../Image/Good_white.png" alt="Like">
-                    <span class="like-count">0</span>
+            <!-- ユーザー管理が追加されてから追加する処理() -->
+            <div class="reply-list-content" id="replyList">
+                <div class="reply-item">
+                    <div class="reply-user"></div>
+                    <div class="reply-content"></div>
                 </div>
             <!-- ループ処理でデータを表示-->
             <?php foreach ($replyData as $reply): ?>
