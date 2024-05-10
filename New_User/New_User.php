@@ -1,62 +1,73 @@
 <!DOCTYPE html>
 <html lang="ja">
+
 <head>
+    <?php session_start(); ?>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ユーザー登録</title>
     <link rel="stylesheet" href="New_User.css">
 </head>
+
 <body>
     <div class="container">
         <h2>ユーザー登録</h2>
-        <form action="register.php" method="POST">
+        <form action="New_User.php" method="POST">
             <div class="form-group">
                 <label for="username">ユーザー名</label>
                 <input type="text" id="username" name="username" required>
             </div>
             <div class="form-group">
                 <label for="email">メールアドレス</label>
-                <input type="email" id="email" name="email" required>
+                <input type="email" id="email" name="email" value="<?php echo isset($_POST['email']) ? htmlspecialchars($_POST['email']) : ''; ?>" required>
             </div>
             <div class="form-group">
                 <label for="password">パスワード</label>
-                <input type="password" id="password" name="password" required>
+                <input type="password" id="password" name="password" value="<?php echo isset($_POST['password']) ? htmlspecialchars($_POST['password']) : ''; ?>" required>
             </div>
             <input type="submit" value="登録">
         </form>
     </div>
     <?php
-        // データベースに接続
-        $db_host = 'localhost';
-        $db_user = 'your_username';
-        $db_password = 'your_password';
-        $db_name = 'your_database_name';
-        $conn = new mysqli($db_host, $db_user, $db_password, $db_name);
+    if ($_SERVER["REQUEST_METHOD"] == "POST") {
+        if (!empty($_POST['username']) && !empty($_POST['email']) && !empty($_POST['password'])) {
+            $username = $_POST['username'];
+            $email = $_POST['email'];
+            $password = $_POST['password'];
 
-        // 接続をチェック
-        if ($conn->connect_error) {
-            die("データベース接続エラー: " . $conn->connect_error);
-        }
+            // データベースに接続
+            $dsn = 'mysql:host=localhost;dbname=post;charset=utf8';
+            $db_username = 'kobe';
+            $db_password = 'denshi';
 
-        // フォームからのデータを取得
-        $username = $_POST['username'];
-        $email = $_POST['email'];
-        $password = $_POST['password'];
+            try {
+                $pdo = new PDO($dsn, $db_username, $db_password);
+                $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-        // データベースに挿入する準備
-        $sql = "INSERT INTO users (username, email, password) VALUES (?, ?, ?)";
-        $stmt = $conn->prepare($sql);
-        $stmt->bind_param('sss', $username, $email, $password);
+                // データベースに挿入する準備
+                $stmt = $pdo->prepare("INSERT INTO account (user_name, email, password) VALUES (?, ?, ?)");
+                $stmt->execute([$username, $email, $password]);
 
-        // クエリを実行して結果を確認
-        if ($stmt->execute()) {
-            echo "ユーザーが登録されました。";
+                echo "ユーザーが登録されました。";
+
+                // ユーザー情報をセッションに保存
+                $_SESSION['user'] = [
+                    'user_name' => $username,
+                    'email' => $email
+                ];
+
+                // ログインページにリダイレクト
+                header("Location: ../login/login.php");
+                exit;
+            } catch (PDOException $e) {
+                echo "エラー: " . $e->getMessage();
+            }
         } else {
-            echo "エラー: " . $sql . "<br>" . $conn->error;
+            echo "すべてのフィールドを入力してください。";
         }
+    }
+    ?>
 
-        // データベース接続を閉じる
-        $conn->close();
-        ?>
 </body>
+
 </html>

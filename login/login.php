@@ -1,6 +1,16 @@
-<?php
-session_start();
+<!DOCTYPE html>
+<html lang="ja">
 
+<head>
+    <?php
+    session_start();
+    ?>
+    <link rel="stylesheet" href="../sidebar/sidebar.css">
+    <link rel="stylesheet" href="login.css">
+    <title>ログイン</title>
+</head>
+
+<?php
 // データベース接続情報
 $dsn = 'mysql:host=localhost;dbname=post;charset=utf8';
 $username = 'kobe';
@@ -37,30 +47,27 @@ try {
 }
 ?>
 
-<!DOCTYPE html>
-<html>
-<head>
-    <link rel="stylesheet" href="../sidebar/sidebar.css">
-    <link rel="stylesheet" href="login.css">
-    <title>ログイン</title>
-</head>
 <body>
     <!-- サイドバー -->
     <?php include '../sidebar/sidebar.php'; ?>
     <div class="main-content">
-    <h2>ログイン</h2>
-    <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">
-        <div>
-            <label>メールアドレス：</label>
-            <input type="text" name="email" required>
-        </div>
-        <div>
-            <label>パスワード：</label>
-            <input type="password" name="password" required>
-        </div>
-        <div>
-            <input type="submit" value="ログイン">
-        </div>
-    </form>
+        <h2>ログイン</h2>
+        <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">
+            <div>
+                <label>メールアドレス：</label>
+                <input type="text" name="email" required>
+            </div>
+            <div>
+                <label>パスワード：</label>
+                <input type="password" name="password" required>
+            </div>
+            <div>
+                <input type="submit" value="ログイン">
+            </div>
+            <div>
+                <label><a href="../New_User/New_User.php">新規登録はこちら</a></label>
+            </div>
+        </form>
 </body>
+
 </html>
