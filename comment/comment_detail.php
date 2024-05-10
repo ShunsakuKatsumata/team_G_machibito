@@ -94,7 +94,7 @@
                             echo '</tr>';
                             // 日付表示
                             echo '<tr>';
-                                echo '<td class="post-date">'.$item['posttime'].'</td>';
+                                echo '<td class="post-date">'.$item['post_time'].'</td>';
                             echo '</tr>';
                             // 編集ボタン
                             echo '<tr>';

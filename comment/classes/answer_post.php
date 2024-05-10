@@ -4,7 +4,7 @@ require_once __DIR__ .'/comment_dbdata.php';
 class answer_post extends dbdata{
     // 回答を投稿
     public function answer_question($post_id, $add_answer_post, $post_time){
-        $sql = "insert into question_answer(post_id, answer, posttime) values(?, ?, ?)";
+        $sql = "insert into question_answer(post_id, answer, post_time) values(?, ?, ?)";
         $result = $this->query($sql, [$post_id, $add_answer_post, $post_time]);
     }
 
