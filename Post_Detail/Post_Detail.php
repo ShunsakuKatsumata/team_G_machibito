@@ -335,8 +335,8 @@ try {
         </div>
         <div class="post-actions">
             <div class="like-button" id="likeButton">
-                <img class="like-icon" src="../Image/Good_white.png" alt="Like">
-                <span class="like-count">0</span>
+                <img class="like-icon" src="<?php echo $isLiked ? '../Image/Good_pink.png' : '../Image/Good_white.png'; ?>" alt="Like">
+                <span class="like-count"><?php echo $currentNice; ?></span>
             </div>
             <div class="reply-button">
                 <img class="reply-icon" src="../Image/SpeechBubble.png" alt="Reply">
@@ -344,7 +344,7 @@ try {
             </div>
         </div>
         <div class="reply-form">
-            <form method="POST" action="Post_Detail.php">
+        <form method="POST" action="Post_Detail.php?post_id=<?php echo $postId; ?>">
                 <textarea name="input-post" class="reply-input" placeholder="リプライを入力してください"></textarea>
                 <button type="submit" name="submit-post" class="reply-submit">送信</button>
             </form>
