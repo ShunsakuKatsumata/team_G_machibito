@@ -23,6 +23,10 @@
         // セッションを破棄
         $_SESSION = array();
         session_destroy();
+
+        // ログインページにリダイレクト
+        header('Location: ../login/login.php');
+        exit();
     }
     ?>
     <!-- サイドバー -->

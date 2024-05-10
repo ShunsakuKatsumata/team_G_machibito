@@ -64,6 +64,9 @@ try {
             <div>
                 <input type="submit" value="ログイン">
             </div>
+            <div>
+                <label><a href="../New_User/New_User.php">新規登録はこちら</a></label>
+            </div>
         </form>
 </body>
 
