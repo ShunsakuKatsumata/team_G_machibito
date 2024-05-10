@@ -8,9 +8,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="../sidebar/sidebar.css">
     <link rel="stylesheet" href="post_detail.css">
-    <title><?php echo htmlspecialchars($titleData['title']); ?></title>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-</head>
+
 
 <!-- データベ～ス -->
 <?php
@@ -174,6 +173,9 @@ try {
     echo "エラー：" . $e->getMessage();
 }
 ?>
+
+    <title><?php echo isset($titleData['title']) ? htmlspecialchars($titleData['title']) : 'デフォルトのタイトル'; ?></title>
+</head>
 
 <script>
     document.addEventListener('DOMContentLoaded', () => {
