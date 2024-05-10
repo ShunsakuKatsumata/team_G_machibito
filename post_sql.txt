@@ -44,6 +44,7 @@ create table question_post(
     title varchar(100), 
     detail varchar(1000),
     user_id INT,
+    is_resolved BOOLEAN DEFAULT FALSE,
     FOREIGN KEY (user_id) REFERENCES account(user_id)
                            
 );
