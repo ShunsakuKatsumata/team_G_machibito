@@ -1,7 +1,14 @@
 .main-content {
+    overflow-y: scroll;
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100vh; /* viewport height */
+    height: 100vh;
+    /* viewport height */
     flex-direction: column;
+}
+
+.sidebar {
+    overflow-y: scroll;
+    /* 常に垂直方向のスクロールバーを表示 */
 }

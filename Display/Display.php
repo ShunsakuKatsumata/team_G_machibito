@@ -12,8 +12,6 @@
 </head>
 
 <body>
-    <!-- サイドバー -->
-    <?php include '../sidebar/sidebar.php'; ?>
     <div class="main-content">
         <form method="GET" class="search-bar">
             <input type="text" name="search" class="search-input" placeholder="検索..." value="<?php echo isset($_GET['search']) ? htmlspecialchars($_GET['search']) : ''; ?>">
@@ -160,6 +158,9 @@
             });
         }
     </script>
+
+    <!-- サイドバー設定 -->
+    <?php include '../sidebar/sidebar.php'; ?>
 </body>
 
 </html>

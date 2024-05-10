@@ -1,77 +1,9 @@
-<?php
-session_start();
-// フォームが送信されたかどうかを確認する
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    // フォームから送信されたデータを取得する
-    $title = $_POST['title'];
-    $content = $_POST['content'];
-    $tag = $_POST['tag'];
-
-    // フォームの入力値が空でないかをチェックする
-    if (empty($title) || empty($content) || empty($tag)) {
-        echo "タイトル・内容・タグを入力して下さい";
-    } else {
-        // タグ入力欄から入力されたタグを取得
-        $tags_input = $_POST['tag'];
-
-        // タグを半角スペースと全角スペースで区切り、配列に分割
-        $tags_array = preg_split('/[\s　]+/u', $tags_input);
-
-        // 各タグに対してトリミングを行い、空のタグを削除
-        $tags_array = array_map('trim', $tags_array);
-        $tags_array = array_filter($tags_array);
-
-        // タグをカンマで連結して文字列にする
-        $tags_combined = implode(",", $tags_array);
-
-        // ユーザーがログインしているかどうかを確認
-        if (isset($_SESSION['user']['user_id'])) {
-            $user_id = $_SESSION['user']['user_id'];
-        } else {
-            // ユーザーがログインしていない場合は、何らかのエラー処理を行うか、ログインページにリダイレクトするなどの処理を行う
-            echo "ログインしていないため、投稿できません。";
-            exit();
-        }
-
-        try {
-            // データベースに接続する
-            $dsn = 'mysql:host=localhost;dbname=post;charset=utf8';
-            $username = 'kobe';
-            $password = 'denshi';
-            $pdo = new PDO($dsn, $username, $password);
-            $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-
-            // データを挿入するクエリを準備する
-            $sql = "INSERT INTO post (title, content, tag, user_id) VALUES (:title, :content, :tag, :user_id)";
-            $stmt = $pdo->prepare($sql);
-
-            // パラメータをバインドする
-            $stmt->bindParam(':title', $title, PDO::PARAM_STR);
-            $stmt->bindParam(':content', $content, PDO::PARAM_STR);
-            $stmt->bindParam(':tag', $tags_combined, PDO::PARAM_STR);
-            $stmt->bindParam(':user_id', $user_id, PDO::PARAM_INT);
-
-            // クエリを実行する
-            $stmt->execute();
-
-            // 投稿一覧画面にリダイレクトする
-            header("Location: ../Display/Display.php");
-            exit();
-        } catch (PDOException $e) {
-            error_log("データベースエラー: " . $e->getMessage());
-            echo "エラーが発生しました。管理者にお知らせください。";
-        } finally {
-            // データベース接続を閉じる
-            unset($pdo);
-        }
-    }
-}
-?>
-
 <!DOCTYPE html>
 <html lang="ja">
 
 <head>
+    <?php
+    session_start(); ?>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="../sidebar/sidebar.css">
@@ -80,8 +12,74 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 </head>
 
 <body>
-    <!-- サイドバー設定 -->
-    <?php include '../sidebar/sidebar.php'; ?>
+    <?php
+    // フォームが送信されたかどうかを確認する
+    if ($_SERVER["REQUEST_METHOD"] == "POST") {
+        // フォームから送信されたデータを取得する
+        $title = $_POST['title'];
+        $content = $_POST['content'];
+        $tag = $_POST['tag'];
+
+        // フォームの入力値が空でないかをチェックする
+        if (empty($title) || empty($content) || empty($tag)) {
+            echo "タイトル・内容・タグを入力して下さい";
+        } else {
+            // タグ入力欄から入力されたタグを取得
+            $tags_input = $_POST['tag'];
+
+            // タグを半角スペースと全角スペースで区切り、配列に分割
+            $tags_array = preg_split('/[\s　]+/u', $tags_input);
+
+            // 各タグに対してトリミングを行い、空のタグを削除
+            $tags_array = array_map('trim', $tags_array);
+            $tags_array = array_filter($tags_array);
+
+            // タグをカンマで連結して文字列にする
+            $tags_combined = implode(",", $tags_array);
+
+            // ユーザーがログインしているかどうかを確認
+            if (isset($_SESSION['user']['user_id'])) {
+                $user_id = $_SESSION['user']['user_id'];
+            } else {
+                // ユーザーがログインしていない場合は、何らかのエラー処理を行うか、ログインページにリダイレクトするなどの処理を行う
+                echo "ログインしていないため、投稿できません。";
+                exit();
+            }
+
+            try {
+                // データベースに接続する
+                $dsn = 'mysql:host=localhost;dbname=post;charset=utf8';
+                $username = 'kobe';
+                $password = 'denshi';
+                $pdo = new PDO($dsn, $username, $password);
+                $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+                // データを挿入するクエリを準備する
+                $sql = "INSERT INTO post (title, content, tag, user_id) VALUES (:title, :content, :tag, :user_id)";
+                $stmt = $pdo->prepare($sql);
+
+                // パラメータをバインドする
+                $stmt->bindParam(':title', $title, PDO::PARAM_STR);
+                $stmt->bindParam(':content', $content, PDO::PARAM_STR);
+                $stmt->bindParam(':tag', $tags_combined, PDO::PARAM_STR);
+                $stmt->bindParam(':user_id', $user_id, PDO::PARAM_INT);
+
+                // クエリを実行する
+                $stmt->execute();
+
+                // 投稿一覧画面にリダイレクトする
+                header("Location: ../Display/Display.php");
+                exit();
+            } catch (PDOException $e) {
+                error_log("データベースエラー: " . $e->getMessage());
+                echo "エラーが発生しました。管理者にお知らせください。";
+            } finally {
+                // データベース接続を閉じる
+                unset($pdo);
+            }
+        }
+    }
+    ?>
 
     <div class="error-message"></div>
     <div class="post-container">
@@ -194,6 +192,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             });
         });
     </script>
+
+    <!-- サイドバー設定 -->
+    <?php include '../sidebar/sidebar.php'; ?>
 
 </body>
 

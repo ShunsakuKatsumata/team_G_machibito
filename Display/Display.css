@@ -1,6 +1,6 @@
 /* 全体のスタイル設定 */
 body {
-    font-family: Arial, sans-serif;
+    overflow-y: scroll;
     margin: 0;
     padding: 20px;
     background-color: #f0f0f0;
@@ -133,4 +133,9 @@ body {
     text-align: right;
     padding: 10px;
     margin-top: 10px;
+}
+
+.sidebar {
+    overflow-y: scroll;
+    /* 常に垂直方向のスクロールバーを表示 */
 }
