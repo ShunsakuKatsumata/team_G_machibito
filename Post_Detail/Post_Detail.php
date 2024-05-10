@@ -9,21 +9,28 @@ $password = 'denshi';
 try {
     $pdo = new PDO($dsn, $username, $password);
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-
-    // URLパラメータからpost_idを取得
+    
     if (isset($_GET['post_id'])) {
-        $postId = $_GET['post_id'];
-    } else {
-        // post_idがURLに含まれていない場合はエラー処理などを行う
-        die("エラー：投稿IDが見つかりません");
+        $_SESSION['post_id'] = $_GET['post_id']; // セッションにpost_idを保存
     }
 
-    // post_idを使用してデータベースから該当の投稿を取得
-    $stmt = $pdo->prepare("SELECT * FROM post WHERE post_id = :post_id");
-    $stmt->bindParam(':post_id', $postId);
-    $stmt->execute();
-    $postData = $stmt->fetch(PDO::FETCH_ASSOC);
+    if (isset($_SESSION['post_id'])) {
+        $postId = $_SESSION['post_id'];
 
+        // post_idを使用してデータベースから該当の投稿を取得
+        $stmt = $pdo->prepare("SELECT * FROM post WHERE post_id = :post_id");
+        $stmt->bindParam(':post_id', $postId);
+        $stmt->execute();
+        $postData = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        if (!$postData) {
+            // post_idに対応する投稿が見つからなかった場合のエラー処理　未記入
+        }
+    } else {
+        // post_idがURLに含まれていない場合のエラー処理　未記入
+    }
+
+    
     // いいね数を取得
     $stmt = $pdo->prepare("SELECT nice FROM post WHERE post_id = :post_id");
     $stmt->bindParam(':post_id', $postId);
@@ -55,16 +62,18 @@ try {
         exit;
     }
 
+
     // リプライを投稿するデータベース処理
-    if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['submit-post'])) {
         $replyContent = $_POST['input-post'];
         $userId = $_SESSION['user']['user_id']; // セッションからユーザーIDを取得
-
+    
         // SQLクエリを準備
-        $stmt = $pdo->prepare("INSERT INTO reply (post_id, reply) VALUES (:post_id, :reply)");
+        $stmt = $pdo->prepare("INSERT INTO reply (post_id, reply, user_id) VALUES (:post_id, :reply, :user_id)");
         $stmt->bindParam(':post_id', $postId);
         $stmt->bindParam(':reply', $replyContent);
-
+        $stmt->bindParam(':user_id', $userId);
+    
         // クエリを実行
         $stmt->execute();
 
@@ -118,15 +127,40 @@ try {
     FROM reply 
     JOIN account ON reply.user_id = account.user_id 
     WHERE post_id = :post_id
-    ");
+    ORDER BY reply.reply_id ASC
+    ");// ORDER BYで昇順に並び替え
     $stmt->bindParam(':post_id', $postId);
     $stmt->execute();
     $replyData = $stmt->fetchAll();
+
+    // リプライ削除処理
+    if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['delete_reply'])) {
+        $deleteReplyId = $_POST['delete_reply_id'];
+    
+        $stmt = $pdo->prepare("DELETE FROM reply WHERE reply_id = :reply_id AND user_id = :user_id");
+        $stmt->bindParam(':reply_id', $deleteReplyId);
+        $stmt->bindParam(':user_id', $_SESSION['user']['user_id']);
+        $stmt->execute();
+    
+        header("Location: " . $_SERVER['PHP_SELF'] . "?post_id=" . $postId);
+        exit();
+    }
+
+    // 投稿者名を取得するデータベース
+    $stmt = $pdo->prepare("
+    SELECT post.*, account.user_name 
+    FROM post 
+    JOIN account ON post.user_id = account.user_id 
+    WHERE post_id = :post_id
+    ");
+    $stmt->bindParam(':post_id', $postId);
+    $stmt->execute();
+    $postData = $stmt->fetch();
+
 } catch (PDOException $e) {
     echo "エラー：" . $e->getMessage();
 }
 ?>
-
 
 
 <!DOCTYPE html>
@@ -139,6 +173,7 @@ try {
     <link rel="stylesheet" href="post_detail.css">
     <title><?php echo htmlspecialchars($titleData['title']); ?></title>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             const likeButton = document.querySelector('.like-button');
@@ -177,7 +212,6 @@ try {
                 likeCount.textContent = count;
             }
         });
-
         window.addEventListener('DOMContentLoaded', () => {
             // 各要素を取得
             const replyButton = document.querySelector('.reply-button');
@@ -231,9 +265,9 @@ try {
             const replyListContent = document.querySelector('.reply-list-content');
             const toggleIcon = replyListToggle.querySelector('.toggle-icon');
 
-            if (!replyListContent.classList.contains('show')) {
-                replyListContent.style.maxHeight = '0';
-            }
+            // 初期状態でリプライリストを開いた状態にする
+            replyListContent.classList.add('show');
+            toggleIcon.style.transform = 'rotate(180deg)'; // 初期状態で▽の向きにする
 
             replyListToggle.addEventListener('click', () => {
                 replyListContent.classList.toggle('show');
@@ -243,7 +277,7 @@ try {
                     toggleIcon.style.transform = 'rotate(180deg)';
                 } else {
                     replyListContent.style.maxHeight = '0';
-                    toggleIcon.style.transform = 'rotate(0deg)';
+                    toggleIcon.style.transform = 'rotate(0deg)'; // △に変更
                 }
             });
         });
@@ -254,57 +288,69 @@ try {
     <!-- サイドバー -->
     <?php include '../sidebar/sidebar.php'; ?>
     <div class="main-content">
-        <!-- ここまで -->
-        <div class="post-detail">
-            <div class="user-info">
-                <div class="user-icon"></div>
-                <span>投稿者名</span>
-            </div>
-            <div class="post-title"><?php echo $titleData['title']; ?></div>
-            <div class="post-content">
-                <?php echo $contentData['content']; ?>
-                <!-- ここだけはhtmlで出力したいかも -->
-            </div>
-            <div class="reply-list">
-                <div class="reply-list-header">
-                    <span class="reply-list-title">リプライ</span>
-                    <div class="reply-list-toggle">
-                        <img class="toggle-icon" src="../Image/toggle2.png" alt="Toggle">
-                    </div>
-                </div>
-                <!-- ユーザー管理が追加されてから追加する処理() -->
-                <div class="reply-list-content" id="replyList">
-                    <div class="reply-item">
-                        <div class="reply-user"></div>
-                        <div class="reply-content"></div>
-                    </div>
-                    <!-- ループ処理でデータを表示-->
-                    <?php foreach ($replyData as $reply) : ?>
-                        <div class="reply-item">
-                            <div class="reply-user"><?php echo $reply['user_name']; ?></div>
-                            <div class="reply-content"><?php echo $reply['reply']; ?></div>
-                        </div>
-                    <?php endforeach; ?>
-                </div>
-            </div>
-            <div class="post-actions">
-                <div class="like-button" id="likeButton">
-                    <img class="like-icon" src="../Image/Good_white.png" alt="Like">
-                    <span class="like-count">0</span>
-                </div>
-                <div class="reply-button">
-                    <img class="reply-icon" src="../Image/SpeechBubble.png" alt="Reply">
-                    <span>リプライする</span>
-                </div>
-            </div>
-            <div class="reply-form">
-                <form method="POST" action="Post_Detail.php">
-                    <textarea name="input-post" class="reply-input" placeholder="リプライを入力してください"></textarea>
-                    <button type="submit" name="submit-post" class="reply-submit">送信</button>
-                </form>
+    <!-- ここまで -->  
+    <div class="post-detail">
+        <div class="user-info">
+            <div class="user-icon"></div>
+            <div class="post-user">
+                <?php echo '投稿者: ' . $postData['user_name']; ?><!-- 投稿者名 -->
             </div>
         </div>
-        <div class="post-message"></div>
+        <div class="post-title"><?php echo $titleData['title'];?></div>
+        <div class="post-content">
+        <?php echo $contentData['content'];?>
+        <!-- ここだけはhtmlで出力したいかも -->
+        </div>
+        <div class="reply-list">
+            <div class="reply-list-header">
+                <span class="reply-list-title">リプライ</span>
+                <div class="reply-list-toggle">
+                    <img class="toggle-icon" src="../Image/post-toggle.png" alt="Toggle">
+                </div>
+            </div>
+            <!-- ユーザー管理が追加されてから追加する処理() -->
+            <div class="reply-list-content" id="replyList">
+                <div class="reply-item">
+                    <div class="reply-user"></div>
+                    <div class="reply-content"></div>
+                </div>
+            <!-- ループ処理でデータを表示-->
+            <?php foreach ($replyData as $reply): ?>
+            <div class="reply-item">
+                <div class="reply-user">
+                    <?php echo $reply['user_name']; ?>
+                    <?php if ($_SESSION['user']['user_id'] == $reply['user_id']): ?>
+                        <form method="post" style="display: inline;">
+                            <input type="hidden" name="delete_reply_id" value="<?php echo $reply['reply_id']; ?>">
+                            <button type="submit" name="delete_reply" style="border: none; background: none;">
+                                <img src="../image/batsumaru.png" alt="Delete" style="width: 14px; height: 14px; transition: transform 0.3s ease-in-out;">
+                            </button>
+                        </form>
+                    <?php endif; ?>
+                </div>
+                <div class="reply-content"><?php echo $reply['reply']; ?></div>
+            </div>
+        <?php endforeach; ?>
+            </div>
+        </div>
+        <div class="post-actions">
+            <div class="like-button" id="likeButton">
+                <img class="like-icon" src="../Image/Good_white.png" alt="Like">
+                <span class="like-count">0</span>
+            </div>
+            <div class="reply-button">
+                <img class="reply-icon" src="../Image/SpeechBubble.png" alt="Reply">
+                <span>リプライする</span>
+            </div>
+        </div>
+        <div class="reply-form">
+            <form method="POST" action="Post_Detail.php">
+                <textarea name="input-post" class="reply-input" placeholder="リプライを入力してください"></textarea>
+                <button type="submit" name="submit-post" class="reply-submit">送信</button>
+            </form>
+        </div>
+    </div>
+    <div class="post-message"></div>
 </body>
 
 </html>
