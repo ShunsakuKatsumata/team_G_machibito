@@ -29,6 +29,7 @@
         </form>
     </div>
     <?php
+    // フォームからのデータを取得
     if ($_SERVER["REQUEST_METHOD"] == "POST") {
         if (!empty($_POST['username']) && !empty($_POST['email']) && !empty($_POST['password'])) {
             $username = $_POST['username'];
@@ -36,37 +37,51 @@
             $password = $_POST['password'];
 
             // データベースに接続
-            $dsn = 'mysql:host=localhost;dbname=post;charset=utf8';
-            $db_username = 'kobe';
+            $db_host = 'localhost';
+            $db_user = 'kobe';
             $db_password = 'denshi';
+            $db_name = 'post';
+            $conn = new mysqli($db_host, $db_user, $db_password, $db_name);
 
-            try {
-                $pdo = new PDO($dsn, $db_username, $db_password);
-                $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-
-                // データベースに挿入する準備
-                $stmt = $pdo->prepare("INSERT INTO account (user_name, email, password) VALUES (?, ?, ?)");
-                $stmt->execute([$username, $email, $password]);
-
-                echo "ユーザーが登録されました。";
-
-                // ユーザー情報をセッションに保存
-                $_SESSION['user'] = [
-                    'user_name' => $username,
-                    'email' => $email
-                ];
-
-                // ログインページにリダイレクト
-                header("Location: ../login/login.php");
-                exit;
-            } catch (PDOException $e) {
-                echo "エラー: " . $e->getMessage();
+            // 接続をチェック
+            if ($conn->connect_error) {
+                die("データベース接続エラー: " . $conn->connect_error);
             }
+
+            // データベースに挿入する前に既存のメールアドレスをチェック
+            $check_email_sql = "SELECT COUNT(*) AS count FROM account WHERE email = ?";
+            $check_stmt = $conn->prepare($check_email_sql);
+            $check_stmt->bind_param('s', $email);
+            $check_stmt->execute();
+            $result = $check_stmt->get_result();
+            $row = $result->fetch_assoc();
+
+            if ($row['count'] > 0) {
+                echo "エラー: このメールアドレスは既に登録されています。";
+            } else {
+                // データベースに挿入する準備
+                $insert_sql = "INSERT INTO account (user_name, email, password) VALUES (?, ?, ?)";
+                $insert_stmt = $conn->prepare($insert_sql);
+                $insert_stmt->bind_param('sss', $username, $email, $password);
+
+                // クエリを実行して結果を確認
+                if ($insert_stmt->execute()) {
+                    echo "ユーザーが登録されました。";
+                    header("Location: ../Display/Display.php");
+                    exit; // リダイレクト後にスクリプトの実行を終了
+                } else {
+                    echo "エラー: " . $insert_sql . "<br>" . $conn->error;
+                }
+            }
+
+            // データベース接続を閉じる
+            $conn->close();
         } else {
             echo "すべてのフィールドを入力してください。";
         }
     }
     ?>
+
 
 </body>
 
