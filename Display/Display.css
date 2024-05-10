@@ -139,3 +139,19 @@ body {
     overflow-y: scroll;
     /* 常に垂直方向のスクロールバーを表示 */
 }
+
+.delete-button {
+    margin-top: 10px;
+    background-color: #fe3f52;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    height: 30px;
+    width: 60px;
+}
+
+.delete-button:hover {
+    background-color: #ff8694;
+}

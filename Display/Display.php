@@ -59,7 +59,7 @@
                 echo '<a href="../Post_Detail/Post_Detail.php?post_id=' . $row["post_id"] . '" class="post-title">' . $row["title"] . '</a>';
                 echo '<div class="post-content">' . $row["content"] . '</div>';
                 echo '<div class="like-button">';
-                echo '<img class="like-icon" src="../Image/Good_white.png" alt="Like">';
+                echo '<img class="like-icon" src="../Image/Good_pink.png" alt="Like">';
                 echo '<span class="like-count">' . $row["nice"] . '</span>';
                 echo '<span class="post-tag">' . $row["tag"] . '</span>';
 
