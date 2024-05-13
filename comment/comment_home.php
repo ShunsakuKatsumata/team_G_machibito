@@ -1,6 +1,9 @@
 <!DOCTYPE html>
 <html>
     <head> 
+        <?php
+        session_start(); ?>
+        <title>コメントホーム</title>
         <link rel="stylesheet" href="comment.css">
         <link rel="stylesheet" href="../sidebar/sidebar.css">
         <meta charset="UTF-8">
