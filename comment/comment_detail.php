@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html>
     <head> 
+        <?php
+        session_start(); ?>
         <link rel="stylesheet" href="comment.css">
         <link rel="stylesheet" href="../sidebar/sidebar.css">
         <meta charset="UTF-8">
@@ -31,12 +33,15 @@
                             echo '<td>'.$item['detail'].'</td>';
                         echo '</tr>';
                     echo '</table>';
-
                     // 編集ボタン
-                    echo '<button class="post_edit_button" onclick="location.href=\'./new_post/new_question_post_edit.php?ident='.$ident.'\'">編集</button>';
+                    if ($_SESSION['user']['user_id'] == $item['user_id']) {
+                        echo '<button class="post_edit_button" onclick="location.href=\'./new_post/new_question_post_edit.php?ident='.$ident.'\'">編集</button>';
+                    }
 
                     // 削除ボタン
-                    echo '<button class="post_delete_button" onclick="location.href=\'./post_comment/comment_post_delete.php?ident='.$ident.'\'">削除</button>';
+                    if ($_SESSION['user']['user_id'] == $item['user_id']) {
+                        echo '<button class="post_delete_button" onclick="location.href=\'./post_comment/comment_post_delete.php?ident='.$ident.'\'">削除</button>';
+                    }
                     ?>
                 </div>
 
