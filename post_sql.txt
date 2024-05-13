@@ -59,7 +59,7 @@ create table question_answer(
     ident int auto_increment primary key, 
     answer varchar(1000),
     post_id int(11),
-    like_count int,
+    like_count int DEFAULT 0,
 	like_state tinyint(1),
     post_time datetime,
     user_id INT,
