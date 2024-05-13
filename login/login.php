@@ -44,7 +44,7 @@ try {
             header('Location: ../mypage/mypage.php');
             exit;
         } else {
-            echo "失敗した失敗した失敗した失敗した失敗した失敗した失敗した失敗した失敗した失敗した失敗した失敗した";
+            echo "ログインに失敗しました";
         }
     }
 } catch (PDOException $e) {
@@ -55,7 +55,7 @@ try {
 <body>
     <div class="main-content">
         <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">
-            <h1>login</h1>
+            <h2>ログイン</h2>
             <div>
                 <input type="text" name="email" placeholder="email" required>
                 <input type="password" name="password" placeholder="password" required>

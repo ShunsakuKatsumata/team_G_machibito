@@ -1,40 +1,62 @@
-body {
-    font-family: Arial, sans-serif;
-}
+new css
+
 .container {
-    max-width: 400px;
-    margin: 50px auto;
-    padding: 20px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    flex-direction: column;
 }
+
+form {
+    margin:70px auto;
+    background:#2a3644;
+    width:345px;
+    text-align:center;
+    padding:40px;
+    border-radius: 15px;
+  }
+
 h2 {
     text-align: center;
+    color: #ffffff;
 }
-.form-group {
-    margin-bottom: 20px;
-}
+
 label {
     display: block;
     margin-bottom: 5px;
     font-weight: bold;
 }
+
 input[type="text"], input[type="email"], input[type="password"] {
-    width: 100%;
-    padding: 10px;
-    border: 1px solid #ccc;
+    background:rgba(0, 0, 0, 0.2);
+    width:315px;
+    padding:15px;
+    margin-bottom:10px;
+    outline:none;
     border-radius: 5px;
 }
+
 input[type="submit"] {
+    background: #f26964;
+    color: #fff;
     width: 100%;
-    padding: 10px;
+    padding: 15px;
     border: none;
     border-radius: 5px;
-    background-color: #007bff;
-    color: #fff;
-    cursor: pointer;
 }
+
 input[type="submit"]:hover {
-    background-color: #0056b3;
+    background-color: #d0534e;
 }
+
+.login{
+    font-size: 1em;
+    padding: 2em 0;
+    text-align: center;
+}
+
+.login a {
+    color: #8c8c8c;
+    text-decoration: none;
+  }

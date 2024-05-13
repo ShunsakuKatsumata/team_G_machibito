@@ -15,7 +15,7 @@ form {
   border-radius: 15px;
 }
 
-h1{
+h2{
   color: #ffffff;
 }
 
@@ -44,6 +44,10 @@ input[type="login"]{
   padding: 15px;
   border: none;
   border-radius: 5px;
+}
+
+input[type="submit"]:hover {
+  background-color: #d0534e;
 }
 
 .new{
