@@ -21,7 +21,7 @@
                         echo '<h4 style="margin-top:0;">'.$item['title'].'</h4>';
                         echo '<table>';
                         echo '<tr class="user_icon_name">';
-                            echo '<td><img class="user_icon" src="./image/user-icon1.png" width="40px" height="40px"><div class="user_name">&nbsp;morimoriさん</div></td>';
+                            echo '<td><img class="user_icon" src="./../Image/user-icon1.png" width="40px" height="40px"><div class="user_name">&nbsp;morimoriさん</div></td>';
                         echo '</tr>';
                         echo '<tr>';
                             echo '<td>'.$item['detail'].'</td>';
@@ -40,23 +40,23 @@
                 $answer_post = new answer_post();
                 $item_answer = $answer_post->get_answer_answerid($comment_id);
                 // $item_answer = $answer_post->get_answers(4);
+
                 echo '<form method="POST" action="../post_answer/answer_post_edit.php?postid='.$post_id.'">';
                     echo '<div class="detail_reply">';
                     echo '<h3>回答</h3>';
                     echo '<table>';
-                        foreach($item_answer as $item){
-                            echo '<tr>';
-                                echo '<td><textarea name="answer_edit_text" class="title-input" rows="3" cols="45">'.$item['answer'].'</textarea></td>';
-                            echo '</tr>';
-                            echo '<input type="hidden" name="answer_ident_edit_text" value="'.$item['ident'].'">';
-                            
-                            // 投稿ボタン
-                            echo '<tr>';
-                                echo '<td><div class="button-container">';
-                                    echo '<button name="button1" class="post-button">更新</button>';
-                                echo '</div></td>';
-                            echo '</tr>';
-                        }
+                        echo '<tr>';
+                            echo '<td><textarea name="answer_edit_text" class="title-input" rows="3" cols="45">'.$item_answer['answer'].'</textarea></td>';
+                        echo '</tr>';
+                        echo '<input type="hidden" name="answer_ident_edit_text" value="'.$item_answer['ident'].'">';
+                        
+                        // 投稿ボタン
+                        echo '<tr>';
+                            echo '<td><div class="button-container">';
+                                echo '<button name="button1" class="post-button">更新</button>';
+                            echo '</div></td>';
+                        echo '</tr>';
+                        // }
                     echo '</table>';
                     echo '</div>';
                 echo '</form>';

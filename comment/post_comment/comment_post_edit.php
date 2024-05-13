@@ -9,9 +9,7 @@
     $question_post = new question_post();
     $question_post->edit_question($ident, $title, $detail);
 
-    // echo $ident;
-
-    // 
+    // いいねを押した後の画面に遷移する
     header("Location: ./../comment_detail.php?ident=$ident");
     exit;1
 ?>
