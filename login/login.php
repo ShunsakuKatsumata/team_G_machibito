@@ -8,6 +8,11 @@
     <link rel="stylesheet" href="../sidebar/sidebar.css">
     <link rel="stylesheet" href="login.css">
     <title>ログイン</title>
+    <style>
+        input[type="text"], input[type="password"] {
+            color: white; /* テキスト入力とパスワード入力のフォント色を白に設定 */
+        }
+    </style>
 </head>
 
 <?php
@@ -48,26 +53,21 @@ try {
 ?>
 
 <body>
-    <!-- サイドバー -->
-    <?php include '../sidebar/sidebar.php'; ?>
     <div class="main-content">
-        <h2>ログイン</h2>
         <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">
+            <h1>login</h1>
             <div>
-                <label>メールアドレス：</label>
-                <input type="text" name="email" required>
-            </div>
-            <div>
-                <label>パスワード：</label>
-                <input type="password" name="password" required>
+                <input type="text" name="email" placeholder="email" required>
+                <input type="password" name="password" placeholder="password" required>
             </div>
             <div>
                 <input type="submit" value="ログイン">
             </div>
-            <div>
-                <label><a href="../New_User/New_User.php">新規登録はこちら</a></label>
+            <div class="new">
+                <a href="../New_User/New_User.php">新規登録はこちら</a>
             </div>
         </form>
+    </div>
 </body>
 
 </html>
