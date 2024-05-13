@@ -27,7 +27,9 @@
                         echo '<h4 style="margin-top:0;">'.$item['title'].'</h4>';
                         echo '<table>';
                         echo '<tr class="user_icon_name">';
-                            echo '<td><img class="user_icon" src="./image/user-icon1.png" width="40px" height="40px"><div class="user_name">&nbsp;morimoriさん</div></td>';
+                            // 作成者の名前
+                            $author_name = $question_post->get_author_name($ident);
+                            echo '<td><div class="user_name">&nbsp;'.$author_name.'さん</div></td>';
                         echo '</tr>';
                         echo '<tr>';
                             echo '<td>'.$item['detail'].'</td>';
