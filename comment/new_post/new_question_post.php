@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ja">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>投稿画面</title>
+    <title>質問の投稿画面</title>
     <style>
         body {
             display: flex;
@@ -112,13 +112,24 @@
             </div>
             <textarea name="question_detail" placeholder="本文を入力してください" class="content-input"></textarea>
             <div class="button-container">
-                <button class="clear-button">削除する</button>
-                <button name="button1" class="post-button">投稿する</button>
+                <button type="button" class="clear-button">削除する</button>
+                <button type="submit" name="button1" class="post-button">投稿する</button>
             </div>
         </form>
 
         
     </div>
 </body>
+<script>
+    const clearButton = document.querySelector('.clear-button');
+    const titleInput = document.querySelector('.title-input');
+    const contentInput = document.querySelector('.content-input');
+    const errorMessage = document.querySelector('.error-message');
 
+    clearButton.addEventListener('click', () => {
+            titleInput.value = '';
+            contentInput.value = '';
+            hideErrorMessage();
+        });
+</script>
 </html>
