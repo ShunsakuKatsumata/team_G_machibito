@@ -1,44 +1,44 @@
 <!DOCTYPE html>
 <html>
-
-<head>
-    <?php
-    session_start(); ?>
-    <link rel="stylesheet" href="comment.css">
-    <link rel="stylesheet" href="../sidebar/sidebar.css">
-    <meta charset="UTF-8">
-
-</head>
-
-<body>
-    <?php include '../sidebar/sidebar.php'; ?>
-    <div class="detail1">
-        <!-- 質問詳細画面 -->
-        <!-- 投稿された質問 -->
-        <div class="detail_q">
-            <h3 style="text-align:left; float:left;">質問</h3>
-            <div style="text-align:right; padding-top:20px;">12回答</div>
-            <br>
-            <?php
-            $ident = $_GET['ident'];
-            // テーブルの中身を取り出す
-            require_once __DIR__ . '/classes/question_post.php';
-            $question_post = new question_post();
-            $item = $question_post->get_question_ident($ident);
-
-            echo '<h4 style="margin-top:0;">' . $item['title'] . '</h4>';
-            echo '<table>';
-            echo '<tr class="user_icon_name">';
-            echo '<td><img class="user_icon" src="./image/user-icon1.png" width="40px" height="40px"><div class="user_name">&nbsp;morimoriさん</div></td>';
-            echo '</tr>';
-            echo '<tr>';
-            echo '<td>' . $item['detail'] . '</td>';
-            echo '</tr>';
-            echo '</table>';
-            // 編集ボタン
-            if ($_SESSION['user']['user_id'] == $item['user_id']) {
-                echo '<button class="post_edit_button" onclick="location.href=\'./new_post/new_question_post_edit.php?ident=' . $ident . '\'">編集</button>';
-            }
+    <head> 
+        <?php
+        session_start(); ?>
+        <link rel="stylesheet" href="comment.css">
+        <link rel="stylesheet" href="../sidebar/sidebar.css">
+        <meta charset="UTF-8">
+        
+    </head>
+    <body>
+        <?php include '../sidebar/sidebar.php'; ?>
+            <div class="detail1">
+                <!-- 質問詳細画面 -->
+                <!-- 投稿された質問 -->
+                <div class="detail_q">
+                    <h3 style="text-align:left; float:left;">質問</h3>
+                    <div style="text-align:right; padding-top:20px;">12回答</div>
+                    <br>
+                    <?php
+                        $ident = $_GET['ident'];
+                        // テーブルの中身を取り出す
+                        require_once __DIR__.'/classes/question_post.php';
+                        $question_post = new question_post();
+                        $item = $question_post->get_question_ident($ident);
+                    
+                        echo '<h4 style="margin-top:0;">'.$item['title'].'</h4>';
+                        echo '<table>';
+                        echo '<tr class="user_icon_name">';
+                            // 作成者の名前
+                            $author_name = $question_post->get_author_name($ident);
+                            echo '<td><div class="user_name">&nbsp;'.$author_name.'さん</div></td>';
+                        echo '</tr>';
+                        echo '<tr>';
+                            echo '<td>'.$item['detail'].'</td>';
+                        echo '</tr>';
+                    echo '</table>';
+                    // 編集ボタン
+                    if ($_SESSION['user']['user_id'] == $item['user_id']) {
+                        echo '<button class="post_edit_button" onclick="location.href=\'./new_post/new_question_post_edit.php?ident='.$ident.'\'">編集</button>';
+                    }
 
             // 削除ボタン
             if ($_SESSION['user']['user_id'] == $item['user_id']) {

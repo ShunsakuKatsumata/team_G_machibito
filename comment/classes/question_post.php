@@ -36,6 +36,17 @@ class question_post extends dbdata{
         $sql = "delete from question_post where ident=?";
         $result = $this->exec($sql, [$ident]);
     } 
+
+    // 質問の投稿者の名前を取得
+    public function get_author_name($ident){
+        $sql = "SELECT account.user_name FROM question_post 
+                INNER JOIN account ON question_post.user_id = account.user_id 
+                WHERE ident = ?";
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute([$ident]);
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+        return $result['user_name'];
+    }
 }
 
 ?>
