@@ -83,6 +83,7 @@
                 echo '<tr>';
                 $answer_name = $answer_post->get_answer_name($ident);
                 echo '<td><div class="answer_name">&nbsp;' . $answer_name . 'さん</div></td>';
+                echo '</tr>';
                 // echo '<td>'.$item['ident'].'</td>';
                 echo '<td>' . $item['answer'] . '</td>';
                 echo '</tr>';
