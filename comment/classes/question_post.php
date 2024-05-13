@@ -3,9 +3,9 @@ require_once __DIR__ .'/comment_dbdata.php';
 
 class question_post extends dbdata{
     // 質問を投稿
-    public function post_questions($title, $detail){
-        $sql = "insert into question_post(title, detail) values(?, ?)";
-        $result = $this->exec($sql, [$title, $detail]);
+    public function post_questions($title, $detail, $user_id){
+        $sql = "insert into question_post(title, detail, user_id) values(?, ?, ?)";
+        $result = $this->exec($sql, [$title, $detail, $user_id]);
     }
 
     // 質問を取得
