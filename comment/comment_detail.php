@@ -69,7 +69,6 @@
         <div class="post-list">
             <?php
             $post_id = $_GET['ident'];
-            $ident = $_GET['ident'];
             // テーブルの中身を取り出す
             require_once __DIR__ . '/classes/answer_post.php';
             $answer_post = new answer_post();
