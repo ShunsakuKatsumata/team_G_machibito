@@ -72,30 +72,30 @@
 
                         // echo $items;
 
-                        echo '<div class="detail_reply">';
-                        echo '<h3>回答</h3>';
-                        echo '<table>';
-                            echo '<tr>';
-                                $answer_name = $answer_post->get_answer_name($ident);
-                                echo '<td><div class="answer_name">&nbsp;' . $answer_name . 'さん</div></td>';
-                                echo '</tr>';
-                                // echo '<td>'.$item['ident'].'</td>';
-                                echo '<td>'.$item['answer'].'</td>';
-                            echo '</tr>';
-                            // いいねボタン
-                            echo '<tr>';
-                                echo '<form method="POST" action="./post_answer/good_count_add.php">';
-                                    echo '<td class="answer_like_flex">';
-                                        echo '<div class="answer_like_button">';
-                                            if ($item['like_state']){
-                                                echo '<a href="./post_answer/good_count_add.php?comment_id='.$item['ident'].'"><img class="answer_like_icon" src="./../Image/Good_pink.png"></a>';
-                                            }else{
-                                                echo '<a href="./post_answer/good_count_add.php?comment_id='.$item['ident'].'"><img class="answer_like_icon" src="./../Image/Good_white.png"></a>';
-                                            }
-                                            echo '</div>';
-                                        echo '<span class="answer_like_count">'.$item['like_count'].'</span>';
-                                    echo '</td>';
-                                echo '</form>';
+                echo '<div class="detail_reply">';
+                echo '<h3>回答</h3>';
+                echo '<table>';
+                echo '<tr>';
+                $answer_name = $answer_post->get_answer_name($item['ident']);
+                echo '<td><div class="answer_name">&nbsp;' . $answer_name . 'さん</div></td>';
+                echo '</tr>';
+                // echo '<td>'.$item['ident'].'</td>';
+                echo '<td>' . $item['answer'] . '</td>';
+                echo '</tr>';
+                // いいねボタン
+                echo '<tr>';
+                echo '<form method="POST" action="./post_answer/good_count_add.php">';
+                echo '<td class="answer_like_flex">';
+                echo '<div class="answer_like_button">';
+                if ($item['like_state']) {
+                    echo '<a href="./post_answer/good_count_add.php?comment_id=' . $item['ident'] . '"><img class="answer_like_icon" src="./../Image/Good_pink.png"></a>';
+                } else {
+                    echo '<a href="./post_answer/good_count_add.php?comment_id=' . $item['ident'] . '"><img class="answer_like_icon" src="./../Image/Good_white.png"></a>';
+                }
+                echo '</div>';
+                echo '<span class="answer_like_count">' . $item['like_count'] . '</span>';
+                echo '</td>';
+                echo '</form>';
 
                                 // 回答テーブルのデータをjsonに変換し、JavaScriptに送る
                                 // $like_state_each_comment = json_encode($item['like_state']);
