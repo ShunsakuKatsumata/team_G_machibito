@@ -15,7 +15,7 @@
                 <!-- 投稿された質問 -->
                 <div class="detail_q">
                     <h3 style="text-align:left; float:left;">質問</h3>
-                    <div style="text-align:right; padding-top:20px;">12回答</div>
+                    <!-- <div style="text-align:right; padding-top:20px;">12回答</div> -->
                     <br>
                     <?php
                         $ident = $_GET['ident'];
@@ -27,7 +27,7 @@
                         echo '<h4 style="margin-top:0;">'.$item['title'].'</h4>';
                         echo '<table>';
                         echo '<tr class="user_icon_name">';
-                            echo '<td><img class="user_icon" src="./image/user-icon1.png" width="40px" height="40px"><div class="user_name">&nbsp;morimoriさん</div></td>';
+                            // echo '<td><img class="user_icon" src="./image/user-icon1.png" width="40px" height="40px"><div class="user_name">&nbsp;morimoriさん</div></td>';
                         echo '</tr>';
                         echo '<tr>';
                             echo '<td>'.$item['detail'].'</td>';
@@ -51,8 +51,8 @@
                         <select name="pulldown_goodbutton" onchange="handleSortChange_answer(this.value)">
                             <option value="">ソート選択...</option> 
                             <option value="good-desc">いいねが多い順</option>
-                            <option value="new-desc">回答が新しい順</option>
-                            <option value="old-asc">回答が古い順</option>
+                            <!-- <option value="new-desc">回答が新しい順</option>
+                            <option value="old-asc">回答が古い順</option> -->
                             <!-- <button onclick="location.href='./post_answer/good_count_sort.php?sort=\'old\''"> -->
                         </select>
                     </ul></P>
@@ -102,13 +102,17 @@
                                 echo '<td class="post-date">'.$item['post_time'].'</td>';
                             echo '</tr>';
                             // 編集ボタン
-                            echo '<tr>';
-                                echo '<td><button class="post_edit_button" onclick="location.href=\'./edit_answer/edit_answer.php?post_id='.$post_id.'&commentId='.$item['ident'].'\'">編集</button></td>';
-                            echo '</tr>';
+                            if ($_SESSION['user']['user_id'] == $item['user_id']) {
+                                echo '<tr>';
+                                echo '<td><button class="post_edit_button" onclick="location.href=\'./edit_answer/edit_answer.php?post_id=' . $post_id . '&commentId=' . $item['ident'] . '\'">編集</button></td>';
+                                echo '</tr>';
+                            }
                             // 削除ボタン
-                            echo '<tr>';
-                                echo '<td><button class="post_delete_button" onclick="location.href=\'./post_answer/answer_post_delete.php?post_id='.$post_id.'&commentId='.$item['ident'].'\'">削除</button></td>';
-                            echo '</tr>';
+                if ($_SESSION['user']['user_id'] == $item['user_id']) {
+                    echo '<tr>';
+                    echo '<td><button class="post_delete_button" onclick="location.href=\'./post_answer/answer_post_delete.php?post_id=' . $post_id . '&commentId=' . $item['ident'] . '\'">削除</button></td>';
+                    echo '</tr>';
+                }
                         echo '</table>';
                         echo '</div>';
                     }
