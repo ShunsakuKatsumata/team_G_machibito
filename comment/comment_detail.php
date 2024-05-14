@@ -69,6 +69,7 @@
         <div class="post-list">
             <?php
             $post_id = $_GET['ident'];
+            $ident = $_GET['ident'];
             // テーブルの中身を取り出す
             require_once __DIR__ . '/classes/answer_post.php';
             $answer_post = new answer_post();
@@ -81,7 +82,7 @@
                 echo '<h3>回答</h3>';
                 echo '<table>';
                 echo '<tr>';
-                $answer_name = $answer_post->get_answer_name($ident);
+                $answer_name = $answer_post->get_answer_name($item['ident']);
                 echo '<td><div class="answer_name">&nbsp;' . $answer_name . 'さん</div></td>';
                 echo '</tr>';
                 // echo '<td>'.$item['ident'].'</td>';

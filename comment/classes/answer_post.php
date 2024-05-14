@@ -51,21 +51,17 @@ class answer_post extends dbdata
     }
 
     // 回答の投稿者の名前を取得
-    public function get_answer_name($ident)
+    public function get_answer_name($post_id)
     {
         $sql = "SELECT account.user_name FROM question_answer 
             INNER JOIN account ON question_answer.user_id = account.user_id 
             WHERE ident = ?";
         $stmt = $this->pdo->prepare($sql);
-        $stmt->execute([$ident]);
+        $stmt->execute([$post_id]);
 
         // 結果が空の場合に備えて、fetch() メソッドの結果をチェック
         $result = $stmt->fetch(PDO::FETCH_ASSOC);
-        if ($result === false || $result === null) {
-            // データが見つからない場合など、適切に処理を行う（例えばエラーをログに記録するなど）
-            return null; // または空の文字列など、適切なデフォルト値を返す
-        }
-
+        
         return $result['user_name'];
     }
 
