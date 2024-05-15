@@ -13,18 +13,6 @@ body{
     border-radius:10px;
 }
 
-.menu-home{
-    text-align: left;
-    margin-left:19%;
-}
-
-/* 回答募集中 */
-.menu-item_home{
-    float:left;
-    padding-top:12px;
-    
-}
-
 /* 質問を投稿するボタン */
 .menu-item_q{
     /* border: solid 1px #000000; */

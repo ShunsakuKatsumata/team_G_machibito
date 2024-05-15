@@ -2,11 +2,7 @@
 <html>
     <head> 
         <?php
-        session_start();
-        if (!isset($_SESSION['user'])) {
-            header('Location: ../login/login.php');
-            exit();
-        } ?>
+        session_start(); ?>
         <link rel="stylesheet" href="comment_detail.css">
         <link rel="stylesheet" href="../sidebar/sidebar.css">
         <meta charset="UTF-8">
@@ -48,6 +44,10 @@
                     if ($_SESSION['user']['user_id'] == $item['user_id']) {
                         echo '<button class="post_delete_button" onclick="location.href=\'./post_comment/comment_post_delete.php?ident=' . $ident . '\'">削除</button>';
                     }
+                    // 投稿者がボタンをクリックすると、その質問が解決済みに変更される
+                    if ($_SESSION['user']['user_id'] == $item['user_id']) {
+                        echo '<button class="is_resolved_update_button" onclick="location.href=\'./post_comment/is_resolved_update.php?ident=' . $ident . '\'">解決済み</button>';
+                    }
                     ?>
                 </div>
 
@@ -59,7 +59,6 @@
                             <option value="good-desc">いいねが多い順</option>
                             <option value="new-desc">回答が新しい順</option>
                             <option value="old-asc">回答が古い順</option>
-                            <!-- <button onclick="location.href='./post_answer/good_count_sort.php?sort=\'old\''"> -->
                         </select>
                     </ul></P>
                 </div>
@@ -143,7 +142,41 @@
                     </div>
                 </form>
             </div>
+        <!-- JavaScript -->
+        <div class="post-message" id="postMessage"></div>
+        <div class="post-message" id="deleteMessage"></div>
         <script>
+            // 
+            // ページ読み込み時に投稿メッセージがあれば表示する
+            window.onload = function() {
+                var postMessage = localStorage.getItem('postMessage');
+                if (postMessage) {
+                    var postMessageElement = document.getElementById('postMessage');
+                    postMessageElement.innerText = postMessage;
+                    postMessageElement.style.opacity = '1';
+                    setTimeout(function() {
+                        postMessageElement.style.opacity = '0';
+                    }, 3000);
+                    // メッセージを表示した後は削除する
+                    localStorage.removeItem('postMessage');
+                }
+
+                // Delete_Post.php からのリダイレクトでセッションに保存されたメッセージがあれば表示する
+                var deleteMessage = "<?php echo isset($_SESSION['deleteMessage']) ? $_SESSION['deleteMessage'] : '' ?>";
+                if (deleteMessage) {
+                    var deleteMessageElement = document.getElementById('deleteMessage');
+                    deleteMessageElement.innerText = deleteMessage;
+                    deleteMessageElement.style.opacity = '1';
+                    setTimeout(function() {
+                        deleteMessageElement.style.opacity = '0';
+                    }, 3000);
+                    // メッセージを表示した後は削除する
+                    <?php unset($_SESSION['deleteMessage']); ?>
+                }
+            };
+            
+
+            // 質問に対する回答をソート
             function handleSortChange_answer(value) {
                 var postList = document.querySelector('.post-list');
                 var postDetails = Array.from(postList.querySelectorAll('.detail_reply'));
@@ -184,3 +217,52 @@
         </script>
     </body>
 </html>
+
+<!--　参考にするファイル間違えた 
+    const isresolved_update_button = document.querySelector('.is_resolved_update_button');
+            isresolved_update_button.addEventListener('click', (event) => {
+                    localStorage.setItem('postMessage', '投稿しました');
+            });
+
+            window.onload = function() {
+                const postMessage = localStorage.getItem('postMessage');
+                if (postMessage) {
+                    showPostMessage(postMessage);
+                    localStorage.removeItem('postMessage'); // メッセージを削除する
+                }
+            }
+            function showPostMessage(message) {
+                const postMessageDiv = document.createElement('div');
+                postMessageDiv.textContent = message;
+                postMessageDiv.classList.add('post-message');
+                document.body.appendChild(postMessageDiv);
+
+                setTimeout(function() {
+                    postMessageDiv.style.opacity = '0'; // 3 秒後にメッセージを非表示にする
+                }, 3000);
+            }
+
+            document.addEventListener('DOMContentLoaded', function() {
+                // ポップアップを開くための要素を取得
+                const popupTrigger = document.querySelector('.popup-trigger');
+                // ポップアップの要素を取得
+                const popup = document.getElementById('popup');
+
+                // ポップアップを開くイベントリスナーを設定
+                popupTrigger.addEventListener('click', function() {
+                    popup.style.display = 'block';
+                });
+
+                // ポップアップの×ボタンをクリックしたときの処理
+                const closeButton = document.querySelector('.close-popup');
+                closeButton.addEventListener('click', function() {
+                    popup.style.display = 'none';
+                });
+
+                // ポップアップ以外の部分がクリックされたときの処理
+                window.addEventListener('click', function(event) {
+                    if (event.target === popup) {
+                        popup.style.display = 'none';
+                    }
+                });
+            }); -->

@@ -2,11 +2,7 @@
 <html lang="ja">
     <head> 
         <?php
-        session_start();
-        if (!isset($_SESSION['user'])) {
-            header('Location: ../login/login.php');
-            exit();
-        } ?>
+        session_start(); ?>
         <title>コメントホーム</title>
         <link rel="stylesheet" href="comment_home.css">
         <link rel="stylesheet" href="../sidebar/sidebar.css">
@@ -17,20 +13,16 @@
         <!-- サイドバー設定 -->
         <?php include '../sidebar/sidebar.php'; ?>
         <div class="comment_home">
-            <ul class="menu-home">
-                <li class="menu-item_home">回答募集中&nbsp;|&nbsp;</li>
-                <li class="menu-item_home">解決済み&nbsp;|&nbsp;</li>
-                <li class="menu-item_home">カテゴリー</li>
-                <li><input class="menu-item_q" type="button" onclick="location.href='./new_post/new_question_post.php'" value="質問する"></li>
-            </ul>
-            <P><ul class="menu_sort">
+            <input class="menu-item_q" type="button" onclick="location.href='./new_post/new_question_post.php'" value="質問する">
+            <!-- このソートなくてもいい気がする -->
+            <!-- <P><ul class="menu_sort">
                 <li style="float:left;"><img src="./../Image/icons8-sort.png"/></li>
                 <select name="pulldown1">
                     <option>投稿が新しい順</option>
                     <option>投稿が古い順</option>
                     <option>回答が多い順</option>
                 </select>
-            </ul></P>
+            </ul></P> -->
             <hr>
             <?php
                 
@@ -41,7 +33,7 @@
                 // onclick="location.href='comment_detail.html'">
                 require_once __DIR__.'/classes/question_post.php';
                 $question_post = new question_post();
-                $questions_list = $question_post->get_questions();
+                $questions_list = $question_post->get_questions_unsolved();
                     foreach ($questions_list as $item) {
                         echo '<tr>';
                             echo '<td>';
@@ -54,7 +46,6 @@
                     }
                 ?>
             </table>
-            
         </div>
     </body>
     <script>

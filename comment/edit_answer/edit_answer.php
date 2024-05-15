@@ -3,10 +3,6 @@
     <head> 
         <?php
         session_start();
-        if (!isset($_SESSION['user'])) {
-            header('Location: ../login/login.php');
-            exit();
-        }
         ?>
         <link rel="stylesheet" href="./edit_answer.css">
         <meta charset="UTF-8">
