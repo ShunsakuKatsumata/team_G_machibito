@@ -16,6 +16,7 @@
 </head>
 <body>
     <?php
+
         session_start();
         $user_id = $_SESSION['user']['user_id'];
 
@@ -27,15 +28,16 @@
             $pdo = new PDO($dsn, $username, $password);
             $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-            // ユーザーIDと一致するタイトルを取得
+            // ユーザーIDと一致する記事のタイトルを取得
             $sql = "SELECT post_id, title FROM post WHERE user_id = :user_id";
             $stmt = $pdo->prepare($sql);
             $stmt->bindParam(':user_id', $user_id, PDO::PARAM_INT);
             $stmt->execute();
 
             $posts = $stmt->fetchAll(PDO::FETCH_ASSOC);
-            // 削除ボタンがクリックされた場合
-            if (isset($_POST['delete'])) {
+
+            // 記事削除ボタンがクリックされた場合
+            if (isset($_POST['delete_post'])) {
                 $post_id = $_POST['post_id'];
 
                 // トランザクション開始
@@ -66,6 +68,48 @@
                     echo "エラー：" . $e->getMessage();
                 }
             }
+
+            // ユーザーIDと一致する質問のタイトルを取得
+            $sql = "SELECT ident, title FROM question_post WHERE user_id = :user_id";
+            $stmt = $pdo->prepare($sql);
+            $stmt->bindParam(':user_id', $user_id, PDO::PARAM_INT);
+            $stmt->execute();
+
+            $questions = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+            // 質問の削除ボタンがクリックされた場合
+            if (isset($_POST['delete_question'])) {
+                $ident = $_POST['ident'];
+
+                // トランザクション開始
+                $pdo->beginTransaction();
+
+                try {
+                    // 対応するquestion_postを削除
+                    $sql = "DELETE FROM question_post WHERE ident = :ident";
+                    $stmt = $pdo->prepare($sql);
+                    $stmt->bindParam(':ident', $ident, PDO::PARAM_INT);
+                    $stmt->execute();
+
+                    // 対応するquestion_answerを削除
+                    $sql = "DELETE FROM question_answer WHERE post_id = :ident";
+                    $stmt = $pdo->prepare($sql);
+                    $stmt->bindParam(':ident', $ident, PDO::PARAM_INT);
+                    $stmt->execute();
+
+                    // トランザクションコミット
+                    $pdo->commit();
+
+                    // 同じページにリダイレクト
+                    header('Location: ' . $_SERVER['PHP_SELF']);
+                    exit();
+                } catch (PDOException $e) {
+                    // エラーが発生した場合はロールバック
+                    $pdo->rollBack();
+                    echo "エラー：" . $e->getMessage();
+                }
+            }
+
             // ログアウトボタンがクリックされた場合
             if (isset($_POST['logout'])) {
                 // セッションを破棄
@@ -76,6 +120,14 @@
                 header('Location: ../login/login.php');
                 exit();
             }
+
+            // パスワード変更ボタンがクリックされた場合
+            if (isset($_POST['pass_change'])) {
+                // パスワード変更ページにリダイレクト
+                header('Location: ../login/pass_change.php');
+                exit();
+            }
+
         } catch (PDOException $e) {
             echo "エラー：" . $e->getMessage();
         }
@@ -85,21 +137,51 @@
     <div class="main-content">
     <div class="container">
         <?php 
+
         // ユーザー名
         echo $_SESSION['user']['user_name'];
         echo '<br>';
-        // タイトルと削除ボタンを表示
-        foreach ($posts as $post) {
-            echo $post['title'];
-            echo '<form method="post">';
-            echo '<input type="hidden" name="post_id" value="' . $post['post_id'] . '">';
-            echo '<button type="submit" name="delete">削除</button>';
-            echo '</form>';
+
+        // 記事のタイトルと削除ボタンを表示
+        echo '記事一覧';
+        echo '<br>';
+        if (empty($posts)) {
+            echo 'なし';    // なんにもなかったらなしと表示
             echo '<br>';
+        } else {
+            foreach ($posts as $post) {
+                echo '<a href="../Post_Detail/Post_Detail.php?post_id=' . $post['post_id'] . '">' . $post['title'] . '</a>';
+                echo '<form method="post">';
+                echo '<input type="hidden" name="post_id" value="' . $post['post_id'] . '">';
+                echo '<button type="submit" name="delete_post">削除</button>';
+                echo '</form>';
+                echo '<br>';
+            }
+        }
+
+        // 質問のタイトルと削除ボタンを表示
+        echo '質問一覧';
+        echo '<br>';
+        if (empty($questions)) {
+            echo 'なし';    // なんにもなかったらなしと表示
+            echo '<br>';
+        } else {
+            foreach ($questions as $question) {
+                echo '<a href="../comment/comment_detail.php?ident=' . $question['ident'] . '">' . $question['title'] . '</a>';
+                echo '<form method="post">';
+                echo '<input type="hidden" name="ident" value="' . $question['ident'] . '">';
+                echo '<button type="submit" name="delete_question">削除</button>';
+                echo '</form>';
+                echo '<br>';
+            }
         }
 
         
         ?>
+        <!-- パスワード変更ボタン -->
+        <form method="post">
+            <button type="submit" name="pass_change">パスワード変更</button>
+        </form>
         <!-- ログアウトボタン -->
         <form method="post">
             <button type="submit" name="logout">ログアウト</button>
