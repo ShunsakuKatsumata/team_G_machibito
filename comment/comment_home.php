@@ -2,7 +2,11 @@
 <html lang="ja">
     <head> 
         <?php
-        session_start(); ?>
+        session_start();
+        if (!isset($_SESSION['user'])) {
+            header('Location: ../login/login.php');
+            exit();
+        } ?>
         <title>コメントホーム</title>
         <link rel="stylesheet" href="comment_home.css">
         <link rel="stylesheet" href="../sidebar/sidebar.css">
