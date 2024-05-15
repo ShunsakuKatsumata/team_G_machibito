@@ -2,7 +2,11 @@
 <html>
     <head> 
         <?php
-        session_start(); ?>
+        session_start();
+        if (!isset($_SESSION['user'])) {
+            header('Location: ../login/login.php');
+            exit();
+        } ?>
         <link rel="stylesheet" href="comment_detail.css">
         <link rel="stylesheet" href="../sidebar/sidebar.css">
         <meta charset="UTF-8">

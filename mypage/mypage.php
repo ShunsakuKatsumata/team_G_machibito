@@ -18,6 +18,10 @@
     <?php
 
         session_start();
+        if (!isset($_SESSION['user'])) {
+            header('Location: ../login/login.php');
+            exit();
+        }
         $user_id = $_SESSION['user']['user_id'];
 
         $dsn = 'mysql:host=localhost;dbname=post;charset=utf8';

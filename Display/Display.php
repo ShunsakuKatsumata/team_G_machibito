@@ -3,7 +3,11 @@
 
 <head>
     <?php
-    session_start(); ?>
+    session_start();
+    if (!isset($_SESSION['user'])) {
+        header('Location: ../login/login.php');
+        exit();
+    } ?>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="../sidebar/sidebar.css">
