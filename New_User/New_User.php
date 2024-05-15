@@ -23,12 +23,21 @@
                 <input type="email" id="email" name="email" value="<?php echo isset($_POST['email']) ? htmlspecialchars($_POST['email']) : ''; ?>" placeholder="email" required>
                 <input type="password" id="password" name="password" value="<?php echo isset($_POST['password']) ? htmlspecialchars($_POST['password']) : ''; ?>" placeholder="password" required>
             </div>
-            <input type="submit" value="登録">
+            <input type="submit" class="new_user" value="登録">
             <div class="login">
                 <a href="../login/login.php">サインインする</a>
             </div>
         </form>
     </div>
+
+    <script>
+        const New_user = document.querySelector('.new_user');
+
+        New_user.addEventListener('click', (event) => {
+        localStorage.setItem('loginMessage', '新規登録しました');
+        });
+    </script>
+
     <?php
     // フォームからのデータを取得
     if ($_SERVER["REQUEST_METHOD"] == "POST") {
@@ -64,10 +73,10 @@
                 $insert_sql = "INSERT INTO account (user_name, email, password) VALUES (?, ?, ?)";
                 $insert_stmt = $conn->prepare($insert_sql);
                 $insert_stmt->bind_param('sss', $username, $email, $password);
-
+                
                 // クエリを実行して結果を確認
                 if ($insert_stmt->execute()) {
-                    echo "ユーザーが登録されました。";
+                    
                     header("Location: ../login/login.php");
                     exit; // リダイレクト後にスクリプトの実行を終了
                 } else {
@@ -82,8 +91,6 @@
         }
     }
     ?>
-
-
 </body>
 
 </html>

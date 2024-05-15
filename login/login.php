@@ -68,6 +68,22 @@ try {
             </div>
         </form>
     </div>
+    <div class="login-message" id="loginMessage"></div>
+    <script>
+        window.onload = function() {
+            var loginMessage = localStorage.getItem('loginMessage');
+            if (loginMessage) {
+                var loginMessageElement = document.getElementById('loginMessage');
+                loginMessageElement.innerText = loginMessage;
+                loginMessageElement.style.opacity = '1';
+                setTimeout(function() {
+                    loginMessageElement.style.opacity = '0';
+                }, 3000);
+                // メッセージを表示した後は削除する
+                localStorage.removeItem('loginMessage');
+            }
+        }
+    </script>
 </body>
 
 </html>
