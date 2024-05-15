@@ -18,7 +18,6 @@
                 <li class="menu-item_home">解決済み&nbsp;|&nbsp;</li>
                 <li class="menu-item_home">カテゴリー</li>
                 <li><input class="menu-item_q" type="button" onclick="location.href='./new_post/new_question_post.php'" value="質問する"></li>
-                <!-- <li ></li> -->
             </ul>
             <P><ul class="menu_sort">
                 <li style="float:left;"><img src="./../Image/icons8-sort.png"/></li>
@@ -44,7 +43,7 @@
                             echo '<td>';
                                 // 投稿詳細画面に移動
                                 echo '<button class="list_button" onclick="location.href=\'./comment_detail.php?ident='.$item['ident'].'\'">';       
-                                    echo '<div><span class="post">'.$item['title'].'</span></div>';
+                                    echo '<div><span class="post_item">'.$item['title'].'</span></div>';
                                 echo '</button>';
                             echo '</td>';
                         echo '</tr>';

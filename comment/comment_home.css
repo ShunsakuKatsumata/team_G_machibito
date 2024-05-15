@@ -60,7 +60,7 @@ li{
     margin:7px 15%;
 }
 
-.post{
-    display: block;
+.post_item{
+    display:block;
     text-align: center;
 }

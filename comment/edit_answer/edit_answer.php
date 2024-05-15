@@ -24,9 +24,6 @@
                     
                         echo '<h4 style="margin-top:0;">'.$item['title'].'</h4>';
                         echo '<table>';
-                        echo '<tr class="user_icon_name">';
-                            echo '<td><img class="user_icon" src="./../Image/user-icon1.png" width="40px" height="40px"><div class="user_name">&nbsp;morimoriさん</div></td>';
-                        echo '</tr>';
                         echo '<tr>';
                             echo '<td>'.$item['detail'].'</td>';
                         echo '</tr>';

@@ -3,7 +3,7 @@
     <head> 
         <?php
         session_start(); ?>
-        <link rel="stylesheet" href="comment.css">
+        <link rel="stylesheet" href="comment_detail.css">
         <link rel="stylesheet" href="../sidebar/sidebar.css">
         <meta charset="UTF-8">
         <title>各質問の投稿詳細画面</title>
@@ -23,28 +23,29 @@
                         require_once __DIR__.'/classes/question_post.php';
                         $question_post = new question_post();
                         $item = $question_post->get_question_ident($ident);
+                        // 作成者の名前を取得
+                        $author_name = $question_post->get_author_name($ident);
                     
                         echo '<h4 style="margin-top:0;">'.$item['title'].'</h4>';
                         echo '<table>';
                         echo '<tr class="user_icon_name">';
-                            // 作成者の名前
-                            $author_name = $question_post->get_author_name($ident);
-                            echo '<td><div class="user_name">&nbsp;' . $author_name . 'さん</div></td>';
-                            echo '</tr>';
+                            echo '<td>&nbsp;' . $author_name . 'さん</td>';
+                        echo '</tr>';
                         echo '<tr>';
                             echo '<td>'.$item['detail'].'</td>';
                         echo '</tr>';
                     echo '</table>';
 
                     // 編集ボタン
-                    echo '<button class="post_edit_button" onclick="location.href=\'./new_post/new_question_post_edit.php?ident='.$ident.'\'">編集</button>';
-
-            // 削除ボタン
-            if ($_SESSION['user']['user_id'] == $item['user_id']) {
-                echo '<button class="post_delete_button" onclick="location.href=\'./post_comment/comment_post_delete.php?ident=' . $ident . '\'">削除</button>';
-            }
-            ?>
-        </div>
+                    if ($_SESSION['user']['user_id'] == $item['user_id']) {
+                        echo '<button class="post_edit_button" onclick="location.href=\'./new_post/new_question_post_edit.php?ident='.$ident.'\'">編集</button>';
+                    }
+                    // 削除ボタン
+                    if ($_SESSION['user']['user_id'] == $item['user_id']) {
+                        echo '<button class="post_delete_button" onclick="location.href=\'./post_comment/comment_post_delete.php?ident=' . $ident . '\'">削除</button>';
+                    }
+                    ?>
+                </div>
 
                 <div class="menu_sort_answer_list">
                     <P><ul class="menu_sort">
@@ -72,30 +73,33 @@
 
                         // echo $items;
 
-                echo '<div class="detail_reply">';
-                echo '<h3>回答</h3>';
-                echo '<table>';
-                echo '<tr>';
-                $answer_name = $answer_post->get_answer_name($item['ident']);
-                echo '<td><div class="answer_name">&nbsp;' . $answer_name . 'さん</div></td>';
-                echo '</tr>';
-                // echo '<td>'.$item['ident'].'</td>';
-                echo '<td>' . $item['answer'] . '</td>';
-                echo '</tr>';
-                // いいねボタン
-                echo '<tr>';
-                echo '<form method="POST" action="./post_answer/good_count_add.php">';
-                echo '<td class="answer_like_flex">';
-                echo '<div class="answer_like_button">';
-                if ($item['like_state']) {
-                    echo '<a href="./post_answer/good_count_add.php?comment_id=' . $item['ident'] . '"><img class="answer_like_icon" src="./../Image/Good_pink.png"></a>';
-                } else {
-                    echo '<a href="./post_answer/good_count_add.php?comment_id=' . $item['ident'] . '"><img class="answer_like_icon" src="./../Image/Good_white.png"></a>';
-                }
-                echo '</div>';
-                echo '<span class="answer_like_count">' . $item['like_count'] . '</span>';
-                echo '</td>';
-                echo '</form>';
+                        echo '<div class="detail_reply">';
+                        echo '<h3>回答</h3>';
+                        echo '<table>';
+                            echo '<tr>';
+                                // コメントのIDを取得
+                                $comment_id = $item['ident'];
+                                // コメントした人を取得
+                                $answer_name = $answer_post->get_answer_name($comment_id );
+                                echo '<td><div class="answer_name">&nbsp;' . $answer_name . 'さん</div></td>';
+                                echo '</tr>';
+                                // echo '<td>'.$item['ident'].'</td>';
+                                echo '<td>'.$item['answer'].'</td>';
+                            echo '</tr>';
+                            // いいねボタン
+                            echo '<tr>';
+                                echo '<form method="POST" action="./post_answer/good_count_add.php">';
+                                    echo '<td class="answer_like_flex">';
+                                        echo '<div class="answer_like_button">';
+                                            if ($item['like_state']){
+                                                echo '<a href="./post_answer/good_count_add.php?comment_id='.$item['ident'].'"><img class="answer_like_icon" src="./../Image/Good_pink.png"></a>';
+                                            }else{
+                                                echo '<a href="./post_answer/good_count_add.php?comment_id='.$item['ident'].'"><img class="answer_like_icon" src="./../Image/Good_white.png"></a>';
+                                            }
+                                            echo '</div>';
+                                        echo '<span class="answer_like_count">'.$item['like_count'].'</span>';
+                                    echo '</td>';
+                                echo '</form>';
 
                                 // 回答テーブルのデータをjsonに変換し、JavaScriptに送る
                                 // $like_state_each_comment = json_encode($item['like_state']);
@@ -112,11 +116,11 @@
                                 echo '</tr>';
                             }
                             // 削除ボタン
-                if ($_SESSION['user']['user_id'] == $item['user_id']) {
-                    echo '<tr>';
-                    echo '<td><button class="post_delete_button" onclick="location.href=\'./post_answer/answer_post_delete.php?post_id=' . $post_id . '&commentId=' . $item['ident'] . '\'">削除</button></td>';
-                    echo '</tr>';
-                }
+                            if ($_SESSION['user']['user_id'] == $item['user_id']) {
+                                echo '<tr>';
+                                echo '<td><button class="post_delete_button" onclick="location.href=\'./post_answer/answer_post_delete.php?post_id=' . $post_id . '&commentId=' . $item['ident'] . '\'">削除</button></td>';
+                                echo '</tr>';
+                            }
                         echo '</table>';
                         echo '</div>';
                     }
