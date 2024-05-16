@@ -20,6 +20,7 @@
 .sidebar-sidebar nav ul li {
     margin-bottom: 10px;
     transition: background-color 0.3s ease;
+    transition: transform 0.3s ease;
     /* 背景色の変化が滑らかになるように設定 */
 }
 
@@ -33,6 +34,7 @@
 
 .sidebar-sidebar nav ul li:hover {
     background-color: #545454;
+    transform: scale(0.95);
     /* マウスを合わせたときの背景色 */
 }
 
