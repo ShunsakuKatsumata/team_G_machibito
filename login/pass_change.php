@@ -17,19 +17,58 @@ if (!isset($_SESSION['user'])) {
     exit();
 }
 
+// データベース接続
+$dsn = 'mysql:host=localhost;dbname=post;charset=utf8';
+$username = 'kobe';
+$password = 'denshi';
+
+try {
+    $pdo = new PDO($dsn, $username, $password);
+    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+} catch (PDOException $e) {
+    echo 'データベース接続失敗: ' . $e->getMessage();
+    exit();
+}
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $old_password = $_POST['old_password'];
     $new_password = $_POST['new_password'];
     $new_password_conf = $_POST['new_password_conf'];
 
-    // データベース接続
-    $dsn = 'mysql:host=localhost;dbname=post;charset=utf8';
-    $username = 'kobe';
-    $password = 'denshi';
+    // デバッグ出力
+    echo '<pre>';
+    print_r($_SESSION['user']);
+    print_r($_POST);
+    echo '</pre>';
 
-    $pdo = new PDO($dsn, $username, $password);
+    $stmt = $pdo->prepare('SELECT password FROM account WHERE user_id = ?');
+    $stmt->execute([$_SESSION['user']['user_id']]);
+    $row = $stmt->fetch(PDO::FETCH_ASSOC);
 
-    ?>
+    // $rowの内容を確認
+    echo '<pre>';
+    print_r($row);
+    echo '</pre>';
+
+    if ($row === false) {
+        echo 'ユーザーが見つかりません。';
+    } else {
+        if (!password_verify($old_password, $row['password'])) {
+            echo '古いパスワードが間違っています。';
+        } elseif ($new_password !== $new_password_conf) {
+            echo '新しいパスワードとその確認が一致しません。';
+        } else {
+            $new_password_hashed = password_hash($new_password, PASSWORD_DEFAULT);
+            $stmt = $pdo->prepare('UPDATE account SET password = ? WHERE user_id = ?');
+            $stmt->execute([$new_password_hashed, $_SESSION['user']['user_id']]);
+            echo 'パスワードを変更しました。';
+            header('Location: another_page.php');
+            exit;
+        }
+    }
+}
+?>
+
     <link rel="stylesheet" href="../sidebar/sidebar.css">
     <meta charset="UTF-8">
     <title>パスワード変更</title>
