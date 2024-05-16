@@ -2,11 +2,7 @@
 <html>
     <head> 
         <?php
-        session_start();
-        if (!isset($_SESSION['user'])) {
-            header('Location: ../login/login.php');
-            exit();
-        } ?>
+        session_start(); ?>
         <link rel="stylesheet" href="comment_detail.css">
         <link rel="stylesheet" href="../sidebar/sidebar.css">
         <meta charset="UTF-8">
@@ -48,6 +44,10 @@
                     if ($_SESSION['user']['user_id'] == $item['user_id']) {
                         echo '<button class="post_delete_button" onclick="location.href=\'./post_comment/comment_post_delete.php?ident=' . $ident . '\'">削除</button>';
                     }
+                    // 投稿者がボタンをクリックすると、その質問が解決済みに変更される
+                    if ($_SESSION['user']['user_id'] == $item['user_id']) {
+                        echo '<button class="is_resolved_update_button" onclick="location.href=\'./post_comment/is_resolved_update.php?ident=' . $ident . '\'">解決済み</button>';
+                    }
                     ?>
                 </div>
 
@@ -64,6 +64,7 @@
                     </ul></P>
                 </div>
                 
+
                 <!-- コメント欄 -->
                 <!-- 質問者の返信がある場合 -->
                 <div class="post-list">
@@ -74,9 +75,7 @@
                     $answer_post = new answer_post();
                     $items = $answer_post->get_answers($post_id);
                     foreach($items as $item){
-
                         // echo $items;
-
                         echo '<div class="detail_reply">';
                         echo '<h3>回答</h3>';
                         echo '<table>';
@@ -106,8 +105,8 @@
                                 echo '</form>';
 
                                 // 回答テーブルのデータをjsonに変換し、JavaScriptに送る
-                                // $like_state_each_comment = json_encode($item['like_state']);
-                                // echo $like_state_each_comment;
+                                $like_state_each_comment = json_encode($item['like_state']);
+                                echo $like_state_each_comment;
                             echo '</tr>';
                             // 日付表示
                             echo '<tr>';
@@ -144,6 +143,7 @@
                 </form>
             </div>
         <script>
+            // 質問に対する回答をソート
             function handleSortChange_answer(value) {
                 var postList = document.querySelector('.post-list');
                 var postDetails = Array.from(postList.querySelectorAll('.detail_reply'));
@@ -180,7 +180,32 @@
                 postDetails.forEach(function(postDetail) {
                     postList.appendChild(postDetail);
                 });
-            }
+            };
+
+            window.addEventListener('DOMContentLoaded', () => {
+                // 要素を取得
+                const likeButton = document.querySelector('.answer_like_button');
+                const likeIcon = document.querySelector('.answer_like_icon');
+                
+                // いいねボタンのクリックイベント
+                likeButton.addEventListener('click', () => {
+                    // like_stateを取得
+                    var like_state = JSON.parse('<?php echo $like_state_each_comment; ?>');
+
+                    // いいねの状態に応じてアイコンとカウントを更新
+                    if (like_state) {
+                        console.log('a');
+                        likeIcon.src = "./../Image/Good_pink.png";
+                        likeButton.classList.add('liked');
+                        // count++;
+                    } else {
+                        console.log('b');
+                        likeIcon.src = "./../Image/Good_white.png";
+                        likeButton.classList.remove('liked');
+                        // count--;
+                    }
+                });
+            });
         </script>
     </body>
 </html>

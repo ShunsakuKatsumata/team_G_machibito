@@ -75,6 +75,14 @@ li{
     background-color: #dc3545;
     color:#fff;
     padding:5px 10px;
+    margin-right:10px;
+    border:none;
+}
+/* is_resolved更新 */
+.is_resolved_update_button{
+    background-color: #00B16B;
+    color:#fff;
+    padding:5px 10px;
     border:none;
 }
 
