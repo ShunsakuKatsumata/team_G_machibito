@@ -1,66 +1,130 @@
-body{
-    margin-top:10px;
-    margin-bottom:10px;
-    margin-left:25%;
-    margin-right:10%;
+body {
+    overflow-y: scroll;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    margin-left: 28%;
+    margin-right: 9%;
     background-color: #f5f5f5;
 }
 
-
-.comment_home{
+.comment_home {
     background-color: #fff;
-    border: 1px solid #ccc;
-    border-radius:10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    border: 0px solid #ccc;
+    border-radius: 5px;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    padding: 0 5%;
 }
 
-.menu-home{
-    text-align: left;
-    margin-left:19%;
+.menu-home {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    width: 100%;
 }
 
-/* 回答募集中 */
-.menu-item_home{
-    float:left;
-    padding-top:12px;
-    
+.menu-item_home,
+.menu_sort {
+    align-items: center;
 }
 
-/* 質問を投稿するボタン */
-.menu-item_q{
-    /* border: solid 1px #000000; */
+.menu-item_q {
     display: inline-block;
-    color:#fff;
+    color: #ffffff;
     border: none;
     border-radius: 5px;
-    padding: 10px, 20px;
     background-color: #007bff;
-    margin-left:12px;
-    padding:10px 25px;
-}
-
-/* ソート部分 */
-.menu_sort{
-    text-align: left;
-    margin-left:19%;
-}
-
-li{
-    list-style:none;
-}
-
-
-/* 投稿した質問一覧 */
-.list_button{
-    height:80px; 
-    width:70%;
-    font-size:20px;
-    background:#f5f5f5;
-    border-radius:10px;
-    border: solid 1px #ccc;
-    margin:7px 15%;
-}
-
-.post_item{
-    display:block;
+    transition: background-color 0.3s ease;
+    padding: 8px 20px;
+    margin: 0;
+    font-weight: bold;
     text-align: center;
+}
+
+.menu-item_q:hover {
+    background-color: #77b9ff;
+}
+
+.menu_sort {
+    background-color: #f5f5f5;
+    padding: 6px 20px;
+    border-radius: 5px;
+}
+
+.sort-option {
+    text-decoration: none;
+    color: #000;
+    margin: 0 5px;
+    font-weight: bold;
+    background-color: #f5f5f5;
+    border-radius: 5px;
+}
+
+.sort-option:hover {
+    text-decoration: underline;
+}
+
+li {
+    list-style: none;
+}
+
+.question-list-container {
+    background-color: #ffffff;
+    padding: 20px;
+    border-radius: 5px;
+    margin: 20px auto;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+}
+
+.question-comment {
+    font-weight: bold;
+    color: #000;
+    text-align: center;
+    margin-bottom: 5px;
+    font-size: 20px;
+}
+
+#comment_home_item {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.list_button {
+    width: 100%;
+    font-size: 20px;
+    background: #fff;
+    border-radius: 5px;
+    border: solid 1.5px #CCC;
+    margin: 10px 0;
+    padding: 10px;
+    font-weight: bold;
+    height: 50px;
+    transition: background-color 0.3s ease;
+    transition: transform 0.3s ease;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    box-sizing: border-box;
+    max-width: 100%;
+}
+
+.list_button:hover {
+    background-color: #ccc;
+    transform: scale(0.975);
+}
+
+.post_item {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    display: block;
+    text-align: center;
+    box-sizing: border-box;
+    max-width: 100%;
 }
