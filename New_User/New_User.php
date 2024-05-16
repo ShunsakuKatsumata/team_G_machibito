@@ -43,23 +43,23 @@
         if (!empty($_POST['username']) && !empty($_POST['email']) && !empty($_POST['password'])) {
             $username = $_POST['username'];
             $email = $_POST['email'];
-            $password = $_POST['password'];
-
+            $password = password_hash($_POST['password'], PASSWORD_DEFAULT); // パスワードをハッシュ化
+    
             // データベースに接続
             $dsn = 'mysql:host=localhost;dbname=post;charset=utf8';
             $db_username = 'kobe';
             $db_password = 'denshi';
-
+    
             try {
                 $pdo = new PDO($dsn, $db_username, $db_password);
                 $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-
+    
                 // データベースに挿入する準備
                 $stmt = $pdo->prepare("INSERT INTO account (user_name, email, password) VALUES (?, ?, ?)");
                 $stmt->execute([$username, $email, $password]);
-
+    
                 echo "ユーザーが登録されました。";
-
+    
                 // ログインページにリダイレクト
                 header("Location: ../login/login.php");
                 exit;
