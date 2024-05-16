@@ -19,7 +19,7 @@
                 <!-- 投稿された質問 -->
                 <div class="detail_q">
                     <h3 style="text-align:left; float:left;">質問</h3>
-                    <div style="text-align:right; padding-top:20px;">12回答</div>
+                    <!-- <div style="text-align:right; padding-top:20px;">12回答</div> -->
                     <br>
                     <?php
                         $ident = $_GET['ident'];
@@ -57,8 +57,8 @@
                         <select name="pulldown_goodbutton" onchange="handleSortChange_answer(this.value)">
                             <option value="">ソート選択...</option> 
                             <option value="good-desc">いいねが多い順</option>
-                            <option value="new-desc">回答が新しい順</option>
-                            <option value="old-asc">回答が古い順</option>
+                            <!-- <option value="new-desc">回答が新しい順</option>
+                            <option value="old-asc">回答が古い順</option> -->
                             <!-- <button onclick="location.href='./post_answer/good_count_sort.php?sort=\'old\''"> -->
                         </select>
                     </ul></P>
