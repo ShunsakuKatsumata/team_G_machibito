@@ -37,8 +37,9 @@
             </li>
             <li><a href="../Display/Display.php"><img src="../Image/hhome.png" alt="ホーム">ホーム</a></li>
             <!-- <li><a href=""><img src="../Image/my.png" alt="マイページ">マイページ</a></li> -->
-            <li><a href="../Post/Post.php"><img src="../Image/post.png" alt="投稿する">投稿する</a></li>
-            <li><a href="../comment/comment_home.php"><img src="../Image/question.png" alt="質問">質問する</a></li>
+            <li><a href="../Post/Post.php"><img src="../Image/post.png" alt="投稿する">投稿</a></li>
+            <li><a href="../comment/comment_home.php"><img src="../Image/question.png" alt="質問">Q&A</a></li>
+            <li><a href="../sidebar/logout.php"><img src="../Image/llogout.png" alt="ログアウト">ログアウト</a></li>
             <!-- <li><a href=""><img src="../Image/good.png" alt="いいね">いいね</a></li> -->
             <!-- <li><a href=""><img src="../Image/setting.png" alt="設定">設定</a></li> -->
         </ul>
