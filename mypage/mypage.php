@@ -148,7 +148,7 @@
                     <h2>記事一覧</h2>
                     <?php 
                     if (empty($posts)) {
-                        echo '<p>なし</p>'; // なんにもなかったらなしと表示
+                        echo '<p>投稿がありません</p>'; // なんにもなかったらなしと表示
                     } else {
                         foreach ($posts as $post) {
                             echo '<div class="item">';
@@ -166,6 +166,8 @@
                     <h2>質問一覧</h2>
                     <?php 
                     if (!empty($questions)) {
+                        echo '<p>質問がありません</p>'; // なんにもなかったらなしと表示
+                    } else {
                         foreach ($questions as $question) {
                             echo '<div class="item">';
                             echo '<h3><a href="../comment/comment_detail.php?ident=' . $question['ident'] . '">' . $question['title'] . '</a></h3>';
