@@ -1,0 +1,66 @@
+body{
+    margin-top:10px;
+    margin-bottom:10px;
+    margin-left:25%;
+    margin-right:10%;
+    background-color: #f5f5f5;
+}
+
+
+.comment_home{
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-radius:10px;
+}
+
+.menu-home{
+    text-align: left;
+    margin-left:19%;
+}
+
+/* 回答募集中 */
+.menu-item_home{
+    float:left;
+    padding-top:12px;
+    
+}
+
+/* 質問を投稿するボタン */
+.menu-item_q{
+    /* border: solid 1px #000000; */
+    display: inline-block;
+    color:#fff;
+    border: none;
+    border-radius: 5px;
+    padding: 10px, 20px;
+    background-color: #007bff;
+    margin-left:12px;
+    padding:10px 25px;
+}
+
+/* ソート部分 */
+.menu_sort{
+    text-align: left;
+    margin-left:19%;
+}
+
+li{
+    list-style:none;
+}
+
+
+/* 投稿した質問一覧 */
+.list_button{
+    height:80px; 
+    width:70%;
+    font-size:20px;
+    background:#f5f5f5;
+    border-radius:10px;
+    border: solid 1px #ccc;
+    margin:7px 15%;
+}
+
+.post_item{
+    display:block;
+    text-align: center;
+}

@@ -1,27 +1,31 @@
 <!DOCTYPE html>
-<html>
+<html lang="ja">
     <head> 
         <?php
-        session_start(); ?>
+        session_start();
+        if (!isset($_SESSION['user'])) {
+            header('Location: ../login/login.php');
+            exit();
+        } ?>
         <title>コメントホーム</title>
-        <link rel="stylesheet" href="comment.css">
+        <link rel="stylesheet" href="comment_home.css">
         <link rel="stylesheet" href="../sidebar/sidebar.css">
         <meta charset="UTF-8">
+        <title>質問の一覧画面</title>
     </head>
     <body>
         <!-- サイドバー設定 -->
         <?php include '../sidebar/sidebar.php'; ?>
         <div class="comment_home">
-            <ul class="menu">
-                <!-- <li class="menu-item_red">回答募集中&nbsp;|&nbsp;</li>
-                <li class="menu-item_blue">解決済み&nbsp;|&nbsp;</li>
-                <li class="menu-item_blue">カテゴリー</li> -->
+            <ul class="menu-home">
+                <li class="menu-item_home">回答募集中&nbsp;|&nbsp;</li>
+                <li class="menu-item_home">解決済み&nbsp;|&nbsp;</li>
+                <li class="menu-item_home">カテゴリー</li>
                 <li><input class="menu-item_q" type="button" onclick="location.href='./new_post/new_question_post.php'" value="質問する"></li>
-                <!-- <li ></li> -->
             </ul>
             <P><ul class="menu_sort">
-                <!-- <li style="float:left;"><img src="./image/icons8-sort.png"/></li> -->
-                <!-- <select name="pulldown1">
+                <li style="float:left;"><img src="./../Image/icons8-sort.png"/></li>
+                <select name="pulldown1">
                     <option>投稿が新しい順</option>
                     <option>投稿が古い順</option>
                     <option>回答が多い順</option>
@@ -43,10 +47,7 @@
                             echo '<td>';
                                 // 投稿詳細画面に移動
                                 echo '<button class="list_button" onclick="location.href=\'./comment_detail.php?ident='.$item['ident'].'\'">';       
-                                // echo '<div><span class="language">Python</span></div>';
-                                    echo '<div><span class="post">'.$item['title'].'</span></div>';
-                                    // echo '<div class="date">4/17 21:30</div>';
-                                    // echo '<div class="comment_number">コメント12個</div>';
+                                    echo '<div><span class="post_item">'.$item['title'].'</span></div>';
                                 echo '</button>';
                             echo '</td>';
                         echo '</tr>';

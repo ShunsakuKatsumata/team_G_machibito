@@ -1,0 +1,96 @@
+body{
+    margin-top:10px;
+    margin-bottom:10px;
+    margin-left:25%;
+    margin-right:10%;
+    background-color: #f5f5f5;
+}
+
+.menu{
+    text-align: left;
+}
+
+.menu_sort{
+    text-align: left;
+    /* margin:15px 50px; */
+}
+
+li{
+    list-style:none;
+}
+
+.detail1{
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-radius:10px;
+    text-align: center;
+}
+
+.detail_q, .detail_reply{
+    border: solid 1px #000000;
+    border-radius: 10px;
+    text-align: left;
+    padding: 0 10px 10px;
+    background-color: #f5f5f5;
+    border: 1px solid #ccc;
+    width:70%;
+    margin:0 15%;
+}
+
+/* 質問と回答の間に空白 */
+.detail_q{
+    /* margin:10px 20% 10px 20%; */
+    margin-top:10px;
+    margin-bottom:10px;
+}
+
+.detail_reply{
+    margin-bottom:10px;
+}
+
+/* 回答のいいねボタン*/
+.answer_like_flex{
+    display: flex;
+}
+
+.answer_like_icon{
+    width:30px;
+    height:30px;
+}
+
+/* いいねの数が表示される位置 */
+.answer_like_count{
+    margin-top: 10px;
+}
+
+/* 編集と削除 */
+.post_edit_button{
+    background-color: #007bff;
+    color:#fff;
+    padding:5px 10px;
+    margin-right:10px;
+    border:none;
+}
+.post_delete_button{
+    background-color: #dc3545;
+    color:#fff;
+    padding:5px 10px;
+    border:none;
+}
+
+/*  */
+.menu_sort_answer_list{
+    margin:0 12%;
+}
+
+/* コメント記入 */
+.write_comment{
+    text-align: left;
+    margin:0 15%;
+    background-color: #fff;
+}
+.answer_post_textarea{
+    background-color: #f5f5f5;
+    height:50px;
+    /* width:120%; */
+}

@@ -1,5 +1,9 @@
 <?php
     session_start();
+    if (!isset($_SESSION['user'])) {
+        header('Location: ../login/login.php');
+        exit();
+    }
 
     // 変数を受け取る
     $title = $_POST['qustion_title'];
