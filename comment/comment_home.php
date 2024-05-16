@@ -47,31 +47,38 @@
                 ?>
             </table>
         </div>
+        <!-- JavaScript -->
+        <div class="isresolved-message" id="postMessage_id"></div>
+        <div class="isresolved-message" id="isresolved-message-id"></div>
     </body>
-    <script>
-        window.addEventListener('DOMContentLoaded', () => {
-            // 要素を取得
-            const likeButton = document.querySelector('.answer_like_button');
-            const likeIcon = document.querySelector('.answer_like_icon');
-            
-            // いいねボタンのクリックイベント
-            likeButton.addEventListener('click', () => {
-                // like_stateを取得
-                var like_state = JSON.parse('<?php echo $like_state_each_comment; ?>');
-
-                // いいねの状態に応じてアイコンとカウントを更新
-                if (like_state) {
-                    console.log('a');
-                    likeIcon.src = "./../Image/Good_pink.png";
-                    likeButton.classList.add('liked');
-                    // count++;
-                } else {
-                    console.log('b');
-                    likeIcon.src = "./../Image/Good_white.png";
-                    likeButton.classList.remove('liked');
-                    // count--;
+        <script>
+            // 
+            // ページ読み込み時に投稿メッセージがあれば表示する
+            window.onload = function() {
+                var postMessage = localStorage.getItem('postMessage');
+                if (postMessage) {
+                    var postMessageElement = document.getElementById('postMessage_id');
+                    postMessageElement.innerText = postMessage;
+                    postMessageElement.style.opacity = '1';
+                    setTimeout(function() {
+                        postMessageElement.style.opacity = '0';
+                    }, 3000);
+                    // メッセージを表示した後は削除する
+                    localStorage.removeItem('postMessage');
                 }
-            });
-        });
+                
+                // Delete_Post.php からのリダイレクトでセッションに保存されたメッセージがあれば表示する
+                var isresolved_message = "<?php echo isset($_SESSION['isresolved-message']) ? $_SESSION['deleteMessage'] : '' ?>";
+                if (isresolved_message) {
+                    var isresolved_message_Element = document.getElementById('isresolved-message-id');
+                    isresolved_message_Element.innerText = isresolved_message;
+                    isresolved_message_Element.style.opacity = '1';
+                    setTimeout(function() {
+                        isresolved_message_Element.style.opacity = '0';
+                    }, 3000);
+                    // メッセージを表示した後は削除する
+                    <?php unset($_SESSION['isresolved-message']); ?>
+                }
+            };
     </script>
 </html>

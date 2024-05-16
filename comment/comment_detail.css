@@ -79,8 +79,8 @@ li{
     border:none;
 }
 /* is_resolved更新 */
-.is_solved_update_button{
-    background-color: #007bff;
+.is_resolved_update_button{
+    background-color: #00B16B;
     color:#fff;
     padding:5px 10px;
     border:none;

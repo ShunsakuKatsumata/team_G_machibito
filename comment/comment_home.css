@@ -52,3 +52,19 @@ li{
     display:block;
     text-align: center;
 }
+
+/* ポップアップ */
+/* 投稿した質問を解決済みの状態にする */
+.isresolved-message {
+    position: fixed;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: #fff;
+    border-radius: 5px;
+    opacity: 0;
+    transition: opacity 0.3s;
+    z-index: 1;
+}

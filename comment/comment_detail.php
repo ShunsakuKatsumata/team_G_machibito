@@ -63,6 +63,7 @@
                     </ul></P>
                 </div>
                 
+
                 <!-- コメント欄 -->
                 <!-- 質問者の返信がある場合 -->
                 <div class="post-list">
@@ -73,9 +74,7 @@
                     $answer_post = new answer_post();
                     $items = $answer_post->get_answers($post_id);
                     foreach($items as $item){
-
                         // echo $items;
-
                         echo '<div class="detail_reply">';
                         echo '<h3>回答</h3>';
                         echo '<table>';
@@ -105,8 +104,8 @@
                                 echo '</form>';
 
                                 // 回答テーブルのデータをjsonに変換し、JavaScriptに送る
-                                // $like_state_each_comment = json_encode($item['like_state']);
-                                // echo $like_state_each_comment;
+                                $like_state_each_comment = json_encode($item['like_state']);
+                                echo $like_state_each_comment;
                             echo '</tr>';
                             // 日付表示
                             echo '<tr>';
@@ -142,40 +141,7 @@
                     </div>
                 </form>
             </div>
-        <!-- JavaScript -->
-        <div class="post-message" id="postMessage"></div>
-        <div class="post-message" id="deleteMessage"></div>
         <script>
-            // 
-            // ページ読み込み時に投稿メッセージがあれば表示する
-            window.onload = function() {
-                var postMessage = localStorage.getItem('postMessage');
-                if (postMessage) {
-                    var postMessageElement = document.getElementById('postMessage');
-                    postMessageElement.innerText = postMessage;
-                    postMessageElement.style.opacity = '1';
-                    setTimeout(function() {
-                        postMessageElement.style.opacity = '0';
-                    }, 3000);
-                    // メッセージを表示した後は削除する
-                    localStorage.removeItem('postMessage');
-                }
-
-                // Delete_Post.php からのリダイレクトでセッションに保存されたメッセージがあれば表示する
-                var deleteMessage = "<?php echo isset($_SESSION['deleteMessage']) ? $_SESSION['deleteMessage'] : '' ?>";
-                if (deleteMessage) {
-                    var deleteMessageElement = document.getElementById('deleteMessage');
-                    deleteMessageElement.innerText = deleteMessage;
-                    deleteMessageElement.style.opacity = '1';
-                    setTimeout(function() {
-                        deleteMessageElement.style.opacity = '0';
-                    }, 3000);
-                    // メッセージを表示した後は削除する
-                    <?php unset($_SESSION['deleteMessage']); ?>
-                }
-            };
-            
-
             // 質問に対する回答をソート
             function handleSortChange_answer(value) {
                 var postList = document.querySelector('.post-list');
@@ -213,56 +179,32 @@
                 postDetails.forEach(function(postDetail) {
                     postList.appendChild(postDetail);
                 });
-            }
+            };
+
+            window.addEventListener('DOMContentLoaded', () => {
+                // 要素を取得
+                const likeButton = document.querySelector('.answer_like_button');
+                const likeIcon = document.querySelector('.answer_like_icon');
+                
+                // いいねボタンのクリックイベント
+                likeButton.addEventListener('click', () => {
+                    // like_stateを取得
+                    var like_state = JSON.parse('<?php echo $like_state_each_comment; ?>');
+
+                    // いいねの状態に応じてアイコンとカウントを更新
+                    if (like_state) {
+                        console.log('a');
+                        likeIcon.src = "./../Image/Good_pink.png";
+                        likeButton.classList.add('liked');
+                        // count++;
+                    } else {
+                        console.log('b');
+                        likeIcon.src = "./../Image/Good_white.png";
+                        likeButton.classList.remove('liked');
+                        // count--;
+                    }
+                });
+            });
         </script>
     </body>
 </html>
-
-<!--　参考にするファイル間違えた 
-    const isresolved_update_button = document.querySelector('.is_resolved_update_button');
-            isresolved_update_button.addEventListener('click', (event) => {
-                    localStorage.setItem('postMessage', '投稿しました');
-            });
-
-            window.onload = function() {
-                const postMessage = localStorage.getItem('postMessage');
-                if (postMessage) {
-                    showPostMessage(postMessage);
-                    localStorage.removeItem('postMessage'); // メッセージを削除する
-                }
-            }
-            function showPostMessage(message) {
-                const postMessageDiv = document.createElement('div');
-                postMessageDiv.textContent = message;
-                postMessageDiv.classList.add('post-message');
-                document.body.appendChild(postMessageDiv);
-
-                setTimeout(function() {
-                    postMessageDiv.style.opacity = '0'; // 3 秒後にメッセージを非表示にする
-                }, 3000);
-            }
-
-            document.addEventListener('DOMContentLoaded', function() {
-                // ポップアップを開くための要素を取得
-                const popupTrigger = document.querySelector('.popup-trigger');
-                // ポップアップの要素を取得
-                const popup = document.getElementById('popup');
-
-                // ポップアップを開くイベントリスナーを設定
-                popupTrigger.addEventListener('click', function() {
-                    popup.style.display = 'block';
-                });
-
-                // ポップアップの×ボタンをクリックしたときの処理
-                const closeButton = document.querySelector('.close-popup');
-                closeButton.addEventListener('click', function() {
-                    popup.style.display = 'none';
-                });
-
-                // ポップアップ以外の部分がクリックされたときの処理
-                window.addEventListener('click', function(event) {
-                    if (event.target === popup) {
-                        popup.style.display = 'none';
-                    }
-                });
-            }); -->
