@@ -15,10 +15,10 @@ CREATE TABLE account (
 );
 
 INSERT INTO account (user_name, email, password) VALUES
-('Sayori', 'sayori@example.com', 'password1'),
-('Natsuki', 'Natsuki@example.com', 'password2'),
-('Yuri', 'yurie@example.com', 'password3'),
-('Monika', 'monika@example.com', 'password4');
+('Sayori', 'sayori@example.com', '$2y$10$ISGQXC2c2b0teKOG2EnFE.dcdvIgQgSPfVObm5mGQBekjsWjpwzNq'),
+('Natsuki', 'Natsuki@example.com', '$2y$10$7DA65bo.vWOQlEGKfs4h0./EBKtfU2w/Xk4uu0Kp9ro6PhIOKYvpe'),
+('Yuri', 'yurie@example.com', '$2y$10$n3mlaWlS06mkFlbPEa9VpOXVcBhljYcmcJfhyiCCx3w/dkZJpAh5m'),
+('Monika', 'monika@example.com', '$2y$10$QPClPlmUhf34Gx.xuHeqmei7OEmxTeAa0r.4Mhf8CHmu4yUH5ObGe');
 
 # 投稿に対するリプライを格納
 CREATE TABLE reply (

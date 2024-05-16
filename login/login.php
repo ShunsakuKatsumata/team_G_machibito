@@ -37,8 +37,8 @@ try {
         $stmt->execute(['email' => $email]);
         $user = $stmt->fetch();
 
-        // ユーザーが見つかり、パスワードが一致する場合はログイン成功
-        if ($user && $password == $user['password']) {
+        // ユーザーが見つかり、ハッシュ化したパスワードが一致する場合はログイン成功
+        if ($user && password_verify($password, $user['password'])) {
             // ユーザー情報をセッションに保存
             $_SESSION['user'] = $user;
             header('Location: ../mypage/mypage.php');
