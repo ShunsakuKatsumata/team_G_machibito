@@ -44,7 +44,7 @@ try {
             header('Location: ../mypage/mypage.php');
             exit;
         } else {
-            echo "失敗した失敗した失敗した失敗した失敗した失敗した失敗した失敗した失敗した失敗した失敗した失敗した";
+            echo "ログインに失敗しました";
         }
     }
 } catch (PDOException $e) {
@@ -55,7 +55,7 @@ try {
 <body>
     <div class="main-content">
         <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">
-            <h1>login</h1>
+            <h2>ログイン</h2>
             <div>
                 <input type="text" name="email" placeholder="email" required>
                 <input type="password" name="password" placeholder="password" required>
@@ -68,6 +68,22 @@ try {
             </div>
         </form>
     </div>
+    <div class="login-message" id="loginMessage"></div>
+    <script>
+        window.onload = function() {
+            var loginMessage = localStorage.getItem('loginMessage');
+            if (loginMessage) {
+                var loginMessageElement = document.getElementById('loginMessage');
+                loginMessageElement.innerText = loginMessage;
+                loginMessageElement.style.opacity = '1';
+                setTimeout(function() {
+                    loginMessageElement.style.opacity = '0';
+                }, 3000);
+                // メッセージを表示した後は削除する
+                localStorage.removeItem('loginMessage');
+            }
+        }
+    </script>
 </body>
 
 </html>

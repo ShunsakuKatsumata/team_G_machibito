@@ -29,7 +29,7 @@
                     <option>投稿が新しい順</option>
                     <option>投稿が古い順</option>
                     <option>回答が多い順</option>
-                </select>
+                </select> -->
             </ul></P>
             <hr>
             <?php
