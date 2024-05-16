@@ -11,5 +11,5 @@
 
     // いいねを押した後の画面に遷移する
     header("Location: ./../comment_detail.php?ident=$ident");
-    exit;1
+    exit;
 ?>

@@ -42,16 +42,20 @@
             echo '</tr>';
             echo '</table>';
 
-            // 編集ボタン
-            if ($_SESSION['user']['user_id'] == $item['user_id']) {
-                echo '<button class="post_edit_button" onclick="location.href=\'./new_question_post_edit.php?ident=' . $ident . '\'">編集</button>';
-            }
-            // 削除ボタン
-            if ($_SESSION['user']['user_id'] == $item['user_id']) {
-                echo '<button class="post_delete_button" onclick="location.href=\'./post_comment/comment_post_delete.php?ident=' . $ident . '\'">削除</button>';
-            }
-            ?>
-        </div>
+                    // 編集ボタン
+                    if ($_SESSION['user']['user_id'] == $item['user_id']) {
+                        echo '<button class="post_edit_button" onclick="location.href=\'./new_post/new_question_post_edit.php?ident='.$ident.'\'">編集</button>';
+                    }
+                    // 削除ボタン
+                    if ($_SESSION['user']['user_id'] == $item['user_id']) {
+                        echo '<button class="post_delete_button" onclick="location.href=\'./post_comment/comment_post_delete.php?ident=' . $ident . '\'">削除</button>';
+                    }
+                    // 投稿者がボタンをクリックすると、その質問が解決済みに変更される
+                    if ($_SESSION['user']['user_id'] == $item['user_id']) {
+                        echo '<button class="is_resolved_update_button" onclick="location.href=\'./post_comment/is_resolved_update.php?ident=' . $ident . '\'">解決済み</button>';
+                    }
+                    ?>
+                </div>
 
         <div class="menu_sort_answer_list">
             <P>
@@ -109,83 +113,108 @@
                 echo '</td>';
                 echo '</form>';
 
-                // 回答テーブルのデータをjsonに変換し、JavaScriptに送る
-                // $like_state_each_comment = json_encode($item['like_state']);
-                // echo $like_state_each_comment;
-                echo '</tr>';
-                // 日付表示
-                echo '<tr>';
-                echo '<td class="post-date">' . $item['post_time'] . '</td>';
-                echo '</tr>';
-                // 編集ボタン
-                if ($_SESSION['user']['user_id'] == $item['user_id']) {
-                    echo '<tr>';
-                    echo '<td><button class="post_edit_button" onclick="location.href=\'./edit_answer/edit_answer.php?post_id=' . $post_id . '&commentId=' . $item['ident'] . '\'">編集</button></td>';
-                    echo '</tr>';
-                }
-                // 削除ボタン
-                if ($_SESSION['user']['user_id'] == $item['user_id']) {
-                    echo '<tr>';
-                    echo '<td><button class="post_delete_button" onclick="location.href=\'./post_answer/answer_post_delete.php?post_id=' . $post_id . '&commentId=' . $item['ident'] . '\'">削除</button></td>';
-                    echo '</tr>';
-                }
-                echo '</table>';
-                echo '</div>';
-            }
-            ?>
-        </div>
-        <!-- 回答を記入する場所 -->
-        <form method="POST" action="./post_answer/answer_post_add.php">
-            <div class="write_comment">
-                <?php
-                // <!-- <label>コメント記入</label> -->
-                $ident = $_GET['ident'];
-                echo '<p><textarea name="answer_post" rows="3" cols="45" placeholder="質問に回答する"></textarea></p>';
-                echo '<p><button>送信</button></p>';
-                echo '<input type="hidden" name="answer_ident" value="' . $ident . '">';
-                ?>
+                                // 回答テーブルのデータをjsonに変換し、JavaScriptに送る
+                                $like_state_each_comment = json_encode($item['like_state']);
+                                echo $like_state_each_comment;
+                            echo '</tr>';
+                            // 日付表示
+                            echo '<tr>';
+                                echo '<td class="post-date">'.$item['post_time'].'</td>';
+                            echo '</tr>';
+                            // 編集ボタン
+                            if ($_SESSION['user']['user_id'] == $item['user_id']) {
+                                echo '<tr>';
+                                echo '<td><button class="post_edit_button" onclick="location.href=\'./edit_answer/edit_answer.php?post_id=' . $post_id . '&commentId=' . $item['ident'] . '\'">編集</button></td>';
+                                echo '</tr>';
+                            }
+                            // 削除ボタン
+                            if ($_SESSION['user']['user_id'] == $item['user_id']) {
+                                echo '<tr>';
+                                echo '<td><button class="post_delete_button" onclick="location.href=\'./post_answer/answer_post_delete.php?post_id=' . $post_id . '&commentId=' . $item['ident'] . '\'">削除</button></td>';
+                                echo '</tr>';
+                            }
+                        echo '</table>';
+                        echo '</div>';
+                    }
+                    ?>
+                </div>
+                <!-- 回答を記入する場所 -->
+                <form method="POST" action="./post_answer/answer_post_add.php">
+                    <div class="write_comment">
+                        <?php
+                        // <!-- <label>コメント記入</label> -->
+                        $ident = $_GET['ident'];
+                        echo '<p><textarea name="answer_post" rows="3" cols="45" placeholder="質問に回答する"></textarea></p>';
+                        echo '<p><button>送信</button></p>';                      
+                        echo '<input type="hidden" name="answer_ident" value="'.$ident.'">';
+                        ?>
+                    </div>
+                </form>
             </div>
-        </form>
-    </div>
-    <script>
-        function handleSortChange_answer(value) {
-            var postList = document.querySelector('.post-list');
-            var postDetails = Array.from(postList.querySelectorAll('.detail_reply'));
-            console.log('1');
-            switch (value) {
-                case 'good-desc':
-                    // 評価数降順
-                    postDetails.sort(function(a, b) {
-                        var dateA = new Date(a.querySelector('.answer_like_count').textContent.trim());
-                        var dateB = new Date(b.querySelector('.answer_like_count').textContent.trim());
-                        return dateB - dateA;
-                    });
-                    break;
-                case 'new-desc':
-                    // 日付降順でソート
-                    postDetails.sort(function(a, b) {
-                        var dateA = new Date(a.querySelector('.post-date').textContent.trim());
-                        var dateB = new Date(b.querySelector('.post-date').textContent.trim());
-                        return dateB - dateA;
-                    });
-                    break;
-                case 'old-asc':
-                    // 日付昇順でソート
-                    postDetails.sort(function(a, b) {
-                        var dateA = new Date(a.querySelector('.post-date').textContent.trim());
-                        var dateB = new Date(b.querySelector('.post-date').textContent.trim());
-                        return dateA - dateB;
-                    });
-                    break;
-                default:
-                    return;
-            }
-            // ソートされた要素を再配置
-            postDetails.forEach(function(postDetail) {
-                postList.appendChild(postDetail);
-            });
-        }
-    </script>
-</body>
+        <script>
+            // 質問に対する回答をソート
+            function handleSortChange_answer(value) {
+                var postList = document.querySelector('.post-list');
+                var postDetails = Array.from(postList.querySelectorAll('.detail_reply'));
+                console.log('1');
+                switch (value) {
+                    case 'good-desc':
+                        // 評価数降順
+                        postDetails.sort(function(a, b) {
+                            var dateA = new Date(a.querySelector('.answer_like_count').textContent.trim());
+                            var dateB = new Date(b.querySelector('.answer_like_count').textContent.trim());
+                            return dateB - dateA;
+                        });
+                        break;
+                    case 'new-desc':
+                        // 日付降順でソート
+                        postDetails.sort(function(a, b) {
+                            var dateA = new Date(a.querySelector('.post-date').textContent.trim());
+                            var dateB = new Date(b.querySelector('.post-date').textContent.trim());
+                            return dateB - dateA;
+                        });
+                        break;
+                    case 'old-asc':
+                        // 日付昇順でソート
+                        postDetails.sort(function(a, b) {
+                            var dateA = new Date(a.querySelector('.post-date').textContent.trim());
+                            var dateB = new Date(b.querySelector('.post-date').textContent.trim());
+                            return dateA - dateB;
+                        });
+                        break;
+                    default:
+                        return;
+                }
+                // ソートされた要素を再配置
+                postDetails.forEach(function(postDetail) {
+                    postList.appendChild(postDetail);
+                });
+            };
 
+            window.addEventListener('DOMContentLoaded', () => {
+                // 要素を取得
+                const likeButton = document.querySelector('.answer_like_button');
+                const likeIcon = document.querySelector('.answer_like_icon');
+                
+                // いいねボタンのクリックイベント
+                likeButton.addEventListener('click', () => {
+                    // like_stateを取得
+                    var like_state = JSON.parse('<?php echo $like_state_each_comment; ?>');
+
+                    // いいねの状態に応じてアイコンとカウントを更新
+                    if (like_state) {
+                        console.log('a');
+                        likeIcon.src = "./../Image/Good_pink.png";
+                        likeButton.classList.add('liked');
+                        // count++;
+                    } else {
+                        console.log('b');
+                        likeIcon.src = "./../Image/Good_white.png";
+                        likeButton.classList.remove('liked');
+                        // count--;
+                    }
+                });
+            });
+        </script>
+    </body>
 </html>
