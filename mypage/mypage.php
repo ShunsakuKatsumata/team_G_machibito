@@ -2,7 +2,7 @@
 <html>
 <head>
     <link rel="stylesheet" href="../sidebar/sidebar.css">
-    <link rel="stylesheet" href="my_page.css">
+    <link rel="stylesheet" href="mypage.css">
     <title>My Page</title>
 </head>
 <body>
