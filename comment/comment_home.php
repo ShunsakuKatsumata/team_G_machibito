@@ -27,7 +27,7 @@
                 <a href="#" class="sort-option">多い順</a>
             </li>
             <li class="menu-item_home"><input class="menu-item_q" type="button" onclick="location.href='../mypage/mypage.php'" value="投稿した質問を見る"></li>
-            <li class="menu-item_home"><input class="menu-item_q" type="button" onclick="location.href='./new_post/new_question_post.php'" value="質問する"></li>
+            <li class="menu-item_home"><input class="menu-item_q" type="button" onclick="location.href='./new_question_post.php'" value="質問する"></li>
         </ul>
     </div>
 
@@ -51,6 +51,7 @@
             ?>
         </table>
     </div>
+    <div class="question-post-message" id="questionpostMessage"></div>
 </body>
 
 <script>
@@ -78,6 +79,21 @@
             }
         });
     });
+
+    // ページ読み込み時に投稿メッセージがあれば表示する
+    window.onload = function() {
+        var questionpostMessage = localStorage.getItem('questionpostMessage');
+        if (questionpostMessage) {
+            var questionpostMessageElement = document.getElementById('questionpostMessage');
+            questionpostMessageElement.innerText = questionpostMessage;
+            questionpostMessageElement.style.opacity = '1';
+            setTimeout(function() {
+                questionpostMessageElement.style.opacity = '0';
+            }, 3000);
+            // メッセージを表示した後は削除する
+            localStorage.removeItem('questionpostMessage');
+        }
+    };
 </script>
 
 </html>
