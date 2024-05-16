@@ -86,7 +86,7 @@
         ?>
     </div>
     <div class="post-message" id="postMessage"></div>
-    <div class="post-message" id="deleteMessage"></div>
+    <div class="delete-message" id="deleteMessage"></div>
     <script>
         // ページ読み込み時に投稿メッセージがあれば表示する
         window.onload = function() {
@@ -162,6 +162,10 @@
             });
         }
     </script>
+    <footer id="footer">
+    <p id="page-top"><a href="#">Page Top</a></p> 
+    <small>&copy; copyright.</small>  
+  </footer>
 
     <!-- サイドバー設定 -->
     <?php include '../sidebar/sidebar.php'; ?>
