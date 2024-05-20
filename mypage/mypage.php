@@ -3,7 +3,7 @@
 <head>
     <link rel="stylesheet" href="../sidebar/sidebar.css">
     <link rel="stylesheet" href="mypage.css">
-    <title>My Page</title>
+    <title>プロフィール</title>
 </head>
 <body>
     <?php
