@@ -80,7 +80,7 @@
                 }
                 
                 // Delete_Post.php からのリダイレクトでセッションに保存されたメッセージがあれば表示する
-                var isresolved_message = "<?php echo isset($_SESSION['isresolved-message']) ? $_SESSION['deleteMessage'] : '' ?>";
+                var isresolved_message = "<?php echo isset($_SESSION['isresolved-message']) ? $_SESSION['isresolved-message'] : '' ?>";
                 if (isresolved_message) {
                     var isresolved_message_Element = document.getElementById('isresolved-message-id');
                     isresolved_message_Element.innerText = isresolved_message;
