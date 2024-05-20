@@ -9,7 +9,7 @@
     require_once __DIR__.'/../classes/answer_post.php';
     $answer_post = new answer_post();
     $answer_post->edit_answer($answer_ident_edit_text, $answer_edit_text);
-    
+
 
     header("Location: ./../comment_detail.php?ident=$post_id");
     exit;

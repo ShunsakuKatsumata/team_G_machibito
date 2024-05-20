@@ -4,7 +4,7 @@ require_once __DIR__ .'/comment_dbdata.php';
 class question_post extends dbdata{
     // 質問を投稿
     public function post_questions($title, $detail, $user_id){
-        $sql = "insert into question_post(title, detail, user_id) values(?, ?, ?)";
+        $sql = "INSERT INTO question_post (title, detail, user_id, question_time) VALUES (?, ?, ?, NOW())";
         $result = $this->exec($sql, [$title, $detail, $user_id]);
     }
 
@@ -12,6 +12,15 @@ class question_post extends dbdata{
     public function get_questions(){
         // 現在利用しているユーザーを指定
         $sql = "select * from question_post";
+        $stmt = $this->query($sql, []);
+        $items = $stmt->fetchAll();
+        return $items;
+    }
+
+    // 未解決の状態の質問のみ取得
+    public function get_questions_unsolved(){
+        // 現在利用しているユーザーを指定
+        $sql = "select * from question_post where is_resolved=0";
         $stmt = $this->query($sql, []);
         $items = $stmt->fetchAll();
         return $items;
@@ -35,6 +44,9 @@ class question_post extends dbdata{
     public function delete_question($ident){
         $sql = "delete from question_post where ident=?";
         $result = $this->exec($sql, [$ident]);
+        // 削除した投稿のID(post_id)に付いているコメントを削除する
+        $sql2 = "delete from question_answer where post_id=?";
+        $result = $this->exec($sql2, [$ident]);
     } 
 
     // 質問の投稿者の名前を取得
@@ -47,6 +59,34 @@ class question_post extends dbdata{
         $result = $stmt->fetch(PDO::FETCH_ASSOC);
         return $result['user_name'];
     }
+
+    // 投稿者がボタンをクリックすると、その質問が解決済みの状態に変更される
+    public function edit_is_resolved($ident){
+        $sql = "update question_post set is_resolved=1 where ident=?";
+        $result = $this->exec($sql, [$ident]);
+    }
+
+    // ソート機能付きの未解決の質問を取得
+    public function get_questions_unsolved_sorted($sort) {
+        switch ($sort) {
+            case 'new':
+                $sql = "SELECT * FROM question_post WHERE is_resolved=0 ORDER BY question_time DESC";
+                break;
+            case 'old':
+                $sql = "SELECT * FROM question_post WHERE is_resolved=0 ORDER BY question_time ASC";
+                break;
+            case 'count':
+                $sql = "SELECT * FROM question_post WHERE is_resolved=0 ORDER BY answer_count DESC";
+                break;
+            default:
+                $sql = "SELECT * FROM question_post WHERE is_resolved=0 ORDER BY question_time DESC";
+                break;
+        }
+        $stmt = $this->query($sql, []);
+        $items = $stmt->fetchAll();
+        return $items;
+    }
+
 }
 
 ?>

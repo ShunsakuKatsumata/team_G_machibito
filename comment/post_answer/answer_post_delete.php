@@ -1,4 +1,6 @@
 <?php
+session_start();
+
 // 変数を受け取る
 $comment_id = $_GET['commentId'];
 $post_id = $_GET['post_id'];
