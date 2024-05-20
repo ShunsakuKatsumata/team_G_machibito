@@ -155,7 +155,7 @@
                             echo '<h3><a href="../Post_Detail/Post_Detail.php?post_id=' . $post['post_id'] . '">' . $post['title'] . '</a></h3>';
                             echo '<form method="post">';
                             echo '<input type="hidden" name="post_id" value="' . $post['post_id'] . '">';
-                            echo '<button type="submit" name="delete_post">削除</button>';
+                            echo '<button type="submit" name="delete_post">削除する</button>';
                             echo '</form>';
                             echo '</div>';
                         }
@@ -165,7 +165,7 @@
                 <div class="question-card">
                     <h2>質問一覧</h2>
                     <?php 
-                    if (!empty($questions)) {
+                    if (empty($questions)) {
                         echo '<p>質問がありません</p>'; // なんにもなかったらなしと表示
                     } else {
                         foreach ($questions as $question) {
