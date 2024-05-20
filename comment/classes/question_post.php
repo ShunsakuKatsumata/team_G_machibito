@@ -4,7 +4,7 @@ require_once __DIR__ .'/comment_dbdata.php';
 class question_post extends dbdata{
     // 質問を投稿
     public function post_questions($title, $detail, $user_id){
-        $sql = "insert into question_post(title, detail, user_id) values(?, ?, ?)";
+        $sql = "INSERT INTO question_post (title, detail, user_id, question_time) VALUES (?, ?, ?, NOW())";
         $result = $this->exec($sql, [$title, $detail, $user_id]);
     }
 
@@ -65,6 +65,28 @@ class question_post extends dbdata{
         $sql = "update question_post set is_resolved=1 where ident=?";
         $result = $this->exec($sql, [$ident]);
     }
+
+    // ソート機能付きの未解決の質問を取得
+    public function get_questions_unsolved_sorted($sort) {
+        switch ($sort) {
+            case 'new':
+                $sql = "SELECT * FROM question_post WHERE is_resolved=0 ORDER BY question_time DESC";
+                break;
+            case 'old':
+                $sql = "SELECT * FROM question_post WHERE is_resolved=0 ORDER BY question_time ASC";
+                break;
+            case 'count':
+                $sql = "SELECT * FROM question_post WHERE is_resolved=0 ORDER BY answer_count DESC";
+                break;
+            default:
+                $sql = "SELECT * FROM question_post WHERE is_resolved=0 ORDER BY question_time DESC";
+                break;
+        }
+        $stmt = $this->query($sql, []);
+        $items = $stmt->fetchAll();
+        return $items;
+    }
+
 }
 
 ?>

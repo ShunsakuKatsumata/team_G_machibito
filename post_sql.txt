@@ -45,14 +45,16 @@ create table question_post(
     detail varchar(1000),
     user_id INT,
     is_resolved BOOLEAN DEFAULT FALSE,
+    question_time datetime,
+    answer_count INT DEFAULT 0,
     FOREIGN KEY (user_id) REFERENCES account(user_id)   
 );
 
-INSERT INTO question_post(ident, title, detail, user_id, is_resolved)
-VALUES (1, 'Question 1', 'This is detail of question 1', 1, FALSE),
-       (2, 'Question 2', 'This is detail of question 2', 2, FALSE),
-       (3, 'Question 3', 'This is detail of question 3', 3, TRUE),
-       (4, 'Question 4', 'This is detail of question 4', 4, TRUE);
+INSERT INTO question_post(ident, title, detail, user_id, is_resolved, question_time,answer_count)
+VALUES (1, 'Question 1', 'This is detail of question 1', 1, FALSE, NOW(),3),
+       (2, 'Question 2', 'This is detail of question 2', 2, FALSE, NOW() + INTERVAL 1 HOUR,2),
+       (3, 'Question 3', 'This is detail of question 3', 3, TRUE, NOW() + INTERVAL 2 HOUR,1),
+       (4, 'Question 4', 'This is detail of question 4', 4, TRUE, NOW() + INTERVAL 3 HOUR,5);
 
 # 質問に対する回答を格納
 create table question_answer(

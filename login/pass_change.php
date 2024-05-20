@@ -30,6 +30,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $new_password = $_POST['new_password'];
     $new_password_conf = $_POST['new_password_conf'];
 
+    if (empty($old_password) || empty($new_password) || empty($new_password_conf)) {
+        echo '全てのフィールドに入力してください。';
+    } else {
     $stmt = $pdo->prepare('SELECT password FROM account WHERE user_id = ?');
     $stmt->execute([$_SESSION['user']['user_id']]);
     $row = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -37,17 +40,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if ($row === false) {
         echo 'ユーザーが見つかりません。';
     } else {
-        if (!password_verify($old_password, $row['password'])) {
-            echo '古いパスワードが間違っています。';
-        } elseif ($new_password !== $new_password_conf) {
-            echo '新しいパスワードとその確認が一致しません。';
-        } else {
-            $new_password_hashed = password_hash($new_password, PASSWORD_DEFAULT);
-            $stmt = $pdo->prepare('UPDATE account SET password = ? WHERE user_id = ?');
-            $stmt->execute([$new_password_hashed, $_SESSION['user']['user_id']]);
-            echo 'パスワードを変更しました。';
-            header('Location: ../mypage/mypage.php');
-            exit;
+            if (!password_verify($old_password, $row['password'])) {
+                echo '古いパスワードが間違っています。';
+            } elseif ($new_password !== $new_password_conf) {
+                echo '新しいパスワードとその確認が一致しません。';
+            } else {
+                $new_password_hashed = password_hash($new_password, PASSWORD_DEFAULT);
+                $stmt = $pdo->prepare('UPDATE account SET password = ? WHERE user_id = ?');
+                $stmt->execute([$new_password_hashed, $_SESSION['user']['user_id']]);
+                echo 'パスワードを変更しました。';
+                header('Location: ../mypage/mypage.php');
+                exit;
+            }
         }
     }
 }
