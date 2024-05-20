@@ -1,10 +1,13 @@
 <!DOCTYPE html>
-<html>
+<html lang="ja">
+
 <head>
+    <meta charset="UTF-8">
     <link rel="stylesheet" href="../sidebar/sidebar.css">
     <link rel="stylesheet" href="mypage.css">
     <title>プロフィール</title>
 </head>
+
 <body>
     <?php
         session_start();
@@ -184,4 +187,3 @@
         </div>
     </div>
 </body>
-</html>
