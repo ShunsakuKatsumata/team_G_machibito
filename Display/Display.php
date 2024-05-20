@@ -135,22 +135,22 @@
                         return dateB - dateA;
                     });
                     break;
-                case 'likes-asc':
-                    // 評価昇順でソート
-                    postDetails.sort(function(a, b) {
-                        var dateA = new Date(a.querySelector('.post-date').textContent.trim());
-                        var dateB = new Date(b.querySelector('.post-date').textContent.trim());
-                        return dateA - dateB;
-                    });
-                    break;
-                case 'likes-desc':
-                    // 評価降順でソート
-                    postDetails.sort(function(a, b) {
-                        var dateA = new Date(a.querySelector('.post-date').textContent.trim());
-                        var dateB = new Date(b.querySelector('.post-date').textContent.trim());
-                        return dateB - dateA;
-                    });
-                    break;
+                    case 'likes-asc':
+                        // 評価昇順でソート
+                        postDetails.sort(function(a, b) {
+                            var likesA = parseInt(a.querySelector('.like-count').textContent.trim(), 10);
+                            var likesB = parseInt(b.querySelector('.like-count').textContent.trim(), 10);
+                            return likesA - likesB;
+                        });
+                        break;
+                    case 'likes-desc':
+                        // 評価降順でソート
+                        postDetails.sort(function(a, b) {
+                            var likesA = parseInt(a.querySelector('.like-count').textContent.trim(), 10);
+                            var likesB = parseInt(b.querySelector('.like-count').textContent.trim(), 10);
+                            return likesB - likesA;
+                        });
+                        break;
                 default:
                     return;
             }
