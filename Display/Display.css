@@ -58,6 +58,26 @@ body {
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     margin-bottom: 20px;
     padding: 20px;
+    display: block;
+    color: inherit; /* テキストの色を継承 */
+    text-decoration: none;
+}
+
+/* マウスカーソルを当てた時のスタイル */
+.post-detail:hover {
+    background-color: #e0fcff;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
+    transform: translateY(3px);
+    transition: background-color 0.3s ease;
+    transition: transform 0.3s ease;    
+}
+
+/* クリックした時のスタイル */
+.post-detail:active {
+    background-color: #d3f6fa;
+    box-shadow: 0 0 10px #666;
+    transform: translateY(6px);
+    transition-duration: 0.1s;
 }
 
 /* 投稿日時のスタイル */

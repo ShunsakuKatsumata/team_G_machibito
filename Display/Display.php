@@ -53,14 +53,12 @@
         $result = $stmt->get_result();
         if ($result->num_rows > 0) {
             while ($row = $result->fetch_assoc()) {
-                $row['post_id'];
-                echo '<div class="post-detail">';
+                echo '<a href="../Post_Detail/Post_Detail.php?post_id=' . $row["post_id"] . '" class="post-detail">';
                 echo '<div class="post-date">' . $row["post_date"] . '</div>';
                 echo '<div class="user-info">';
-                echo '<div class="user-icon"></div>';
                 echo '<span>投稿者: ' . $row["user_name"] . '</span>'; // 投稿者のユーザー名を表示
                 echo '</div>';
-                echo '<a href="../Post_Detail/Post_Detail.php?post_id=' . $row["post_id"] . '" class="post-title">' . $row["title"] . '</a>';
+                echo '<div class="post-title">' . $row["title"] . '</div>';
                 echo '<div class="post-content">' . $row["content"] . '</div>';
                 echo '<div class="like-button">';
                 echo '<img class="like-icon" src="../Image/Good_white.png" alt="Like">';
@@ -76,7 +74,7 @@
                 }
 
                 echo '</div>'; // like-button の終了タグ
-                echo '</div>'; // post-detail の終了タグ
+                echo '</a>';
             }
         } else {
             echo "投稿がありません";
