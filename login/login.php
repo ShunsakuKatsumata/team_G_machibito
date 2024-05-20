@@ -44,7 +44,7 @@ try {
             header('Location: ../mypage/mypage.php');
             exit;
         } else {
-            echo "ログインに失敗しました";
+            echo "ログインに失敗しました。";
         }
     }
 } catch (PDOException $e) {

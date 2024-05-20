@@ -53,14 +53,12 @@
         $result = $stmt->get_result();
         if ($result->num_rows > 0) {
             while ($row = $result->fetch_assoc()) {
-                $row['post_id'];
-                echo '<div class="post-detail">';
+                echo '<a href="../Post_Detail/Post_Detail.php?post_id=' . $row["post_id"] . '" class="post-detail">';
                 echo '<div class="post-date">' . $row["post_date"] . '</div>';
                 echo '<div class="user-info">';
-                echo '<div class="user-icon"></div>';
                 echo '<span>投稿者: ' . $row["user_name"] . '</span>'; // 投稿者のユーザー名を表示
                 echo '</div>';
-                echo '<a href="../Post_Detail/Post_Detail.php?post_id=' . $row["post_id"] . '" class="post-title">' . $row["title"] . '</a>';
+                echo '<div class="post-title">' . $row["title"] . '</div>';
                 echo '<div class="post-content">' . $row["content"] . '</div>';
                 echo '<div class="like-button">';
                 echo '<img class="like-icon" src="../Image/Good_white.png" alt="Like">';
@@ -76,7 +74,7 @@
                 }
 
                 echo '</div>'; // like-button の終了タグ
-                echo '</div>'; // post-detail の終了タグ
+                echo '</a>';
             }
         } else {
             echo "投稿がありません";
@@ -86,7 +84,7 @@
         ?>
     </div>
     <div class="post-message" id="postMessage"></div>
-    <div class="post-message" id="deleteMessage"></div>
+    <div class="delete-message" id="deleteMessage"></div>
     <script>
         // ページ読み込み時に投稿メッセージがあれば表示する
         window.onload = function() {
@@ -137,22 +135,22 @@
                         return dateB - dateA;
                     });
                     break;
-                case 'likes-asc':
-                    // 評価昇順でソート
-                    postDetails.sort(function(a, b) {
-                        var dateA = new Date(a.querySelector('.post-date').textContent.trim());
-                        var dateB = new Date(b.querySelector('.post-date').textContent.trim());
-                        return dateA - dateB;
-                    });
-                    break;
-                case 'likes-desc':
-                    // 評価降順でソート
-                    postDetails.sort(function(a, b) {
-                        var dateA = new Date(a.querySelector('.post-date').textContent.trim());
-                        var dateB = new Date(b.querySelector('.post-date').textContent.trim());
-                        return dateB - dateA;
-                    });
-                    break;
+                    case 'likes-asc':
+                        // 評価昇順でソート
+                        postDetails.sort(function(a, b) {
+                            var likesA = parseInt(a.querySelector('.like-count').textContent.trim(), 10);
+                            var likesB = parseInt(b.querySelector('.like-count').textContent.trim(), 10);
+                            return likesA - likesB;
+                        });
+                        break;
+                    case 'likes-desc':
+                        // 評価降順でソート
+                        postDetails.sort(function(a, b) {
+                            var likesA = parseInt(a.querySelector('.like-count').textContent.trim(), 10);
+                            var likesB = parseInt(b.querySelector('.like-count').textContent.trim(), 10);
+                            return likesB - likesA;
+                        });
+                        break;
                 default:
                     return;
             }
@@ -162,6 +160,12 @@
             });
         }
     </script>
+    <footer id="footer">
+    <p id="page-top"><a href="#">Page Top</a></p> 
+    <small>&copy; copyright.</small>  
+    </footer>
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+    <script src="https://coco-factory.jp/ugokuweb/wp-content/themes/ugokuweb/data/8-1-2/js/8-1-2.js"></script>
 
     <!-- サイドバー設定 -->
     <?php include '../sidebar/sidebar.php'; ?>

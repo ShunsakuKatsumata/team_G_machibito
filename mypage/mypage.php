@@ -1,96 +1,13 @@
 <!DOCTYPE html>
-<html>
+<html lang="ja">
+
 <head>
-<link rel="stylesheet" href="../sidebar/sidebar.css">
-    <title>My Page</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-        }
-        .container {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            padding: 20px;
-            margin-left: 200px; /* サイドバーの幅を考慮 */
-        }
-        .header {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            width: 100%;
-            max-width: 1200px;
-            margin-bottom: 20px;
-        }
-        .title {
-            font-size: 1.8em;
-            margin-right: 20px;
-        }
-        .action-buttons {
-            display: flex;
-            align-items: center;
-        }
-        .action-button {
-            background-color: #3498db;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 4px;
-            cursor: pointer;
-            margin-left: 10px;
-        }
-        .action-button:hover {
-            background-color: #2980b9;
-        }
-        .content {
-            display: flex;
-            width: 100%;
-            max-width: 1200px;
-            justify-content: space-between;
-        }
-        .post-card, .question-card {
-            background-color: #f9f9f9;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            padding: 16px;
-            margin: 10px;
-            flex: 1;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        }
-        .item {
-            background-color: #fff;
-            border: 1px solid #ccc;
-            border-radius: 8px;
-            padding: 10px;
-            margin-bottom: 10px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        }
-        .item h3 {
-            margin: 0;
-            font-size: 1.2em;
-        }
-        .item form {
-            margin-top: 10px;
-        }
-        .item button {
-            background-color: #e74c3c;
-            color: white;
-            border: none;
-            padding: 5px 10px;
-            border-radius: 4px;
-            cursor: pointer;
-        }
-        .item button:hover {
-            background-color: #c0392b;
-        }
-        .main-content {
-            padding: 20px;
-            width: 100%;
-        }
-    </style>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="../sidebar/sidebar.css">
+    <link rel="stylesheet" href="mypage.css">
+    <title>プロフィール</title>
 </head>
+
 <body>
     <?php
         session_start();
@@ -234,7 +151,7 @@
                     <h2>記事一覧</h2>
                     <?php 
                     if (empty($posts)) {
-                        echo '<p>なし</p>'; // なんにもなかったらなしと表示
+                        echo '<p>投稿がありません</p>'; // なんにもなかったらなしと表示
                     } else {
                         foreach ($posts as $post) {
                             echo '<div class="item">';
@@ -251,7 +168,9 @@
                 <div class="question-card">
                     <h2>質問一覧</h2>
                     <?php 
-                    if (!empty($questions)) {
+                    if (empty($questions)) {
+                        echo '<p>質問がありません</p>'; // なんにもなかったらなしと表示
+                    } else {
                         foreach ($questions as $question) {
                             echo '<div class="item">';
                             echo '<h3><a href="../comment/comment_detail.php?ident=' . $question['ident'] . '">' . $question['title'] . '</a></h3>';
@@ -268,4 +187,3 @@
         </div>
     </div>
 </body>
-</html>

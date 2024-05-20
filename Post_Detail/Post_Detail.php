@@ -294,7 +294,6 @@ try {
     <div class="post-message"></div>
     <div class="post-detail">
         <div class="user-info">
-            <div class="user-icon"></div>
             <div class="post-user">
                 <?php echo '投稿者: ' . $postData['user_name']; ?><!-- 投稿者名 -->
             </div>
