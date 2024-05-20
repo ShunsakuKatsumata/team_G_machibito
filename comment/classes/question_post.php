@@ -17,6 +17,15 @@ class question_post extends dbdata{
         return $items;
     }
 
+    // 未解決の状態の質問のみ取得
+    public function get_questions_unsolved(){
+        // 現在利用しているユーザーを指定
+        $sql = "select * from question_post where is_resolved=0";
+        $stmt = $this->query($sql, []);
+        $items = $stmt->fetchAll();
+        return $items;
+    }
+
     // 選択した質問を取得する
     public function get_question_ident($ident){
         $sql = 'select * from question_post where ident=?';
@@ -35,6 +44,9 @@ class question_post extends dbdata{
     public function delete_question($ident){
         $sql = "delete from question_post where ident=?";
         $result = $this->exec($sql, [$ident]);
+        // 削除した投稿のID(post_id)に付いているコメントを削除する
+        $sql2 = "delete from question_answer where post_id=?";
+        $result = $this->exec($sql2, [$ident]);
     } 
 
     // 質問の投稿者の名前を取得
@@ -46,6 +58,12 @@ class question_post extends dbdata{
         $stmt->execute([$ident]);
         $result = $stmt->fetch(PDO::FETCH_ASSOC);
         return $result['user_name'];
+    }
+
+    // 投稿者がボタンをクリックすると、その質問が解決済みの状態に変更される
+    public function edit_is_resolved($ident){
+        $sql = "update question_post set is_resolved=1 where ident=?";
+        $result = $this->exec($sql, [$ident]);
     }
 }
 
