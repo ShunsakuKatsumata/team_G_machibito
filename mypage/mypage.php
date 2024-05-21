@@ -16,6 +16,21 @@
 </head>
 
 <body>
+    <script>
+        function confirmLogout(event) {
+            if (!confirm("本当にログアウトしますか？")) {
+                event.preventDefault(); // ログアウトをキャンセル
+            }
+        }
+
+        document.addEventListener("DOMContentLoaded", function() {
+            var logoutButton = document.getElementById("logout-button");
+            if (logoutButton) {
+                logoutButton.addEventListener("click", confirmLogout);
+            }
+        });
+    </script>
+
     <?php
     $user_id = $_SESSION['user']['user_id'];
 
@@ -143,7 +158,7 @@
                     </form>
                     <!-- ログアウトボタン -->
                     <form method="post" style="margin: 0;">
-                        <button type="submit" name="logout" class="action-button">ログアウト</button>
+                        <button id="logout-button" type="submit" name="logout" class="action-button">ログアウト</button>
                     </form>
                 </div>
             </div>
