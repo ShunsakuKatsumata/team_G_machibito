@@ -80,7 +80,7 @@
                 }
                 
                 // Delete_Post.php からのリダイレクトでセッションに保存されたメッセージがあれば表示する
-                var isresolved_message = "<?php echo isset($_SESSION['isresolved-message']) ? $_SESSION['deleteMessage'] : '' ?>";
+                var isresolved_message = "<?php echo isset($_SESSION['isresolved-message']) ? $_SESSION['isresolved-message'] : '' ?>";
                 if (isresolved_message) {
                     var isresolved_message_Element = document.getElementById('isresolved-message-id');
                     isresolved_message_Element.innerText = isresolved_message;
@@ -93,4 +93,11 @@
                 }
             };
     </script>
+
+    <footer id="footer">
+    <p id="page-top"><a href="#">Page Top</a></p> 
+    </footer>
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+    <script src="https://coco-factory.jp/ugokuweb/wp-content/themes/ugokuweb/data/8-1-2/js/8-1-2.js"></script>
+
 </html>
