@@ -22,9 +22,10 @@
     <div class="comment_home">
         <ul class="menu-home">
             <li class="menu_sort">
-                <a href="#" class="sort-option">新しい順</a>｜
-                <a href="#" class="sort-option">古い順</a>｜
-                <a href="#" class="sort-option">多い順</a>
+                <!-- ソート機能 -->
+                <a href="?sort=new" class="sort-option">新しい順</a>｜
+                <a href="?sort=old" class="sort-option">古い順</a>｜
+                <a href="?sort=count" class="sort-option">多い順</a>
             </li>
             <li class="menu-item_home"><input class="menu-item_q" type="button" onclick="location.href='../mypage/mypage.php'" value="投稿した質問を見る"></li>
             <li class="menu-item_home"><input class="menu-item_q" type="button" onclick="location.href='./new_question_post.php'" value="質問する"></li>
@@ -35,16 +36,14 @@
     <div class="question-list-container">
         <div class="question-comment">◆回答待ちの質問一覧◆</div>
         <table id="comment_home_item">
-            <?php
-                
-            ?>
             <!-- 投稿された質問一覧（タイトルが表示されている） -->
             <table id="comment_home_item" align="center">
                 <?php
                 // onclick="location.href='comment_detail.html'">
                 require_once __DIR__.'/classes/question_post.php';
                 $question_post = new question_post();
-                $questions_list = $question_post->get_questions_unsolved();
+                $sort_order = isset($_GET['sort']) ? $_GET['sort'] : 'new'; // 受け取ったソートをなげつけ
+                $questions_list = $question_post->get_questions_unsolved_sorted($sort_order);   // ソートかつ未解決の質問を取得
                     foreach ($questions_list as $item) {
                         echo '<tr>';
                             echo '<td>';
@@ -81,7 +80,7 @@
                 }
                 
                 // Delete_Post.php からのリダイレクトでセッションに保存されたメッセージがあれば表示する
-                var isresolved_message = "<?php echo isset($_SESSION['isresolved-message']) ? $_SESSION['deleteMessage'] : '' ?>";
+                var isresolved_message = "<?php echo isset($_SESSION['isresolved-message']) ? $_SESSION['isresolved-message'] : '' ?>";
                 if (isresolved_message) {
                     var isresolved_message_Element = document.getElementById('isresolved-message-id');
                     isresolved_message_Element.innerText = isresolved_message;
@@ -94,4 +93,11 @@
                 }
             };
     </script>
+
+    <footer id="footer">
+    <p id="page-top"><a href="#">Page Top</a></p> 
+    </footer>
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+    <script src="https://coco-factory.jp/ugokuweb/wp-content/themes/ugokuweb/data/8-1-2/js/8-1-2.js"></script>
+
 </html>

@@ -8,6 +8,10 @@ class answer_post extends dbdata
     {
         $sql = "insert into question_answer(post_id, answer, post_time, user_id) values(?, ?, ?, ?)";
         $result = $this->query($sql, [$post_id, $add_answer_post, $post_time, $user_id]);
+
+        // question_post テーブルの answer_count を1増加させる
+        $update_sql = "UPDATE question_post SET answer_count = answer_count + 1 WHERE ident = ?";
+        $this->query($update_sql, [$post_id]);
     }
 
     // 回答を取得
@@ -46,9 +50,24 @@ class answer_post extends dbdata
     // 投稿した回答を削除する
     public function delete_answer($ident)
     {
-        $sql = "delete from question_answer where ident=?";
-        $result = $this->exec($sql, [$ident]);
+        // 削除前にpost_id を取得する
+        $sql = "SELECT post_id FROM question_answer WHERE ident = ?";
+        $stmt = $this->query($sql, [$ident]);
+        $answer = $stmt->fetch();
+
+        if ($answer) {
+            $post_id = $answer['post_id'];
+
+            // 回答を削除する
+            $delete_sql = "DELETE FROM question_answer WHERE ident = ?";
+            $this->exec($delete_sql, [$ident]);
+
+            // question_postテーブルのanswer_countを1減少させる
+            $update_sql = "UPDATE question_post SET answer_count = answer_count - 1 WHERE ident = ?";
+            $this->query($update_sql, [$post_id]);
+        }
     }
+
 
     // 回答の投稿者の名前を取得
     public function get_answer_name($ident)
