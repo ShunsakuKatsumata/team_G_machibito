@@ -12,7 +12,6 @@ body {
     align-items: center;
     height: 100vh;
     margin: 0;
-    font-family: Arial, sans-serif;
     background-color: #f0f0f0;
     margin-left: 20%; /* サイドバーの幅を15%とする */
     width: 80%; /* 残りの85%をメインコンテンツに使用 */
