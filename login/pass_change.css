@@ -1,11 +1,22 @@
+header {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    margin-bottom: 20px;
+}
 body {
     display: flex;
+    flex-direction: column; /* フォームを上下中央に配置するために列方向に設定 */
     justify-content: center;
     align-items: center;
     height: 100vh;
     margin: 0;
-    font-family: Arial, sans-serif;
     background-color: #f0f0f0;
+    margin-left: 20%; /* サイドバーの幅を15%とする */
+    width: 80%; /* 残りの85%をメインコンテンツに使用 */
+    box-sizing: border-box; /* パディングを含めた幅を指定 */
+    overflow-y: scroll;
 }
 
 h1 {
@@ -20,8 +31,13 @@ form {
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     width: 300px;
     display: flex;
-    flex-direction: column;
+    flex-direction: column; /* 入力欄を上下に並べるために列方向に設定 */
     align-items: center;
+}
+
+/* タイトルのスタイルを修正 */
+h1 {
+    margin-bottom: 20px; /* タイトルとフォームの間の余白を追加 */
 }
 
 label {
@@ -33,7 +49,7 @@ label {
 }
 
 input[type="password"] {
-    width: 100%;
+    width: calc(100% - 16px); /* ラベルの幅を考慮して、余白を調整 */
     padding: 8px;
     margin-bottom: 20px;
     border: 1px solid #ccc;
@@ -41,6 +57,7 @@ input[type="password"] {
 }
 
 button[type="submit"] {
+    transition: background-color 0.3s ease;
     width: 100%;
     padding: 10px;
     background-color: #007BFF;
@@ -52,5 +69,47 @@ button[type="submit"] {
 }
 
 button[type="submit"]:hover {
-    background-color: #0056b3;
+    background-color: #77b9ff;
+}
+
+.errorMessage_p_old {
+    position: fixed;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: #fff;
+    border-radius: 5px;
+    opacity: 0;
+    transition: opacity 0.3s;
+    z-index: 1;
+}
+
+.errorMessage_p_new {
+    position: fixed;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: #fff;
+    border-radius: 5px;
+    opacity: 0;
+    transition: opacity 0.3s;
+    z-index: 1;
+}
+
+.errorMessage_p_empty {
+    position: fixed;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: #fff;
+    border-radius: 5px;
+    opacity: 0;
+    transition: opacity 0.3s;
+    z-index: 1;
 }
