@@ -68,7 +68,10 @@ try {
             </div>
         </form>
     </div>
+    <!-- ログイン時のメッセージ -->
     <div class="login-message" id="loginMessage"></div>
+    <!-- ログイン失敗時のメッセージ -->
+    <div class="errorMessage" id="errorMessage"></div>
     <script>
         window.onload = function() {
             var loginMessage = localStorage.getItem('loginMessage');
@@ -82,9 +85,10 @@ try {
                 // メッセージを表示した後は削除する
                 localStorage.removeItem('loginMessage');
             }
+            
             var errorMessage = localStorage.getItem('errorMessage');
             if (errorMessage) {
-                var errorMessageElement = document.getElementById('loginMessage');
+                var errorMessageElement = document.getElementById('errorMessage');
                 errorMessageElement.innerText = errorMessage;
                 errorMessageElement.style.opacity = '1';
                 setTimeout(function() {
