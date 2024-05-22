@@ -113,7 +113,7 @@
             echo '<div class="answer-edit-delete-container">';
             // 編集ボタン
             if ($_SESSION['user']['user_id'] == $item['user_id']) {
-                echo '<button class="post-edit-button" onclick="location.href=\'./edit_answer/edit_answer.php?post_id=' . $post_id . '&commentId=' . $item['ident'] . '\'">編集</button>';
+                echo '<button class="post-edit-button" onclick="location.href=\'./edit_answer.php?post_id=' . $post_id . '&commentId=' . $item['ident'] . '\'">編集</button>';
             }
             // 削除ボタン
             if ($_SESSION['user']['user_id'] == $item['user_id']) {
