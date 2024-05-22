@@ -59,13 +59,13 @@
         <div class="header-container">
             <div class="answer-header">◆回答◆</div>
             <div class="menu-sort-answer-list">
-                <ul class="menu-sort">
+                <!-- <ul class="menu-sort">
                     <li style="float:left;"><img src="./../Image/icons8-sort.png" /></li>
                     <select name="pulldown_goodbutton" onchange="handleSortChange_answer(this.value)">
                         <option value="">ソート選択...</option>
                         <option value="good-desc">いいねが多い順</option>
                         <option value="new-desc">回答が新しい順</option>
-                        <option value="old-asc">回答が古い順</option>
+                        <option value="old-asc">回答が古い順</option> -->
                     </select>
                 </ul>
             </div>
@@ -103,7 +103,7 @@
             echo '<div class="answer-like-container">';
             echo '<div class="answer-like-button">';
             if ($item['like_state']) {
-                echo '<a href="./post_answer/good_count_add.php?comment_id=' . $item['ident'] . '"><img class="answer-like-icon" src="./../Image/Good_pink.png"></a>';
+                echo '<a href="./post_answer/good_count_add.php?comment_id=' . $item['ident'] . '"><img class="answer-like-icon" src="./../Image/Good_white.png"></a>';
             } else {
                 echo '<a href="./post_answer/good_count_add.php?comment_id=' . $item['ident'] . '"><img class="answer-like-icon" src="./../Image/Good_white.png"></a>';
             }
@@ -194,17 +194,17 @@
                 var like_state = JSON.parse('<?php echo $like_state_each_comment; ?>');
 
                 // いいねの状態に応じてアイコンとカウントを更新
-                if (like_state) {
-                    console.log('a');
-                    likeIcon.src = "./../Image/Good_pink.png";
-                    likeButton.classList.add('liked');
-                    // count++;
-                } else {
-                    console.log('b');
-                    likeIcon.src = "./../Image/Good_white.png";
-                    likeButton.classList.remove('liked');
-                    // count--;
-                }
+                // if (like_state) {
+                //     console.log('a');
+                //     likeIcon.src = "./../Image/Good_pink.png";
+                //     likeButton.classList.add('liked');
+                //     // count++;
+                // } else {
+                //     console.log('b');
+                //     likeIcon.src = "./../Image/Good_white.png";
+                //     likeButton.classList.remove('liked');
+                //     // count--;
+                // }
             });
         });
     </script>
