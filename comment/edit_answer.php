@@ -25,7 +25,7 @@
         <?php
             $ident = $_GET['post_id'];
             // テーブルの中身を取り出す
-            require_once __DIR__.'/../classes/question_post.php';
+            require_once __DIR__.'/classes/question_post.php';
             $question_post = new question_post();
             $item = $question_post->get_question_ident($ident);
             echo '<h4 class="question-title" style="margin-top:0;">' . $item['title'] . '</h4>';
@@ -40,12 +40,12 @@
         $comment_id = $_GET['commentId'];
         $post_id = $_GET['post_id'];
         // テーブルの中身を取り出す
-        require_once __DIR__.'/../classes/answer_post.php';
+        require_once __DIR__.'/classes/answer_post.php';
         $answer_post = new answer_post();
         $item_answer = $answer_post->get_answer_answerid($comment_id);
         // $item_answer = $answer_post->get_answers(4);
 
-        echo '<form method="POST" action="../post_answer/answer_post_edit.php?postid=' . $post_id . '">';
+        echo '<form method="POST" action="./post_answer/answer_post_edit.php?postid=' . $post_id . '">';
         echo '<div class="detail_reply">';
         echo '<table>';
         echo '<h3 class="answer-header">◆回答◆</h3>';
