@@ -8,7 +8,7 @@
         header('Location: ../login/login.php');
         exit();
     } ?>
-    <link rel="stylesheet" href="./comment_detail.css">
+    <link rel="stylesheet" href="comment_detail.css">
     <link rel="stylesheet" href="../sidebar/sidebar.css">
     <meta charset="UTF-8">
     <title>各質問の投稿詳細画面</title>
@@ -58,6 +58,17 @@
     <div class="reply">
         <div class="header-container">
             <div class="answer-header">◆回答◆</div>
+            <div class="menu-sort-answer-list">
+                <ul class="menu-sort">
+                    <li style="float:left;"><img src="./../Image/icons8-sort.png" /></li>
+                    <select name="pulldown_goodbutton" onchange="handleSortChange_answer(this.value)">
+                        <option value="">ソート選択...</option>
+                        <option value="good-desc">いいねが多い順</option>
+                        <option value="new-desc">回答が新しい順</option>
+                        <option value="old-asc">回答が古い順</option>
+                    </select>
+                </ul>
+            </div>
         </div>
 
         <!-- コメント欄 -->
@@ -91,15 +102,18 @@
             echo '<td class="answer-action-flex">';
             echo '<div class="answer-like-container">';
             echo '<div class="answer-like-button">';
-            echo '<a href="./post_answer/good_count_add.php?comment_id=' . $item['ident'] . '"><img class="answer-like-icon" src="./../Image/Good_white.png"></a>';
-            
+            if ($item['like_state']) {
+                echo '<a href="./post_answer/good_count_add.php?comment_id=' . $item['ident'] . '"><img class="answer-like-icon" src="./../Image/Good_pink.png"></a>';
+            } else {
+                echo '<a href="./post_answer/good_count_add.php?comment_id=' . $item['ident'] . '"><img class="answer-like-icon" src="./../Image/Good_white.png"></a>';
+            }
             echo '</div>';
             echo '<span class="answer-like-count">' . $item['like_count'] . '</span>';
             echo '</div>';
             echo '<div class="answer-edit-delete-container">';
             // 編集ボタン
             if ($_SESSION['user']['user_id'] == $item['user_id']) {
-                echo '<button class="post-edit-button" onclick="location.href=\'./edit_answer/edit_answer.php?post_id=' . $post_id . '&commentId=' . $item['ident'] . '\'">編集</button>';
+                echo '<button class="post-edit-button" onclick="location.href=\'./edit_answer.php?post_id=' . $post_id . '&commentId=' . $item['ident'] . '\'">編集</button>';
             }
             // 削除ボタン
             if ($_SESSION['user']['user_id'] == $item['user_id']) {
@@ -127,6 +141,73 @@
             </div>
         </form>
     </div>
+
+
+    <script>
+        // 質問に対する回答をソート
+        function handleSortChange_answer(value) {
+            var postList = document.querySelector('.post-list');
+            var postDetails = Array.from(postList.querySelectorAll('.detail_reply'));
+            console.log('1');
+            switch (value) {
+                case 'good-desc':
+                    // 評価数降順
+                    postDetails.sort(function(a, b) {
+                        var dateA = new Date(a.querySelector('.answer_like_count').textContent.trim());
+                        var dateB = new Date(b.querySelector('.answer_like_count').textContent.trim());
+                        return dateB - dateA;
+                    });
+                    break;
+                case 'new-desc':
+                    // 日付降順でソート
+                    postDetails.sort(function(a, b) {
+                        var dateA = new Date(a.querySelector('.post-date').textContent.trim());
+                        var dateB = new Date(b.querySelector('.post-date').textContent.trim());
+                        return dateB - dateA;
+                    });
+                    break;
+                case 'old-asc':
+                    // 日付昇順でソート
+                    postDetails.sort(function(a, b) {
+                        var dateA = new Date(a.querySelector('.post-date').textContent.trim());
+                        var dateB = new Date(b.querySelector('.post-date').textContent.trim());
+                        return dateA - dateB;
+                    });
+                    break;
+                default:
+                    return;
+            }
+            // ソートされた要素を再配置
+            postDetails.forEach(function(postDetail) {
+                postList.appendChild(postDetail);
+            });
+        };
+
+        window.addEventListener('DOMContentLoaded', () => {
+            // 要素を取得
+            const likeButton = document.querySelector('.answer_like_button');
+            const likeIcon = document.querySelector('.answer_like_icon');
+
+            // いいねボタンのクリックイベント
+            likeButton.addEventListener('click', () => {
+                // like_stateを取得
+                var like_state = JSON.parse('<?php echo $like_state_each_comment; ?>');
+
+                // いいねの状態に応じてアイコンとカウントを更新
+                if (like_state) {
+                    console.log('a');
+                    likeIcon.src = "./../Image/Good_pink.png";
+                    likeButton.classList.add('liked');
+                    // count++;
+                } else {
+                    console.log('b');
+                    likeIcon.src = "./../Image/Good_white.png";
+                    likeButton.classList.remove('liked');
+                    // count--;
+                }
+            });
+        });
+    </script>
     
     <footer id="footer">
     <p id="page-top"><a href="#">Page Top</a></p> 
