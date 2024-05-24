@@ -28,7 +28,6 @@ body {
 .user-info {
     display: flex;
     align-items: center;
-    margin-bottom: 20px;
 }
 
 .post-title {
@@ -257,4 +256,12 @@ body {
       opacity: 1;
     transform: translateY(100px);
     }
+}
+
+.post_time{
+    text-align: right;
+    top: 10px;
+    right: 10px;
+    font-size: 14px;
+    color: #666;
 }
