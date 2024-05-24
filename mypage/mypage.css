@@ -69,10 +69,10 @@ body {
     flex: 1 1 calc(50% - 20px);
     /* カードの幅を50%にしてマージンを引く */
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    box-sizing: border-box; /* パディングを含めた幅を指定 */
-    max-width: calc(50% - 20px); /* カードの最大幅を指定 */
-    height: 600px;                   /* カードの高さを固定 */
-    overflow-y: auto;                /* 縦スクロールバーを追加 */
+    box-sizing: border-box;
+    /* パディングを含めた幅を指定 */
+    max-width: calc(50% - 20px);
+    /* カードの最大幅を指定 */
 }
 
 .item {
