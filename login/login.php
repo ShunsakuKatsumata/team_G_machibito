@@ -44,7 +44,7 @@ try {
             header('Location: ../mypage/mypage.php');
             exit;
         } else {
-            echo "ログインに失敗しました。";
+            echo "<script>localStorage.setItem('errorMessage', 'ログインに失敗しました');</script>";
         }
     }
 } catch (PDOException $e) {
@@ -81,6 +81,17 @@ try {
                 }, 3000);
                 // メッセージを表示した後は削除する
                 localStorage.removeItem('loginMessage');
+            }
+            var errorMessage = localStorage.getItem('errorMessage');
+            if (errorMessage) {
+                var errorMessageElement = document.getElementById('loginMessage');
+                errorMessageElement.innerText = errorMessage;
+                errorMessageElement.style.opacity = '1';
+                setTimeout(function() {
+                    errorMessageElement.style.opacity = '0';
+                }, 3000);
+                // メッセージを表示した後は削除する
+                localStorage.removeItem('errorMessage');
             }
         }
     </script>
