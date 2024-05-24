@@ -1,9 +1,8 @@
 body {
-    display: flex;
-    overflow-y: scroll;
     margin: 0;
     padding: 0;
     background-color: #f5f5f5;
+    overflow-y: scroll;
 }
 
 .container {
@@ -12,11 +11,8 @@ body {
     align-items: center;
     padding: 20px;
     margin-left: 20%;
-    /* サイドバーの幅を15%とする */
     width: 80%;
-    /* 残りの85%をメインコンテンツに使用 */
     box-sizing: border-box;
-    /* パディングを含めた幅を指定 */
 }
 
 .header {
@@ -39,7 +35,6 @@ body {
 
 .action-button {
     background-color: #007bff;
-    transition: background-color 0.3s ease;
     color: #fff;
     border: none;
     padding: 10px 20px;
@@ -53,26 +48,34 @@ body {
 }
 
 .content {
-    display: flex;
     width: 100%;
-    justify-content: space-between;
-    flex-wrap: wrap;
 }
 
-.post-card,
-.question-card {
+.titles {
+    display: flex;
+    justify-content: space-around;
+    width: 100%;
+    margin-bottom: 20px;
+}
+
+.cards {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.post-card, .question-card {
     background-color: #fff;
     border: 1px solid #ddd;
     border-radius: 8px;
     padding: 16px;
     margin: 10px;
     flex: 1 1 calc(50% - 20px);
-    /* カードの幅を50%にしてマージンを引く */
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     box-sizing: border-box;
-    /* パディングを含めた幅を指定 */
     max-width: calc(50% - 20px);
-    /* カードの最大幅を指定 */
+    max-height: 500px;
+    overflow-y: auto; /* 縦スクロールバーを追加 */
 }
 
 .item {
@@ -95,7 +98,6 @@ body {
 
 .item button {
     background-color: #fe3f52;
-    transition: background-color 0.3s ease;
     color: #fff;
     border: none;
     padding: 5px 10px;
@@ -140,13 +142,11 @@ body {
     right: 10px;
     bottom: 10px;
     z-index: 2;
-    /*はじめは非表示*/
     opacity: 0;
     transform: translateY(100px);
 }
 
 /*　上に上がる動き　*/
-
 #page-top.UpMove {
     animation: UpAnime 0.5s forwards;
 }
@@ -156,7 +156,6 @@ body {
         opacity: 0;
         transform: translateY(100px);
     }
-
     to {
         opacity: 1;
         transform: translateY(0);
@@ -164,7 +163,6 @@ body {
 }
 
 /*　下に下がる動き　*/
-
 #page-top.DownMove {
     animation: DownAnime 0.5s forwards;
 }
@@ -174,7 +172,6 @@ body {
         opacity: 1;
         transform: translateY(0);
     }
-
     to {
         opacity: 1;
         transform: translateY(100px);
