@@ -34,7 +34,10 @@
 
     <!-- 投稿された質問一覧（タイトルが表示されている） -->
     <div class="question-list-container">
-        <div class="question-comment">◆回答待ちの質問一覧◆</div>
+        <div class="questions-tabs">
+            <div class="tab" id="unsolved-tab">◆回答待ちの質問一覧◆</div>
+            <div class="tab" id="resolved-tab">◆解決済みの質問一覧◆</div>
+        </div>
         <table id="comment_home_item">
             <!-- 投稿された質問一覧（タイトルが表示されている） -->
             <table id="comment_home_item" align="center">
@@ -97,6 +100,21 @@
     <footer id="footer">
     <p id="page-top"><a href="#">Page Top</a></p> 
     </footer>
+
+    <script>
+        // タブの切り替え
+        const unsolvedTab = document.getElementById('unsolved-tab');
+        const resolvedTab = document.getElementById('resolved-tab');
+
+        unsolvedTab.addEventListener('click', () => {
+            location.href = 'comment_home.php';
+        });
+
+        resolvedTab.addEventListener('click', () => {
+            location.href = 'resolved_questions.php';
+        });
+    </script>
+    
     <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
     <script src="https://coco-factory.jp/ugokuweb/wp-content/themes/ugokuweb/data/8-1-2/js/8-1-2.js"></script>
 
