@@ -27,12 +27,9 @@
         $item = $question_post->get_question_ident($ident);
         // 作成者の名前を取得
         $author_name = $question_post->get_author_name($ident);
-
         echo '<table class="question-table">';
-        echo '<tr class="user-icon-name">';
-        echo '<td class="author-name">&nbsp;投稿者：' . $author_name . '</td>';
-        echo '</tr>';
-        echo '</table>';
+        echo '<tr class="author-name">&nbsp;投稿者：' . $author_name . '</tr>';
+        echo '<div class="question-time">'. $item['question_time'] . '</div>';
         echo '<h4 class="question-title" style="margin-top:0;">' . $item['title'] . '</h4>';
         echo '<table class="question-content-table">';
         echo '<tr>';
@@ -90,12 +87,12 @@
             $answer_name = $answer_post->get_answer_name($comment_id);
             echo '<td><div class="answer-name">&nbsp;回答者：' . $answer_name . '</div></td>';
             echo '</tr>';
-            echo '<tr class="answer-row">';
-            echo '<td class="answer-content">' . $item['answer'] . '</td>';
-            echo '</tr>';
             // 日付表示
             echo '<tr class="answer-row">';
             echo '<td class="post-date">' . $item['post_time'] . '</td>';
+            echo '</tr>';
+            echo '<tr class="answer-row">';
+            echo '<td class="answer-content">' . $item['answer'] . '</td>';
             echo '</tr>';
             // いいねボタンとその数、編集・削除ボタン
             echo '<tr class="answer-row">';

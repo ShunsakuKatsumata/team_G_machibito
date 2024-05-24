@@ -114,8 +114,8 @@ try {
     $stmt->execute();
     $replyData = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-    // タイトルを表示するデータベース
-    $stmt = $pdo->prepare("SELECT title FROM post WHERE post_id = :post_id");
+    // タイトルと時間を表示するデータベース
+    $stmt = $pdo->prepare("SELECT title, content, post_date FROM post WHERE post_id = :post_id");
     $stmt->bindParam(':post_id', $postId);
     $stmt->execute();
     $titleData = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -298,6 +298,7 @@ try {
                 <?php echo '投稿者: ' . $postData['user_name']; ?><!-- 投稿者名 -->
             </div>
         </div>
+        <div class="post_time"><?php echo $titleData['post_date']; ?></div>
         <div class="post-title"><?php echo $titleData['title']; ?></div>
         <div class="post-content">
             <?php echo $contentData['content']; ?>
