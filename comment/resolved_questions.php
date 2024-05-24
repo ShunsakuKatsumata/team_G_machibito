@@ -65,17 +65,6 @@
 
     <script>
         window.onload = function() {
-            var postMessage = localStorage.getItem('postMessage');
-            if (postMessage) {
-                var postMessageElement = document.getElementById('postMessage_id');
-                postMessageElement.innerText = postMessage;
-                postMessageElement.style.opacity = '1';
-                setTimeout(function() {
-                    postMessageElement.style.opacity = '0';
-                }, 3000);
-                localStorage.removeItem('postMessage');
-            }
-            
             var isresolved_message = "<?php echo isset($_SESSION['isresolved-message']) ? $_SESSION['isresolved-message'] : '' ?>";
             if (isresolved_message) {
                 var isresolved_message_Element = document.getElementById('isresolved-message-id');
