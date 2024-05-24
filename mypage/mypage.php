@@ -42,11 +42,11 @@
         $pdo = new PDO($dsn, $username, $password);
         $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-            // ユーザーIDと一致する記事のタイトルを取得
-            $sql = "SELECT post_id, title FROM post WHERE user_id = :user_id ORDER BY post_date DESC";
-            $stmt = $pdo->prepare($sql);
-            $stmt->bindParam(':user_id', $user_id, PDO::PARAM_INT);
-            $stmt->execute();
+        // ユーザーIDと一致する記事のタイトルを取得
+        $sql = "SELECT post_id, title FROM post WHERE user_id = :user_id";
+        $stmt = $pdo->prepare($sql);
+        $stmt->bindParam(':user_id', $user_id, PDO::PARAM_INT);
+        $stmt->execute();
 
         $posts = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
@@ -83,11 +83,11 @@
             }
         }
 
-            // ユーザーIDと一致する質問のタイトルを取得
-            $sql = "SELECT ident, title FROM question_post WHERE user_id = :user_id ORDER BY question_time DESC";
-            $stmt = $pdo->prepare($sql);
-            $stmt->bindParam(':user_id', $user_id, PDO::PARAM_INT);
-            $stmt->execute();
+        // ユーザーIDと一致する質問のタイトルを取得
+        $sql = "SELECT ident, title FROM question_post WHERE user_id = :user_id";
+        $stmt = $pdo->prepare($sql);
+        $stmt->bindParam(':user_id', $user_id, PDO::PARAM_INT);
+        $stmt->execute();
 
         $questions = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
