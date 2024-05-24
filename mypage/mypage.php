@@ -25,8 +25,8 @@
             $pdo = new PDO($dsn, $username, $password);
             $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-            // ユーザーIDと一致する記事のタイトルを取得
-            $sql = "SELECT post_id, title FROM post WHERE user_id = :user_id ORDER BY post_date DESC";
+            // ユーザーIDと一致する記事のタイトルと日付を取得
+            $sql = "SELECT post_id, title,post_date FROM post WHERE user_id = :user_id";
             $stmt = $pdo->prepare($sql);
             $stmt->bindParam(':user_id', $user_id, PDO::PARAM_INT);
             $stmt->execute();
@@ -66,8 +66,8 @@
                 }
             }
 
-            // ユーザーIDと一致する質問のタイトルを取得
-            $sql = "SELECT ident, title FROM question_post WHERE user_id = :user_id ORDER BY question_time DESC";
+            // ユーザーIDと一致する質問のタイトルと日付を取得
+            $sql = "SELECT ident, title,question_time FROM question_post WHERE user_id = :user_id";
             $stmt = $pdo->prepare($sql);
             $stmt->bindParam(':user_id', $user_id, PDO::PARAM_INT);
             $stmt->execute();
@@ -160,7 +160,8 @@
                                 echo '<h3><a href="../Post_Detail/Post_Detail.php?post_id=' . $post['post_id'] . '">' . $post['title'] . '</a></h3>';
                                 echo '<form method="post">';
                                 echo '<input type="hidden" name="post_id" value="' . $post['post_id'] . '">';
-                                echo '<button type="submit" name="delete_post">削除</button>';
+                                echo '<div class="post-time">' . $post['post_date'] . '</div>';
+                                echo '<div class="delete"><button type="submit" name="delete_post">削除</button></div>';
                                 echo '</form>';
                                 echo '</div>';
                             }
@@ -177,7 +178,8 @@
                                 echo '<h3><a href="../comment/comment_detail.php?ident=' . $question['ident'] . '">' . $question['title'] . '</a></h3>';
                                 echo '<form method="post">';
                                 echo '<input type="hidden" name="ident" value="' . $question['ident'] . '">';
-                                echo '<button type="submit" name="delete_question">削除</button>';
+                                echo '<div class="question-time">' . $question['question_time'] . '</div>';
+                                echo '<div class="delete"><button type="submit" name="delete_question">削除</button></div>';
                                 echo '</form>';
                                 echo '</div>';
                             }

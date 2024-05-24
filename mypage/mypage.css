@@ -178,3 +178,16 @@ body {
         transform: translateY(100px);
     }
 }
+
+.post-time,
+.question-time{
+    font-size: 14px;
+    color: #666;
+}
+
+.delete{
+    display: flex;
+	flex-direction: column; /*この行を追加*/
+	align-items: flex-end;  /*ここの値を修正する*/
+	justify-content: flex-start; /*ここは任意の値でOK*/
+}
