@@ -17,7 +17,8 @@
 
 <body>
     <!-- サイドバー設定 -->
-    <?php include '../sidebar/sidebar.php'; ?>
+    <?php include '../sidebar/sidebar.php'; 
+    $current_url = $_SERVER['REQUEST_URI'];?>
 
     <div class="comment_home">
         <ul class="menu-home">
@@ -35,8 +36,8 @@
     <!-- 投稿された質問一覧（タイトルが表示されている） -->
     <div class="question-list-container">
         <div class="questions-tabs">
-            <div class="tab" id="unsolved-tab">◆回答待ちの質問一覧◆</div>
-            <div class="tab" id="resolved-tab">◆解決済みの質問一覧◆</div>
+            <div class="tab <?php echo strpos($current_url, 'resolved_questions.php') !== false ? 'disabled-tab' : ''; ?>" id="unsolved-tab">◆回答待ちの質問一覧◆</div>
+            <div class="tab <?php echo strpos($current_url, 'comment_home.php') !== false ? 'disabled-tab' : ''; ?>" id="resolved-tab">◆解決済みの質問一覧◆</div>
         </div>
         <table id="comment_home_item">
             <!-- 投稿された質問一覧（タイトルが表示されている） -->
