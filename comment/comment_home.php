@@ -71,7 +71,6 @@
     
     </body>
     <script>
-        // 
             // ページ読み込み時に投稿メッセージがあれば表示する
             window.onload = function() {
                 // Delete_Post.php からのリダイレクトでセッションに保存されたメッセージがあれば表示する
