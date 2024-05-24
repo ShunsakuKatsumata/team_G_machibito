@@ -36,8 +36,8 @@
     <!-- 解決済みの質問一覧 -->
     <div class="question-list-container">
         <div class="questions-tabs">
-            <div class="tab <?php echo strpos($current_url, 'resolved_questions.php') !== false ? 'disabled-tab' : ''; ?>" id="unsolved-tab">　　　　◆回答待ちの質問一覧◆　　　　</div>
-            <div class="tab <?php echo strpos($current_url, 'comment_home.php') !== false ? 'disabled-tab' : ''; ?>" id="resolved-tab">　　　　◆解決済みの質問一覧◆　　　　</div>
+            <div class="tab <?php echo strpos($current_url, 'resolved_questions.php') !== false ? 'disabled-tab' : ''; ?>" id="unsolved-tab">◆回答待ちの質問一覧◆</div>
+            <div class="tab <?php echo strpos($current_url, 'comment_home.php') !== false ? 'disabled-tab' : ''; ?>" id="resolved-tab">◆解決済みの質問一覧◆</div>
         </div>
         <table id="comment_home_item" align="center">
             <?php
@@ -65,17 +65,6 @@
 
     <script>
         window.onload = function() {
-            var postMessage = localStorage.getItem('postMessage');
-            if (postMessage) {
-                var postMessageElement = document.getElementById('postMessage_id');
-                postMessageElement.innerText = postMessage;
-                postMessageElement.style.opacity = '1';
-                setTimeout(function() {
-                    postMessageElement.style.opacity = '0';
-                }, 3000);
-                localStorage.removeItem('postMessage');
-            }
-            
             var isresolved_message = "<?php echo isset($_SESSION['isresolved-message']) ? $_SESSION['isresolved-message'] : '' ?>";
             if (isresolved_message) {
                 var isresolved_message_Element = document.getElementById('isresolved-message-id');
