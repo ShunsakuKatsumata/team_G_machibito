@@ -24,7 +24,8 @@
         <form method="POST" action="post_comment/comment_post_add.php">
             <div class="user-info">
                 <div class="user-icon"></div>
-                <input name="qustion_title" type="text" placeholder="タイトルを入力してください" class="title-input">
+                <input id="question_title" name="qustion_title" type="text" placeholder="タイトルを入力してください" class="title-input">
+                <div class="titleLength">0/35</div>
             </div>
             <textarea name="question_detail" placeholder="本文を入力してください" class="content-input"></textarea>
             <div class="button-container">
@@ -54,14 +55,40 @@
     const contentInput = document.querySelector('.content-input');
     const errorMessage = document.querySelector('.error-message');
 
+    const titleLength = document.querySelector('.titleLength');
+
+    // タイトルの文字数
+    const maxLength = 35;
+    titleInput.addEventListener('input', () => {
+        titleLength.textContent = titleInput.value.length;
+        if(maxLength - titleInput.value.length < 0){
+            titleLength.textContent = String(maxLength + Math.abs(maxLength - titleInput.value.length)) + '/35';
+            titleLength.style.color = 'red'; // 最大文字数を超過したら赤字で表示する
+        }else{
+            titleLength.textContent = String(titleInput.value.length) + '/35';
+            titleLength.style.color = '#444';
+        }
+    }, false);
+
+
+    
+
     postButton.addEventListener('click', (event) => {
         const title = titleInput.value.trim();
         const content = contentInput.value.trim();
 
+        // タイトルの文字数
+        const title_length = titleInput.value.length
+
         if (title === '' || content === '') {
             event.preventDefault(); // フォームの送信をキャンセル
             showErrorMessage('タイトル・本文を入力してください');
-        } else {
+        }
+        else if(title_length>35){
+            event.preventDefault(); // フォームの送信をキャンセル
+            showErrorMessage('タイトルの文字数を35文字以内にしてください');
+        } 
+        else {
             localStorage.setItem('questionpostMessage', '投稿しました');
         }
     });

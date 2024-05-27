@@ -16,8 +16,6 @@
 
 <body>
     <?php include '../sidebar/sidebar.php'; ?>
-    
-
     <div class="detail">
         <!-- 質問詳細画面 -->
         <!-- 投稿された質問 -->
@@ -61,13 +59,13 @@
         <div class="header-container">
             <div class="answer-header">◆回答◆</div>
             <div class="menu-sort-answer-list">
-                <ul class="menu-sort">
+                <!-- <ul class="menu-sort">
                     <li style="float:left;"><img src="./../Image/icons8-sort.png" /></li>
                     <select name="pulldown_goodbutton" onchange="handleSortChange_answer(this.value)">
                         <option value="">ソート選択...</option>
                         <option value="good-desc">いいねが多い順</option>
                         <option value="new-desc">回答が新しい順</option>
-                        <option value="old-asc">回答が古い順</option>
+                        <option value="old-asc">回答が古い順</option> -->
                     </select>
                 </ul>
             </div>
@@ -81,7 +79,6 @@
         require_once __DIR__ . '/classes/answer_post.php';
         $answer_post = new answer_post();
         $items = $answer_post->get_answers($post_id);
-        echo '<div class="likeButton">';
         foreach ($items as $item) {
             echo '<div class="post-list">';
             echo '<div class="answer-block">';
@@ -103,114 +100,20 @@
             // いいねボタンとその数、編集・削除ボタン
             echo '<tr class="answer-row">';
             echo '<td class="answer-action-flex">';
-
-            $dsn = 'mysql:host=localhost;dbname=post;charset=utf8';
-            $username = 'kobe';
-            $password = 'denshi';
-
-            try {
-                $pdo = new PDO($dsn, $username, $password);
-                $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-
-                if ($comment_id) {
-                    $_SESSION['post_id'] = $_GET['ident'];
-                    $_SESSION['comment_id'] = $comment_id; // セッションにcomment_idを保存
-                }
-
-                if (isset($_SESSION['comment_id'])) {
-                    // commentIdは取得できている
-                    $commentId = $_SESSION['comment_id'];
-                    echo $commentId.' ';
-                    $postId = $_SESSION['post_id'];
-
-                    // post_idを使用してデータベースから該当の投稿を取得
-                    $stmt = $pdo->prepare("SELECT * FROM question_answer WHERE ident = :ident");
-                    $stmt->bindParam(':ident', $commentId);
-                    $stmt->execute();
-                    $postData = $stmt->fetch(PDO::FETCH_ASSOC);
-
-                    if (!$postData) {
-                        // post_idに対応する投稿が見つからなかった場合のエラー処理　未記入
-                    }
-                } else {
-                    // post_idがURLに含まれていない場合のエラー処理　未記入
-                }
-
-
-                // いいね数を取得
-                $stmt = $pdo->prepare("SELECT like_count FROM question_answer WHERE ident = :ident");
-                $stmt->bindParam(':ident', $commentId);
-                $stmt->execute();
-                $currentNice = $stmt->fetchColumn();
-
-                // echo $item['like_count'].' ';
-
-                // セッションに回答ごとのいいねの状態を保存（初期値はfalse）
-                $isLikedKey = 'isLiked_' . $commentId;
-                // echo $isLikedKey;
-
-                // ここで変数を複数用意しなければならない
-                // １個しかない
-
-                // コメントの個数分ループ
-                // foreach (){
-                    $isLiked = isset($_SESSION[$isLikedKey]) ? $_SESSION[$isLikedKey] : false;
-                    // [$isLiked_57, $isLiked_58, $isliked_59]
-                // }
-
-                //  Undefined array key "isLiked_58" in
-                echo $_SESSION[$isLikedKey];
-                // echo $isLiked;
-
-                // いいねの処理
-                if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['liked']) && $_POST['liked'] === 'toggle') {
-                    $isLiked = !$isLiked;
-
-                    // データベースのいいね数を増減
-                    $count = intval($currentNice) + ($isLiked ? 1 : -1);
-
-                    // データベースのいいね数を更新
-                    $stmt = $pdo->prepare("UPDATE question_answer SET like_count = :like_count, like_state=:like_state WHERE ident = :comment_id");
-                    $stmt->bindParam(':like_count', $count, PDO::PARAM_INT);
-                    $stmt->bindParam(':like_state', $isLiked, PDO::PARAM_INT);
-                    $stmt->bindParam(':comment_id', $commentId, PDO::PARAM_INT);
-                    $stmt->execute();
-
-                    // セッションに回答ごとのいいねの状態を保存
-                    $_SESSION[$isLikedKey] = $isLiked;
-                    // 173テスト；
-                    // unset($_SESSION[$isLikedKey]);
-                    // 更新成功をクライアントに返す
-                    echo json_encode(array('success' => true, 'count' => $count, 'isLiked' => $isLiked));
-                    exit;
-                }
-            } catch (PDOException $e) {
-                echo "エラー：" . $e->getMessage();
-            }
-
-            // いいね数を表示するデータベース
-            $stmt = $pdo->prepare("SELECT like_count FROM question_answer WHERE ident = :ident");
-            $stmt->bindParam(':ident', $commentId);
-            $stmt->execute();
-            $currentNice = $stmt->fetchColumn();
-
-            // 初期のいいね数を設定
-            $count = intval($currentNice);
-            echo "<script type='text/javascript'>
-                var count = " . json_encode($count) . ";
-            </script>";
-
+            echo '<div class="answer-like-container">';
             echo '<div class="answer-like-button">';
-            echo '<img class="answer-like-icon" src="'.($isLiked ? './../Image/Good_pink.png' : './../Image/Good_white.png') .'" alt="Like"></a>';
-            echo '<span class="answer-like-count">'.$currentNice.'</span>';
+            if ($item['like_state']) {
+                echo '<a href="./post_answer/good_count_add.php?comment_id=' . $item['ident'] . '"><img class="answer-like-icon" src="./../Image/Good_white.png"></a>';
+            } else {
+                echo '<a href="./post_answer/good_count_add.php?comment_id=' . $item['ident'] . '"><img class="answer-like-icon" src="./../Image/Good_white.png"></a>';
+            }
             echo '</div>';
-
-            
-
+            echo '<span class="answer-like-count">' . $item['like_count'] . '</span>';
+            echo '</div>';
             echo '<div class="answer-edit-delete-container">';
             // 編集ボタン
             if ($_SESSION['user']['user_id'] == $item['user_id']) {
-                echo '<button class="post-edit-button" onclick="location.href=\'./edit_answer/edit_answer.php?post_id=' . $post_id . '&commentId=' . $item['ident'] . '\'">編集</button>';
+                echo '<button class="post-edit-button" onclick="location.href=\'./edit_answer.php?post_id=' . $post_id . '&commentId=' . $item['ident'] . '\'">編集</button>';
             }
             // 削除ボタン
             if ($_SESSION['user']['user_id'] == $item['user_id']) {
@@ -223,7 +126,6 @@
             echo '</div>';
             echo '</div>';
         }
-        echo '</div>';
         ?>
 
         <!-- 回答を記入する場所 -->
@@ -242,52 +144,6 @@
 
 
     <script>
-        // 回答のいいねボタン
-        document.addEventListener('DOMContentLoaded', () => {
-            // const likeButton = document.querySelector('.likeButton');が間違い
-            // const likeButton = document.querySelector('.likeButton');
-            const likeButton = document.querySelector('.answer-like-button');
-            const likeIcon = likeButton.querySelector('.answer-like-icon');
-            const likeCount = likeButton.querySelector('.answer-like-count');
-                
-
-            // いいねボタンのクリックイベント
-            likeButton.addEventListener('click', () => {
-                const xhr = new XMLHttpRequest();
-
-                // console.log($postId);
-                
-                // メソッド、通信先、
-                xhr.open('POST', '<?php echo $_SERVER['PHP_SELF'] . '?ident='.$postId ?>', true);
-                xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-                const postData = 'liked=toggle';
-                xhr.send(postData);
-
-                // リクエスト完了時の処理
-                xhr.onreadystatechange = function() {
-                    if (xhr.readyState === XMLHttpRequest.DONE) {
-                        if (xhr.status === 200) {
-                            // ページの再読み込み
-                            location.reload(); // ページを再読み込みして更新を反映
-                            const response = JSON.parse(xhr.responseText);
-                            updateLikeButton(response.isLiked, response.count);
-                        } else {
-                            // エラーが発生した場合の処理
-                            console.error('いいねの処理中にエラーが発生しました');
-                        }
-                    }
-                };
-            });
-
-            function updateLikeButton(isLiked, count) {
-                const likeIcon = likeButton.querySelector('.answer-like-icon');
-                const likeCount = likeButton.querySelector('.answer-like-count');
-
-                likeIcon.src = isLiked ? '../Image/Good_pink.png' : '../Image/Good_white.png';
-                likeCount.textContent = count;
-            }
-        });
-
         // 質問に対する回答をソート
         function handleSortChange_answer(value) {
             var postList = document.querySelector('.post-list');
@@ -326,7 +182,31 @@
                 postList.appendChild(postDetail);
             });
         };
-        
+
+        window.addEventListener('DOMContentLoaded', () => {
+            // 要素を取得
+            const likeButton = document.querySelector('.answer_like_button');
+            const likeIcon = document.querySelector('.answer_like_icon');
+
+            // いいねボタンのクリックイベント
+            likeButton.addEventListener('click', () => {
+                // like_stateを取得
+                var like_state = JSON.parse('<?php echo $like_state_each_comment; ?>');
+
+                // いいねの状態に応じてアイコンとカウントを更新
+                // if (like_state) {
+                //     console.log('a');
+                //     likeIcon.src = "./../Image/Good_pink.png";
+                //     likeButton.classList.add('liked');
+                //     // count++;
+                // } else {
+                //     console.log('b');
+                //     likeIcon.src = "./../Image/Good_white.png";
+                //     likeButton.classList.remove('liked');
+                //     // count--;
+                // }
+            });
+        });
     </script>
     
     <footer id="footer">
@@ -334,6 +214,7 @@
     </footer>
     <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
     <script src="https://coco-factory.jp/ugokuweb/wp-content/themes/ugokuweb/data/8-1-2/js/8-1-2.js"></script>
+    
 </body>
 
 </html>
