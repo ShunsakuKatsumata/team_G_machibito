@@ -87,6 +87,35 @@ class question_post extends dbdata{
         return $items;
     }
 
+    // 解決済みの質問のみ取得
+    public function get_questions_resolved() {
+        $sql = "SELECT * FROM question_post WHERE is_resolved=1";
+        $stmt = $this->query($sql, []);
+        $items = $stmt->fetchAll();
+        return $items;
+    }
+
+    // ソート機能付きの解決済みの質問を取得
+    public function get_questions_resolved_sorted($sort) {
+        switch ($sort) {
+            case 'new':
+                $sql = "SELECT * FROM question_post WHERE is_resolved=1 ORDER BY question_time DESC";
+                break;
+            case 'old':
+                $sql = "SELECT * FROM question_post WHERE is_resolved=1 ORDER BY question_time ASC";
+                break;
+            case 'count':
+                $sql = "SELECT * FROM question_post WHERE is_resolved=1 ORDER BY answer_count DESC";
+                break;
+            default:
+                $sql = "SELECT * FROM question_post WHERE is_resolved=1 ORDER BY question_time DESC";
+                break;
+        }
+        $stmt = $this->query($sql, []);
+        $items = $stmt->fetchAll();
+        return $items;
+    }
+
 }
 
 ?>

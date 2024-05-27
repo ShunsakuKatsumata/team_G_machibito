@@ -28,15 +28,6 @@ body {
 .user-info {
     display: flex;
     align-items: center;
-    margin-bottom: 20px;
-}
-
-.user-icon {
-    width: 50px;
-    height: 50px;
-    border-radius: 50%;
-    background-color: #ccc;
-    margin-right: 10px;
 }
 
 .post-title {
@@ -201,4 +192,76 @@ body {
 .error-message {
     background-color: #dc3545;
     /* エラーメッセージの文字色 */
+}
+
+/*リンクの形状*/
+#page-top a{
+    display: flex;
+    justify-content:center;
+    align-items:center;
+    background:#4e4e4e;
+    border-radius: 5px;
+    width: 60px;
+    height: 60px;
+    color: #fff;
+    text-align: center;
+    text-transform: uppercase; 
+    text-decoration: none;
+    font-size:0.6rem;
+    transition:all 0.3s;
+  }
+  
+#page-top a:hover{
+    background: #777;
+}
+  
+/*リンクを右下に固定*/
+#page-top {
+    position: fixed;
+    right: 10px;
+    bottom:10px;
+    z-index: 2;
+      /*はじめは非表示*/
+    opacity: 0;
+    transform: translateY(100px);
+}
+  
+  /*　上に上がる動き　*/
+  
+#page-top.UpMove{
+    animation: UpAnime 0.5s forwards;
+}
+  @keyframes UpAnime{
+    from {
+      opacity: 0;
+    transform: translateY(100px);
+    }
+    to {
+      opacity: 1;
+    transform: translateY(0);
+    }
+}
+  
+  /*　下に下がる動き　*/
+  
+#page-top.DownMove{
+    animation: DownAnime 0.5s forwards;
+}
+  @keyframes DownAnime{
+    from {
+      opacity: 1;
+    transform: translateY(0);
+    }
+    to {
+      opacity: 1;
+    transform: translateY(100px);
+    }
+}
+
+.post_time{
+    text-align: right;
+    top: 10px;
+    right: 10px;
+    font-size: 14px;
+    color: #666;
 }

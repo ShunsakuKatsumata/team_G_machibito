@@ -17,7 +17,8 @@
 
 <body>
     <!-- サイドバー設定 -->
-    <?php include '../sidebar/sidebar.php'; ?>
+    <?php include '../sidebar/sidebar.php'; 
+    $current_url = $_SERVER['REQUEST_URI'];?>
 
     <div class="comment_home">
         <ul class="menu-home">
@@ -28,13 +29,19 @@
                 <a href="?sort=count" class="sort-option">多い順</a>
             </li>
             <li class="menu-item_home"><input class="menu-item_q" type="button" onclick="location.href='../mypage/mypage.php'" value="投稿した質問を見る"></li>
-            <li class="menu-item_home"><input class="menu-item_q" type="button" onclick="location.href='./new_question_post.php'" value="質問する"></li>
-        </ul>
+            <li class="menu-item_home">
+                <input class="menu-item_q" type="button" onclick="location.href='./new_question_post.php';" value="質問する">
+            </li>
+            <!-- 質問時のメッセージ -->
+            <div class="comment_blue" id="comment_blue"></div>
     </div>
 
     <!-- 投稿された質問一覧（タイトルが表示されている） -->
     <div class="question-list-container">
-        <div class="question-comment">◆回答待ちの質問一覧◆</div>
+        <div class="questions-tabs">
+            <div class="tab <?php echo strpos($current_url, 'resolved_questions.php') !== false ? 'disabled-tab' : ''; ?>" id="unsolved-tab">◆回答待ちの質問一覧◆</div>
+            <div class="tab <?php echo strpos($current_url, 'comment_home.php') !== false ? 'disabled-tab' : ''; ?>" id="resolved-tab">◆解決済みの質問一覧◆</div>
+        </div>
         <table id="comment_home_item">
             <!-- 投稿された質問一覧（タイトルが表示されている） -->
             <table id="comment_home_item" align="center">
@@ -64,7 +71,6 @@
     
     </body>
     <script>
-        // 
             // ページ読み込み時に投稿メッセージがあれば表示する
             window.onload = function() {
                 var postMessage = localStorage.getItem('postMessage');
@@ -91,12 +97,40 @@
                     // メッセージを表示した後は削除する
                     <?php unset($_SESSION['isresolved-message']); ?>
                 }
+
+                var comment_blue = localStorage.getItem('comment_blue');
+                if (comment_blue) {
+                    var comment_blueElement = document.getElementById('comment_blue');
+                    comment_blueElement.innerText = comment_blue;
+                    comment_blueElement.style.opacity = '1';
+                    setTimeout(function() {
+                        comment_blueElement.style.opacity = '0';
+                    }, 3000);
+                    // メッセージを表示した後は削除する
+                    localStorage.removeItem('comment_blue');
+                }
+
             };
     </script>
 
     <footer id="footer">
     <p id="page-top"><a href="#">Page Top</a></p> 
     </footer>
+
+    <script>
+        // タブの切り替え
+        const unsolvedTab = document.getElementById('unsolved-tab');
+        const resolvedTab = document.getElementById('resolved-tab');
+
+        unsolvedTab.addEventListener('click', () => {
+            location.href = 'comment_home.php';
+        });
+
+        resolvedTab.addEventListener('click', () => {
+            location.href = 'resolved_questions.php';
+        });
+    </script>
+    
     <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
     <script src="https://coco-factory.jp/ugokuweb/wp-content/themes/ugokuweb/data/8-1-2/js/8-1-2.js"></script>
 

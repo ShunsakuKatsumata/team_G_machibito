@@ -44,7 +44,7 @@ try {
             header('Location: ../mypage/mypage.php');
             exit;
         } else {
-            echo "ログインに失敗しました";
+            echo "<script>localStorage.setItem('errorMessage', 'ログインに失敗しました');</script>";
         }
     }
 } catch (PDOException $e) {
@@ -68,7 +68,10 @@ try {
             </div>
         </form>
     </div>
+    <!-- ログイン時のメッセージ -->
     <div class="login-message" id="loginMessage"></div>
+    <!-- ログイン失敗時のメッセージ -->
+    <div class="errorMessage" id="errorMessage"></div>
     <script>
         window.onload = function() {
             var loginMessage = localStorage.getItem('loginMessage');
@@ -81,6 +84,18 @@ try {
                 }, 3000);
                 // メッセージを表示した後は削除する
                 localStorage.removeItem('loginMessage');
+            }
+            
+            var errorMessage = localStorage.getItem('errorMessage');
+            if (errorMessage) {
+                var errorMessageElement = document.getElementById('errorMessage');
+                errorMessageElement.innerText = errorMessage;
+                errorMessageElement.style.opacity = '1';
+                setTimeout(function() {
+                    errorMessageElement.style.opacity = '0';
+                }, 3000);
+                // メッセージを表示した後は削除する
+                localStorage.removeItem('errorMessage');
             }
         }
     </script>

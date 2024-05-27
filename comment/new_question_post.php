@@ -41,7 +41,7 @@
                 </div>
                 <span class="popup-trigger" onclick="openPopup()">?</span>
                 <button type="button" class="clear-button">削除する</button>
-                <button type="submit" class="post-button">投稿する</button>
+                <button type="submit" class="post-button" onclick="localStorage.removeItem('comment_blue'); localStorage.setItem('comment_blue', '投稿しました');">投稿する</button>
             </div>
         </form>
 

@@ -114,8 +114,8 @@ try {
     $stmt->execute();
     $replyData = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-    // タイトルを表示するデータベース
-    $stmt = $pdo->prepare("SELECT title FROM post WHERE post_id = :post_id");
+    // タイトルと時間を表示するデータベース
+    $stmt = $pdo->prepare("SELECT title, content, post_date FROM post WHERE post_id = :post_id");
     $stmt->bindParam(':post_id', $postId);
     $stmt->execute();
     $titleData = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -294,11 +294,11 @@ try {
     <div class="post-message"></div>
     <div class="post-detail">
         <div class="user-info">
-            <div class="user-icon"></div>
             <div class="post-user">
                 <?php echo '投稿者: ' . $postData['user_name']; ?><!-- 投稿者名 -->
             </div>
         </div>
+        <div class="post_time"><?php echo $titleData['post_date']; ?></div>
         <div class="post-title"><?php echo $titleData['title']; ?></div>
         <div class="post-content">
             <?php echo $contentData['content']; ?>
@@ -356,5 +356,11 @@ try {
     <!-- サイドバー -->
     <?php include '../sidebar/sidebar.php'; ?>
 </body>
+
+<footer id="footer">
+<p id="page-top"><a href="#">Page Top</a></p> 
+</footer>
+<script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+<script src="https://coco-factory.jp/ugokuweb/wp-content/themes/ugokuweb/data/8-1-2/js/8-1-2.js"></script>
 
 </html>

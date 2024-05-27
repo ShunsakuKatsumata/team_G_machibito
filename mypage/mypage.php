@@ -1,96 +1,13 @@
 <!DOCTYPE html>
-<html>
+<html lang="ja">
+
 <head>
-<link rel="stylesheet" href="../sidebar/sidebar.css">
-    <title>My Page</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-        }
-        .container {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            padding: 20px;
-            margin-left: 200px; /* サイドバーの幅を考慮 */
-        }
-        .header {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            width: 100%;
-            max-width: 1200px;
-            margin-bottom: 20px;
-        }
-        .title {
-            font-size: 1.8em;
-            margin-right: 20px;
-        }
-        .action-buttons {
-            display: flex;
-            align-items: center;
-        }
-        .action-button {
-            background-color: #3498db;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 4px;
-            cursor: pointer;
-            margin-left: 10px;
-        }
-        .action-button:hover {
-            background-color: #2980b9;
-        }
-        .content {
-            display: flex;
-            width: 100%;
-            max-width: 1200px;
-            justify-content: space-between;
-        }
-        .post-card, .question-card {
-            background-color: #f9f9f9;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            padding: 16px;
-            margin: 10px;
-            flex: 1;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        }
-        .item {
-            background-color: #fff;
-            border: 1px solid #ccc;
-            border-radius: 8px;
-            padding: 10px;
-            margin-bottom: 10px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        }
-        .item h3 {
-            margin: 0;
-            font-size: 1.2em;
-        }
-        .item form {
-            margin-top: 10px;
-        }
-        .item button {
-            background-color: #e74c3c;
-            color: white;
-            border: none;
-            padding: 5px 10px;
-            border-radius: 4px;
-            cursor: pointer;
-        }
-        .item button:hover {
-            background-color: #c0392b;
-        }
-        .main-content {
-            padding: 20px;
-            width: 100%;
-        }
-    </style>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="../sidebar/sidebar.css">
+    <link rel="stylesheet" href="mypage.css">
+    <title>プロフィール</title>
 </head>
+
 <body>
     <?php
         session_start();
@@ -108,8 +25,8 @@
             $pdo = new PDO($dsn, $username, $password);
             $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-            // ユーザーIDと一致する記事のタイトルを取得
-            $sql = "SELECT post_id, title FROM post WHERE user_id = :user_id";
+            // ユーザーIDと一致する記事のタイトルと日付を取得
+            $sql = "SELECT post_id, title,post_date FROM post WHERE user_id = :user_id";
             $stmt = $pdo->prepare($sql);
             $stmt->bindParam(':user_id', $user_id, PDO::PARAM_INT);
             $stmt->execute();
@@ -149,8 +66,8 @@
                 }
             }
 
-            // ユーザーIDと一致する質問のタイトルを取得
-            $sql = "SELECT ident, title FROM question_post WHERE user_id = :user_id";
+            // ユーザーIDと一致する質問のタイトルと日付を取得
+            $sql = "SELECT ident, title,question_time FROM question_post WHERE user_id = :user_id";
             $stmt = $pdo->prepare($sql);
             $stmt->bindParam(':user_id', $user_id, PDO::PARAM_INT);
             $stmt->execute();
@@ -219,53 +136,65 @@
             <div class="header">
                 <div class="title"><?php echo $_SESSION['user']['user_name']; ?></div>
                 <div class="action-buttons">
-                    <!-- パスワード変更ボタン -->
                     <form method="post" style="margin: 0;">
                         <button type="submit" name="pass_change" class="action-button">パスワード変更</button>
                     </form>
-                    <!-- ログアウトボタン -->
                     <form method="post" style="margin: 0;">
                         <button type="submit" name="logout" class="action-button">ログアウト</button>
                     </form>
                 </div>
             </div>
             <div class="content">
-                <div class="post-card">
-                    <h2>記事一覧</h2>
-                    <?php 
-                    if (empty($posts)) {
-                        echo '<p>なし</p>'; // なんにもなかったらなしと表示
-                    } else {
-                        foreach ($posts as $post) {
-                            echo '<div class="item">';
-                            echo '<h3><a href="../Post_Detail/Post_Detail.php?post_id=' . $post['post_id'] . '">' . $post['title'] . '</a></h3>';
-                            echo '<form method="post">';
-                            echo '<input type="hidden" name="post_id" value="' . $post['post_id'] . '">';
-                            echo '<button type="submit" name="delete_post">削除</button>';
-                            echo '</form>';
-                            echo '</div>';
-                        }
-                    }
-                    ?>
-                </div>
-                <div class="question-card">
+                <div class="titles">
+                    <h2>投稿一覧</h2>
                     <h2>質問一覧</h2>
-                    <?php 
-                    if (!empty($questions)) {
-                        foreach ($questions as $question) {
-                            echo '<div class="item">';
-                            echo '<h3><a href="../comment/comment_detail.php?ident=' . $question['ident'] . '">' . $question['title'] . '</a></h3>';
-                            echo '<form method="post">';
-                            echo '<input type="hidden" name="ident" value="' . $question['ident'] . '">';
-                            echo '<button type="submit" name="delete_question">削除</button>';
-                            echo '</form>';
-                            echo '</div>';
+                </div>
+                <div class="cards">
+                    <div class="post-card">
+                        <?php 
+                        if (empty($posts)) {
+                            echo '<p>投稿がありません</p>';
+                        } else {
+                            foreach ($posts as $post) {
+                                echo '<div class="item">';
+                                echo '<h3><a href="../Post_Detail/Post_Detail.php?post_id=' . $post['post_id'] . '">' . $post['title'] . '</a></h3>';
+                                echo '<form method="post">';
+                                echo '<input type="hidden" name="post_id" value="' . $post['post_id'] . '">';
+                                echo '<div class="post-time">' . $post['post_date'] . '</div>';
+                                echo '<div class="delete"><button type="submit" name="delete_post">削除</button></div>';
+                                echo '</form>';
+                                echo '</div>';
+                            }
                         }
-                    }
-                    ?>
+                        ?>
+                    </div>
+                    <div class="question-card">
+                        <?php 
+                        if (empty($questions)) {
+                            echo '<p>質問がありません</p>';
+                        } else {
+                            foreach ($questions as $question) {
+                                echo '<div class="item">';
+                                echo '<h3><a href="../comment/comment_detail.php?ident=' . $question['ident'] . '">' . $question['title'] . '</a></h3>';
+                                echo '<form method="post">';
+                                echo '<input type="hidden" name="ident" value="' . $question['ident'] . '">';
+                                echo '<div class="question-time">' . $question['question_time'] . '</div>';
+                                echo '<div class="delete"><button type="submit" name="delete_question">削除</button></div>';
+                                echo '</form>';
+                                echo '</div>';
+                            }
+                        }
+                        ?>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 </body>
+
+<footer id="footer">
+    <p id="page-top"><a href="#">Page Top</a></p> 
+</footer>
+<script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+<script src="https://coco-factory.jp/ugokuweb/wp-content/themes/ugokuweb/data/8-1-2/js/8-1-2.js"></script>
 </html>
