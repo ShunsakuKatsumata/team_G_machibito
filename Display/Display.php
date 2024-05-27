@@ -45,7 +45,7 @@
         }
         // 検索キーワードがあれば、そのキーワードに基づいてSQLクエリを実行
         $search = isset($_GET['search']) ? $_GET['search'] : '';
-        $sql = "SELECT post.*, account.user_name FROM post INNER JOIN account ON post.user_id = account.user_id WHERE post.title LIKE ?";
+        $sql = "SELECT post.*, account.user_name FROM post INNER JOIN account ON post.user_id = account.user_id WHERE post.tag LIKE ?";
         $stmt = $conn->prepare($sql);
         $searchTerm = '%' . $search . '%';
         $stmt->bind_param('s', $searchTerm);

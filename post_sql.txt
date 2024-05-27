@@ -18,7 +18,7 @@ INSERT INTO account (user_name, email, password) VALUES
 ('中村　沙代里', 'sayori@example.com', '$2y$10$ISGQXC2c2b0teKOG2EnFE.dcdvIgQgSPfVObm5mGQBekjsWjpwzNq'),
 ('木村　夏樹', 'Natsuki@example.com', '$2y$10$7DA65bo.vWOQlEGKfs4h0./EBKtfU2w/Xk4uu0Kp9ro6PhIOKYvpe'),
 ('田中　友里', 'yurie@example.com', '$2y$10$n3mlaWlS06mkFlbPEa9VpOXVcBhljYcmcJfhyiCCx3w/dkZJpAh5m'),
-('モニカ・ルインスキー', 'monika@example.com', '$2y$10$QPClPlmUhf34Gx.xuHeqmei7OEmxTeAa0r.4Mhf8CHmu4yUH5ObGe');
+('モニカ・ベルッチ', 'monika@example.com', '$2y$10$QPClPlmUhf34Gx.xuHeqmei7OEmxTeAa0r.4Mhf8CHmu4yUH5ObGe');
 
 # 投稿に対するリプライを格納
 CREATE TABLE reply (
