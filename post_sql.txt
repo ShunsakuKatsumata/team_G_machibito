@@ -15,10 +15,10 @@ CREATE TABLE account (
 );
 
 INSERT INTO account (user_name, email, password) VALUES
-('Sayori', 'sayori@example.com', '$2y$10$ISGQXC2c2b0teKOG2EnFE.dcdvIgQgSPfVObm5mGQBekjsWjpwzNq'),
-('Natsuki', 'Natsuki@example.com', '$2y$10$7DA65bo.vWOQlEGKfs4h0./EBKtfU2w/Xk4uu0Kp9ro6PhIOKYvpe'),
-('Yuri', 'yurie@example.com', '$2y$10$n3mlaWlS06mkFlbPEa9VpOXVcBhljYcmcJfhyiCCx3w/dkZJpAh5m'),
-('Monika', 'monika@example.com', '$2y$10$QPClPlmUhf34Gx.xuHeqmei7OEmxTeAa0r.4Mhf8CHmu4yUH5ObGe');
+('中村　沙代里', 'sayori@example.com', '$2y$10$ISGQXC2c2b0teKOG2EnFE.dcdvIgQgSPfVObm5mGQBekjsWjpwzNq'),
+('木村　夏樹', 'Natsuki@example.com', '$2y$10$7DA65bo.vWOQlEGKfs4h0./EBKtfU2w/Xk4uu0Kp9ro6PhIOKYvpe'),
+('田中　友里', 'yurie@example.com', '$2y$10$n3mlaWlS06mkFlbPEa9VpOXVcBhljYcmcJfhyiCCx3w/dkZJpAh5m'),
+('モニカ・ルインスキー', 'monika@example.com', '$2y$10$QPClPlmUhf34Gx.xuHeqmei7OEmxTeAa0r.4Mhf8CHmu4yUH5ObGe');
 
 # 投稿に対するリプライを格納
 CREATE TABLE reply (
@@ -29,14 +29,15 @@ CREATE TABLE reply (
     FOREIGN KEY (user_id) REFERENCES account(user_id)
 );
 
-INSERT INTO reply(post_id, reply, user_id) VALUES(1, 'pythonでの文字列操作が分かりました', 1);
-INSERT INTO reply(post_id, reply, user_id) VALUES(2, '見やすいですね', 2);
-INSERT INTO reply(post_id, reply, user_id) VALUES(3, '分かりやすかったです。ありがとうございます。', 3);
-INSERT INTO reply(post_id, reply, user_id) VALUES(4, '悩みが解決しました。', 4);
-INSERT INTO reply(post_id, reply, user_id) VALUES(4, '難しいですよね', 1);
-INSERT INTO reply(post_id, reply, user_id) VALUES(4, '↑そうなんですよね', 2);
-INSERT INTO reply(post_id, reply, user_id) VALUES(5, 'Python一択', 3);
-INSERT INTO reply(post_id, reply, user_id) VALUES(5, '断然Rubyだね', 4);
+INSERT INTO reply(post_id, reply, user_id) VALUES(1, 'どう勉強すればいいか迷っていたので助かりました', 3);
+INSERT INTO reply(post_id, reply, user_id) VALUES(1, 'pythonでの文字列操作が分かりました', 4);
+INSERT INTO reply(post_id, reply, user_id) VALUES(2, '授業で近々使うので助かりました', 1);
+INSERT INTO reply(post_id, reply, user_id) VALUES(3, '次はCSSについても教えてほしいです', 2);
+INSERT INTO reply(post_id, reply, user_id) VALUES(4, '動かしている画像が多くてとても見やすかったです', 3);
+INSERT INTO reply(post_id, reply, user_id) VALUES(5, '私ならPythonですかね', 4);
+INSERT INTO reply(post_id, reply, user_id) VALUES(5, '悩みが解決しました。', 1);
+INSERT INTO reply(post_id, reply, user_id) VALUES(5, 'Ruby一択', 2);
+
 
 # 投稿した質問を格納する
 create table question_post(
@@ -51,10 +52,10 @@ create table question_post(
 );
 
 INSERT INTO question_post(ident, title, detail, user_id, is_resolved, question_time,answer_count)
-VALUES (1, 'Question 1', 'This is detail of question 1', 1, FALSE, NOW(),3),
-       (2, 'Question 2', 'This is detail of question 2', 2, FALSE, NOW() + INTERVAL 1 HOUR,2),
-       (3, 'Question 3', 'This is detail of question 3', 3, TRUE, NOW() + INTERVAL 2 HOUR,1),
-       (4, 'Question 4', 'This is detail of question 4', 4, TRUE, NOW() + INTERVAL 3 HOUR,5);
+VALUES (1, 'excelで行と列の違い', '行と列はどうちがうんですか？', 1, FALSE, NOW(),3),
+       (2, 'チャットGPTについて', 'チャットGPTを使いたいのですが、おすすめのサイトはありますか？', 2, FALSE, NOW() - INTERVAL 1 HOUR,2),
+       (3, 'SE向いてますか？', '私はプログラミングが好きですが、勉強をするのは苦手です。勉強が苦手なのはSEとして致命的ですか？', 3, TRUE, NOW() - INTERVAL 2 HOUR,1),
+       (4, 'キューとスタック', 'キューとスタックの違いについて教えてほしいです', 4, TRUE, NOW() - INTERVAL 3 HOUR,5);
 
 # 質問に対する回答を格納
 create table question_answer(
@@ -68,11 +69,11 @@ create table question_answer(
     FOREIGN KEY (user_id) REFERENCES account(user_id)
 );
 
-INSERT INTO question_answer(ident, answer, post_id, user_id)
-VALUES (1, 'This is answer 1', 1, 2),
-       (2, 'This is answer 2', 2, 3),
-       (3, 'This is answer 3', 3, 4),
-       (4, 'This is answer 4', 4, 1);
+INSERT INTO question_answer(ident, answer, post_id, user_id, post_time)
+VALUES (1, '行は横の一連の要素で列は縦の一連の要素です', 1, 2, NOW()),
+       (2, 'このサイトは信用性が高くておすすめですhttps://chatgpt.com', 2, 3, NOW() + INTERVAL 1 HOUR),
+       (3, '私は学校のテストなんて赤点だらけでしたけどSEとしてやっていけると思います。プログラミングが好きなら勉強も苦にならないと思います', 3, 4, NOW() + INTERVAL 2 HOUR),
+       (4, 'キューは先に入れたものが先に出る構造のもので、スタックは後に入れたものが先に出る構造のものです。', 4, 1, NOW() + INTERVAL 3 HOUR);
 
 # 記事の内容を格納
 CREATE TABLE post (
