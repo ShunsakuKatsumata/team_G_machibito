@@ -63,7 +63,6 @@
     </div>
 
     <!-- JavaScript -->
-    <div class="isresolved-message" id="postMessage_id"></div>
     <div class="isresolved-message" id="isresolved-message-id"></div>
 
     <script>

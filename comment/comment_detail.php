@@ -27,12 +27,9 @@
         $item = $question_post->get_question_ident($ident);
         // 作成者の名前を取得
         $author_name = $question_post->get_author_name($ident);
-        
         echo '<table class="question-table">';
-        echo '<tr class="user-icon-name">';
-        echo '<td class="author-name">&nbsp;投稿者：' . $author_name . '</td>';
-        echo '</tr>';
-        echo '</table>';
+        echo '<tr class="author-name">&nbsp;投稿者：' . $author_name . '</tr>';
+        echo '<div class="question-time">'. $item['question_time'] . '</div>';
         echo '<h4 class="question-title" style="margin-top:0;">' . $item['title'] . '</h4>';
         echo '<table class="question-content-table">';
         echo '<tr>';
@@ -42,11 +39,11 @@
 
         // 編集ボタン
         if ($_SESSION['user']['user_id'] == $item['user_id']) {
-            echo '<button class="post-edit-button" onclick="location.href=\'./new_question_post_edit.php?ident=' . $ident . '\'">編集</button>';
+            echo '<button class="post-edit-button" onclick="localStorage.removeItem(\'edit_message\'); localStorage.setItem(\'edit_message\', \'編集しました\'); location.href=\'./new_question_post_edit.php?ident=' . $ident . '\'">編集</button>';
         }
         // 削除ボタン
         if ($_SESSION['user']['user_id'] == $item['user_id']) {
-            echo '<button class="post-delete-button" onclick="location.href=\'./post_comment/comment_post_delete.php?ident=' . $ident . '\'">削除</button>';
+            echo '<button class="post-delete-button" onclick="localStorage.removeItem(\'delete_come\'); localStorage.setItem(\'delete_come\', \'削除しました。\'); location.href=\'./post_comment/comment_post_delete.php?ident=' . $ident . '\'">削除</button>';
         }
         // 投稿者がボタンをクリックすると、その質問が解決済みに変更される
         if ($_SESSION['user']['user_id'] == $item['user_id']) {
@@ -73,38 +70,31 @@
 
         <!-- コメント欄 -->
         <!-- 質問者の返信がある場合 -->
-        
-            <?php
-            $post_id = $_GET['ident'];
-            // テーブルの中身を取り出す
-            require_once __DIR__ . '/classes/answer_post.php';
-            $answer_post = new answer_post();
-            $items = $answer_post->get_answers($post_id);
-            foreach ($items as $item) {
-
-                // echo $items;
-
-                echo '<div class="detail_reply">';
-                echo '<h3>回答</h3>';
-                echo '<table>';
-                echo '<tr>';
-                // コメントのIDを取得
-                $comment_id = $item['ident'];
-                // コメントした人を取得
-                $answer_name = $answer_post->get_answer_name($comment_id);
-                echo '<td><div class="answer-name">&nbsp;回答者：' . $answer_name . '</div></td>';
-                echo '</tr>';
-                // 日付表示
-                echo '<tr class="answer-row">';
-                echo '<td class="post-date">' . $item['post_time'] . '</td>';
-                echo '</tr>';
-                
-                echo '<tr class="answer-row">';
-                echo '<td class="answer-content">' . $item['answer'] . '</td>';
-                echo '</tr>';
-
-
-                // いいねボタンとその数、編集・削除ボタン
+        <?php
+        $post_id = $_GET['ident'];
+        // テーブルの中身を取り出す
+        require_once __DIR__ . '/classes/answer_post.php';
+        $answer_post = new answer_post();
+        $items = $answer_post->get_answers($post_id);
+        foreach ($items as $item) {
+            echo '<div class="post-list">';
+            echo '<div class="answer-block">';
+            echo '<table class="answer-table">';
+            echo '<tr class="answer-row">';
+            // コメントのIDを取得
+            $comment_id = $item['ident'];
+            // コメントした人を取得
+            $answer_name = $answer_post->get_answer_name($comment_id);
+            echo '<td><div class="answer-name">&nbsp;回答者：' . $answer_name . '</div></td>';
+            echo '</tr>';
+            // 日付表示
+            echo '<tr class="answer-row">';
+            echo '<td class="post-date">' . $item['post_time'] . '</td>';
+            echo '</tr>';
+            echo '<tr class="answer-row">';
+            echo '<td class="answer-content">' . $item['answer'] . '</td>';
+            echo '</tr>';
+            // いいねボタンとその数、編集・削除ボタン
             echo '<tr class="answer-row">';
             echo '<td class="answer-action-flex">';
             echo '<div class="answer-like-container">';
@@ -118,8 +108,7 @@
             echo '<span class="answer-like-count">' . $item['like_count'] . '</span>';
             echo '</div>';
             echo '<div class="answer-edit-delete-container">';
-            
-                            // 編集ボタン
+            // 編集ボタン
             if ($_SESSION['user']['user_id'] == $item['user_id']) {
                 echo '<button class="post-edit-button" onclick="location.href=\'./edit_answer.php?post_id=' . $post_id . '&commentId=' . $item['ident'] . '\'">編集</button>';
             }
@@ -135,84 +124,38 @@
             echo '</div>';
         }
         ?>
-                <!-- 回答を記入する場所 -->
-                <form method="POST" action="./post_answer/answer_post_add.php">
-                    <div class="write_comment">
-                        <?php
-                        // <!-- <label>コメント記入</label> -->
-                        $ident = $_GET['ident'];
-                        echo '<p><textarea name="answer_post" rows="3" cols="45" placeholder="質問に回答する"></textarea></p>';
-                        echo '<p><button>送信</button></p>';                      
-                        echo '<input type="hidden" name="answer_ident" value="'.$ident.'">';
-                        ?>
-                    </div>
-                </form>
+
+        <!-- 回答を記入する場所 -->
+        <form method="POST" action="./post_answer/answer_post_add.php">
+            <div class="write_comment">
+                <?php
+                // <!-- <label>コメント記入</label> -->
+                $ident = $_GET['ident'];
+                echo '<textarea class="comment-textarea" name="answer_post" rows="3" cols="45" placeholder="質問に回答する"></textarea>';
+                echo '<button class="comment-submit-button">送信</button>';
+                echo '<input type="hidden" name="answer_ident" value="' . $ident . '">';
+                ?>
             </div>
-        <script>
-            // 質問に対する回答をソート
-            function handleSortChange_answer(value) {
-                var postList = document.querySelector('.post-list');
-                var postDetails = Array.from(postList.querySelectorAll('.detail_reply'));
-                console.log('1');
-                switch (value) {
-                    case 'good-desc':
-                        // 評価数降順
-                        postDetails.sort(function(a, b) {
-                            var dateA = new Date(a.querySelector('.answer_like_count').textContent.trim());
-                            var dateB = new Date(b.querySelector('.answer_like_count').textContent.trim());
-                            return dateB - dateA;
-                        });
-                        break;
-                    case 'new-desc':
-                        // 日付降順でソート
-                        postDetails.sort(function(a, b) {
-                            var dateA = new Date(a.querySelector('.post-date').textContent.trim());
-                            var dateB = new Date(b.querySelector('.post-date').textContent.trim());
-                            return dateB - dateA;
-                        });
-                        break;
-                    case 'old-asc':
-                        // 日付昇順でソート
-                        postDetails.sort(function(a, b) {
-                            var dateA = new Date(a.querySelector('.post-date').textContent.trim());
-                            var dateB = new Date(b.querySelector('.post-date').textContent.trim());
-                            return dateA - dateB;
-                        });
-                        break;
-                    default:
-                        return;
-                }
-                // ソートされた要素を再配置
-                postDetails.forEach(function(postDetail) {
-                    postList.appendChild(postDetail);
-                });
-            };
+        </form>
+    </div>
+    <div class="comment_blue" id="edit_message"></div>
 
-        window.addEventListener('DOMContentLoaded', () => {
-            // 要素を取得
-            const likeButton = document.querySelector('.answer_like_button');
-            const likeIcon = document.querySelector('.answer_like_icon');
 
-            // いいねボタンのクリックイベント
-            likeButton.addEventListener('click', () => {
-                // like_stateを取得
-                var like_state = JSON.parse('<?php echo $like_state_each_comment; ?>');
-
-                // いいねの状態に応じてアイコンとカウントを更新
-                // if (like_state) {
-                //     console.log('a');
-                //     likeIcon.src = "./../Image/Good_pink.png";
-                //     likeButton.classList.add('liked');
-                //     // count++;
-                // } else {
-                //     console.log('b');
-                //     likeIcon.src = "./../Image/Good_white.png";
-                //     likeButton.classList.remove('liked');
-                //     // count--;
-                // }
-            });
-        });
-    </script>
+    <script>
+    window.onload = function() {
+    var edit_message = localStorage.getItem('edit_message');
+    if (edit_message) {
+        var edit_messageElement = document.getElementById('edit_message');
+        edit_messageElement.innerText = edit_message;
+        edit_messageElement.style.opacity = '1';
+        setTimeout(function() {
+            edit_messageElement.style.opacity = '0';
+        }, 3000);
+        // メッセージを表示した後は削除する
+        localStorage.removeItem('edit_message');
+    }
+    };
+</script>
     
     <footer id="footer">
     <p id="page-top"><a href="#">Page Top</a></p> 

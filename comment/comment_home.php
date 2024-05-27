@@ -66,8 +66,8 @@
             
         </div>
         <!-- JavaScript -->
-        <div class="isresolved-message" id="postMessage_id"></div>
         <div class="isresolved-message" id="isresolved-message-id"></div>
+        <div class="isresolved-message" id="delete_come"></div>
     
     </body>
     <script>
@@ -98,6 +98,31 @@
                     // メッセージを表示した後は削除する
                     <?php unset($_SESSION['isresolved-message']); ?>
                 }
+
+                var comment_blue = localStorage.getItem('comment_blue');
+                if (comment_blue) {
+                    var comment_blueElement = document.getElementById('comment_blue');
+                    comment_blueElement.innerText = comment_blue;
+                    comment_blueElement.style.opacity = '1';
+                    setTimeout(function() {
+                        comment_blueElement.style.opacity = '0';
+                    }, 3000);
+                    // メッセージを表示した後は削除する
+                    localStorage.removeItem('comment_blue');
+                }
+
+                var delete_come = localStorage.getItem('delete_come');
+                if (delete_come) {
+                    var delete_comeElement = document.getElementById('delete_come');
+                    delete_comeElement.innerText = delete_come;
+                    delete_comeElement.style.opacity = '1';
+                    setTimeout(function() {
+                        delete_comeElement.style.opacity = '0';
+                    }, 3000);
+                    // メッセージを表示した後は削除する
+                    localStorage.removeItem('delete_come');
+                }
+
             };
     </script>
 
