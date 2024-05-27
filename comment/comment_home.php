@@ -66,8 +66,8 @@
             
         </div>
         <!-- JavaScript -->
-        <div class="isresolved-message" id="postMessage_id"></div>
         <div class="isresolved-message" id="isresolved-message-id"></div>
+        <div class="isresolved-message" id="delete_come"></div>
     
     </body>
     <script>
@@ -96,6 +96,18 @@
                     }, 3000);
                     // メッセージを表示した後は削除する
                     localStorage.removeItem('comment_blue');
+                }
+
+                var delete_come = localStorage.getItem('delete_come');
+                if (delete_come) {
+                    var delete_comeElement = document.getElementById('delete_come');
+                    delete_comeElement.innerText = delete_come;
+                    delete_comeElement.style.opacity = '1';
+                    setTimeout(function() {
+                        delete_comeElement.style.opacity = '0';
+                    }, 3000);
+                    // メッセージを表示した後は削除する
+                    localStorage.removeItem('delete_come');
                 }
 
             };
