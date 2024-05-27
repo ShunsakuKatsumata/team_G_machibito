@@ -27,12 +27,9 @@
         $item = $question_post->get_question_ident($ident);
         // 作成者の名前を取得
         $author_name = $question_post->get_author_name($ident);
-        
         echo '<table class="question-table">';
-        echo '<tr class="user-icon-name">';
-        echo '<td class="author-name">&nbsp;投稿者：' . $author_name . '</td>';
-        echo '</tr>';
-        echo '</table>';
+        echo '<tr class="author-name">&nbsp;投稿者：' . $author_name . '</tr>';
+        echo '<div class="question-time">'. $item['question_time'] . '</div>';
         echo '<h4 class="question-title" style="margin-top:0;">' . $item['title'] . '</h4>';
         echo '<table class="question-content-table">';
         echo '<tr>';
@@ -73,38 +70,31 @@
 
         <!-- コメント欄 -->
         <!-- 質問者の返信がある場合 -->
-        
-            <?php
-            $post_id = $_GET['ident'];
-            // テーブルの中身を取り出す
-            require_once __DIR__ . '/classes/answer_post.php';
-            $answer_post = new answer_post();
-            $items = $answer_post->get_answers($post_id);
-            foreach ($items as $item) {
-
-                // echo $items;
-
-                echo '<div class="detail_reply">';
-                echo '<h3>回答</h3>';
-                echo '<table>';
-                echo '<tr>';
-                // コメントのIDを取得
-                $comment_id = $item['ident'];
-                // コメントした人を取得
-                $answer_name = $answer_post->get_answer_name($comment_id);
-                echo '<td><div class="answer-name">&nbsp;回答者：' . $answer_name . '</div></td>';
-                echo '</tr>';
-                // 日付表示
-                echo '<tr class="answer-row">';
-                echo '<td class="post-date">' . $item['post_time'] . '</td>';
-                echo '</tr>';
-                
-                echo '<tr class="answer-row">';
-                echo '<td class="answer-content">' . $item['answer'] . '</td>';
-                echo '</tr>';
-
-
-                // いいねボタンとその数、編集・削除ボタン
+        <?php
+        $post_id = $_GET['ident'];
+        // テーブルの中身を取り出す
+        require_once __DIR__ . '/classes/answer_post.php';
+        $answer_post = new answer_post();
+        $items = $answer_post->get_answers($post_id);
+        foreach ($items as $item) {
+            echo '<div class="post-list">';
+            echo '<div class="answer-block">';
+            echo '<table class="answer-table">';
+            echo '<tr class="answer-row">';
+            // コメントのIDを取得
+            $comment_id = $item['ident'];
+            // コメントした人を取得
+            $answer_name = $answer_post->get_answer_name($comment_id);
+            echo '<td><div class="answer-name">&nbsp;回答者：' . $answer_name . '</div></td>';
+            echo '</tr>';
+            // 日付表示
+            echo '<tr class="answer-row">';
+            echo '<td class="post-date">' . $item['post_time'] . '</td>';
+            echo '</tr>';
+            echo '<tr class="answer-row">';
+            echo '<td class="answer-content">' . $item['answer'] . '</td>';
+            echo '</tr>';
+            // いいねボタンとその数、編集・削除ボタン
             echo '<tr class="answer-row">';
             echo '<td class="answer-action-flex">';
             echo '<div class="answer-like-container">';
@@ -118,8 +108,7 @@
             echo '<span class="answer-like-count">' . $item['like_count'] . '</span>';
             echo '</div>';
             echo '<div class="answer-edit-delete-container">';
-            
-                            // 編集ボタン
+            // 編集ボタン
             if ($_SESSION['user']['user_id'] == $item['user_id']) {
                 echo '<button class="post-edit-button" onclick="location.href=\'./edit_answer.php?post_id=' . $post_id . '&commentId=' . $item['ident'] . '\'">編集</button>';
             }
