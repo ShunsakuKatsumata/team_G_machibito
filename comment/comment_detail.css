@@ -87,6 +87,16 @@ li {
     margin-bottom: 10px;
 }
 
+/*.detail_q, .detail_reply{
+    border: solid 1px #000000;
+    border-radius: 10px;
+    text-align: left;
+    background-color: #f5f5f5;
+    border: 1px solid #ccc;
+    width: 100%;
+    margin-bottom: 10px;
+}*/
+
 .answer-block {
     padding: 15px;
 }
@@ -209,7 +219,6 @@ li {
     height: 50px;
     /* width:120%; */
 }
-
 /*リンクの形状*/
 #page-top a{
     display: flex;
