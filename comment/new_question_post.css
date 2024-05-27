@@ -33,6 +33,12 @@ body {
     border-radius: 5px;
 }
 
+/* タイトルの文字数を表示 */
+.titleLength{
+    text-align: right;
+    margin-right:5%;
+}
+
 .content-input {
     width: 97.5%;
     height: 200px;

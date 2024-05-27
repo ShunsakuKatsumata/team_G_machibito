@@ -41,6 +41,7 @@ body {
     border-radius: 4px;
     cursor: pointer;
     margin-left: 10px;
+    font-weight: bold;
 }
 
 .action-button:hover {
@@ -190,4 +191,12 @@ body {
 	flex-direction: column; /*この行を追加*/
 	align-items: flex-end;  /*ここの値を修正する*/
 	justify-content: flex-start; /*ここは任意の値でOK*/
+}
+
+.item:hover {
+    background-color: #e0fcff;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
+    transform: translateY(3px);
+    transition: background-color 0.3s ease;
+    transition: transform 0.3s ease;    
 }

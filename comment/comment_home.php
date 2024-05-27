@@ -29,19 +29,19 @@
                 <a href="?sort=count" class="sort-option">多い順</a>
             </li>
             <li class="menu-item_home"><input class="menu-item_q" type="button" onclick="location.href='../mypage/mypage.php'" value="投稿した質問を見る"></li>
-            <li class="menu-item_home">
-                <input class="menu-item_q" type="button" onclick="location.href='./new_question_post.php';" value="質問する">
-            </li>
-            <!-- 質問時のメッセージ -->
-            <div class="comment_blue" id="comment_blue"></div>
+            <li class="menu-item_home"><input class="menu-item_q" type="button" onclick="location.href='./new_question_post.php'" value="質問する"></li>
+        </ul>
     </div>
 
     <!-- 投稿された質問一覧（タイトルが表示されている） -->
     <div class="question-list-container">
         <div class="questions-tabs">
-            <div class="tab <?php echo strpos($current_url, 'resolved_questions.php') !== false ? 'disabled-tab' : ''; ?>" id="unsolved-tab">◆回答待ちの質問一覧◆</div>
-            <div class="tab <?php echo strpos($current_url, 'comment_home.php') !== false ? 'disabled-tab' : ''; ?>" id="resolved-tab">◆解決済みの質問一覧◆</div>
+            <div class="gnavi">
+                <li class="current"><div class="tab <?php echo strpos($current_url, 'resolved_questions.php') !== false ? 'disabled-tab' : ''; ?>" id="unsolved-tab"><a href="#">◆回答待ちの質問一覧◆</a></div></li><!--現在地にはcurrentクラスを付ける-->
+                <li><div class="tab <?php echo strpos($current_url, 'comment_home.php') !== false ? 'disabled-tab' : ''; ?>" id="resolved-tab"><a href="#">◆解決済みの質問一覧◆</div></a></li>
+            </div>
         </div>
+        
         <table id="comment_home_item">
             <!-- 投稿された質問一覧（タイトルが表示されている） -->
             <table id="comment_home_item" align="center">
@@ -71,8 +71,21 @@
     
     </body>
     <script>
+        // 
             // ページ読み込み時に投稿メッセージがあれば表示する
             window.onload = function() {
+                var postMessage = localStorage.getItem('postMessage');
+                if (postMessage) {
+                    var postMessageElement = document.getElementById('postMessage_id');
+                    postMessageElement.innerText = postMessage;
+                    postMessageElement.style.opacity = '1';
+                    setTimeout(function() {
+                        postMessageElement.style.opacity = '0';
+                    }, 3000);
+                    // メッセージを表示した後は削除する
+                    localStorage.removeItem('postMessage');
+                }
+                
                 // Delete_Post.php からのリダイレクトでセッションに保存されたメッセージがあれば表示する
                 var isresolved_message = "<?php echo isset($_SESSION['isresolved-message']) ? $_SESSION['isresolved-message'] : '' ?>";
                 if (isresolved_message) {
