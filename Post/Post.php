@@ -90,6 +90,7 @@
         <form action="post.php" method="post">
             <div class="user-info">
                 <textarea name="title" placeholder="タイトルを入力してください" class="title-input"></textarea>
+                <div class="titleLength">0/50</div>
             </div>
             <textarea name="content" placeholder="本文を入力してください" class="content-input"></textarea>
             <textarea name="tag" placeholder="タグを入力して下さい　　例）Python　C言語" class="tag-input"></textarea>
@@ -119,15 +120,40 @@
         const tagInput = document.querySelector('.tag-input');
         const errorMessage = document.querySelector('.error-message');
 
+        const titleLength = document.querySelector('.titleLength');
+
+        // タイトルの文字数
+        const maxLength = 50;
+            titleInput.addEventListener('input', () => {
+                titleLength.textContent = titleInput.value.length;
+                if(maxLength - titleInput.value.length < 0){
+                    titleLength.textContent = String(maxLength + Math.abs(maxLength - titleInput.value.length)) + '/50';
+                    titleLength.style.color = 'red'; // 最大文字数を超過したら赤字で表示する
+                }else{
+                    titleLength.textContent = String(titleInput.value.length) + '/50';
+                    titleLength.style.color = '#444';
+                }
+            }, false);
+
+        
+        
         postButton.addEventListener('click', (event) => {
             const title = titleInput.value.trim();
             const content = contentInput.value.trim();
             const tag = tagInput.value.trim();
 
+            // タイトルの文字数
+            const title_length = titleInput.value.length    
+
             if (title === '' || content === '' || tag === '') {
                 event.preventDefault(); // フォームの送信をキャンセル
                 showErrorMessage('タイトル・本文・タグを入力してください');
-            } else {
+            } 
+            else if(title_length>50){
+                event.preventDefault(); // フォームの送信をキャンセル
+                showErrorMessage('タイトルの文字数を50文字以内にしてください');
+            }
+            else {
                 localStorage.setItem('postMessage', '投稿しました');
             }
         });

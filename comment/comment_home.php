@@ -73,6 +73,18 @@
     <script>
             // ページ読み込み時に投稿メッセージがあれば表示する
             window.onload = function() {
+                var postMessage = localStorage.getItem('postMessage');
+                if (postMessage) {
+                    var postMessageElement = document.getElementById('postMessage_id');
+                    postMessageElement.innerText = postMessage;
+                    postMessageElement.style.opacity = '1';
+                    setTimeout(function() {
+                        postMessageElement.style.opacity = '0';
+                    }, 3000);
+                    // メッセージを表示した後は削除する
+                    localStorage.removeItem('postMessage');
+                }
+                
                 // Delete_Post.php からのリダイレクトでセッションに保存されたメッセージがあれば表示する
                 var isresolved_message = "<?php echo isset($_SESSION['isresolved-message']) ? $_SESSION['isresolved-message'] : '' ?>";
                 if (isresolved_message) {
