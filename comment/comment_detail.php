@@ -47,7 +47,10 @@
         }
         // 投稿者がボタンをクリックすると、その質問が解決済みに変更される
         if ($_SESSION['user']['user_id'] == $item['user_id']) {
-            echo '<button class="is-resolved-update-button" onclick="location.href=\'./post_comment/is_resolved_update.php?ident=' . $ident . '\'">解決済み</button>';
+            if ($item['is_resolved']) {
+            } else {
+                echo '<button class="is-resolved-update-button" onclick="location.href=\'./post_comment/is_resolved_update.php?ident=' . $ident . '\'">解決済み</button>';
+            }
         }
         ?>
     </div>

@@ -116,6 +116,12 @@ class question_post extends dbdata{
         return $items;
     }
 
+        // 投稿者がボタンをクリックすると、その質問が未解決の状態に変更される
+        public function edit_is_unresolved($ident){
+            $sql = "UPDATE question_post SET is_resolved = 0 WHERE ident = ?";
+            $result = $this->exec($sql, [$ident]);
+        }
+
 }
 
 ?>
